@@ -25,14 +25,16 @@ with open(os.path.join(root, 'README.md'), 'r', encoding='utf-8') as f:
     long_description = f.read()
 
 # Install requirements
-requirements = ['matplotlib']
+requirements = ['matplotlib',
+                'wheel']
 
 # Test suite requirements
 test_requirements = ['matplotlib',
                      'numpy']
 
 # Setup requirements
-setup_requirements = ['matplotlib']
+setup_requirements = ['matplotlib',
+                      'wheel']
 
 
 def install_styles():
@@ -75,12 +77,15 @@ setup(
               'data visualization',
               'matplotlib-styles'],
     name='spiffyplots',
+    packages=['spiffyplots'],
+    package_data={'spiffyplots': ['styles/*']},
+    include_package_data=True,
     test_suite='tests',
     install_requires=requirements,
     tests_require=test_requirements,
     setup_requires=setup_requirements,
     url='https://github.com/JRBCH/spiffyplots',
-    version='0.3.5',
+    version='0.3.12',
     cmdclass={'install': PostInstallMoveFile, },
 
 )
