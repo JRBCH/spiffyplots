@@ -1,0 +1,4 @@
+# Enable right Y-Axis
+
+axes.spines.right : False
+ytick.right : True

@@ -1,0 +1,4 @@
+# Enable upper X-Axis
+
+axes.spines.top : True
+xtick.top : True
