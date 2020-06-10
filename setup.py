@@ -25,14 +25,16 @@ with open(os.path.join(root, 'README.md'), 'r', encoding='utf-8') as f:
     long_description = f.read()
 
 # Install requirements
-requirements = ['matplotlib']
+requirements = ['matplotlib',
+                'wheel']
 
 # Test suite requirements
 test_requirements = ['matplotlib',
                      'numpy']
 
 # Setup requirements
-setup_requirements = ['matplotlib']
+setup_requirements = ['matplotlib',
+                      'wheel']
 
 
 def install_styles():
