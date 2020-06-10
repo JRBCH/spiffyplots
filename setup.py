@@ -68,7 +68,7 @@ setup(
               'matplotlib-styles'],
     name='spiffyplots',
     url='https://github.com/JRBCH/spiffyplots',
-    version='0.1.0',
+    version='version='0.1.0'',
     cmdclass={'install': PostInstallMoveFile, },
 
 )
