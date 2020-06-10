@@ -5,7 +5,7 @@
 
 import unittest
 
-from spiffyplots import spiffyplots
+#from spiffyplots import *
 
 
 class TestSpiffyplots(unittest.TestCase):
