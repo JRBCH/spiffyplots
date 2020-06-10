@@ -4,26 +4,26 @@ Contributions are welcome, and they are greatly appreciated!
 
 You can contribute in many ways:
 
-##Types of Contributions
+## Types of Contributions
 
-###Implement new features
+### Implement new features
 
 * New styles
 * Journal-specific style sheets
 * Helper functions and object classes for multipanel figures
 
-###Submit examples
+### Submit examples
 
 * Submit your visualizations generated with SpiffyPlots
 * Make sure to add your source code
 
-###Write Documentation
+### Write Documentation
 
 SpiffyPlots could always use more documentation, whether as part of the
 official SpiffyPlots docs, in docstrings, or even on the web in blog posts,
 articles, and such.
 
-###Submit Feedback
+### Submit Feedback
 
 The best way to send feedback is to file an issue at https://github.com/JRBCH/spiffyplots/issues.
 
@@ -34,7 +34,7 @@ If you are proposing a feature:
 * Remember that this is a volunteer-driven project, and that contributions
   are welcome :)
 
-##Get Started!
+## Get Started!
 
 Ready to contribute? Here's how to set up `spiffyplots` for local development.
 
@@ -78,7 +78,7 @@ Ready to contribute? Here's how to set up `spiffyplots` for local development.
 
 7. Submit a pull request through the GitHub website.
 
-##Pull Request Guidelines
+## Pull Request Guidelines
 
 Before you submit a pull request, check that it meets these guidelines:
 
@@ -90,13 +90,13 @@ Before you submit a pull request, check that it meets these guidelines:
    https://travis-ci.com/JRBCH/spiffyplots/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
-##Tips
+## Tips
 
 To run a subset of tests:
 
     $ python -m unittest tests.test_spiffyplots
 
-##Deploying
+## Deploying
 
 A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed.
