@@ -34,6 +34,7 @@ test_requirements = ['matplotlib',
 # Setup requirements
 setup_requirements = ['matplotlib']
 
+
 def install_styles():
     # Find all style files
     stylefiles = glob.glob('styles/**/*.mplstyle', recursive=True)
@@ -51,10 +52,11 @@ def install_styles():
             stylefile,
             os.path.join(mpl_stylelib_dir, os.path.basename(stylefile)))
 
+
 class PostInstallMoveFile(install):
-    def run(self):
-        install.run(self)
-        install_styles()
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        atexit.register(install_styles)
 
 setup(
     author="Julian Rossbroich",
