@@ -1,4 +1,4 @@
 # Enable right Y-Axis
 
-axes.spines.right : False
+axes.spines.right : True
 ytick.right : True
