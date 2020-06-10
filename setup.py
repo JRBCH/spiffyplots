@@ -27,6 +27,10 @@ with open(os.path.join(root, 'README.md'), 'r', encoding='utf-8') as f:
 # Install requirements
 requirements = ['matplotlib']
 
+# Test suite requirements
+test_requirements = ['matplotlib',
+                     'numpy']
+
 def install_styles():
     # Find all style files
     stylefiles = glob.glob('spiffyplots/**/*.mplstyle', recursive=True)
@@ -67,8 +71,10 @@ setup(
               'data visualization',
               'matplotlib-styles'],
     name='spiffyplots',
+    test_suite='tests',
+    tests_require=test_requirements,
     url='https://github.com/JRBCH/spiffyplots',
-    version='version='0.2.0'',
+    version='version=0.2.0',
     cmdclass={'install': PostInstallMoveFile, },
 
 )
