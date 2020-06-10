@@ -75,6 +75,8 @@ setup(
               'data visualization',
               'matplotlib-styles'],
     name='spiffyplots',
+    packages=['spiffyplots'],
+    include_package_data=True,
     test_suite='tests',
     install_requires=requirements,
     tests_require=test_requirements,
