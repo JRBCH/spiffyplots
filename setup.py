@@ -33,6 +33,7 @@ test_requirements = ['matplotlib',
 
 # Setup requirements
 setup_requirements = ['matplotlib']
+
 def install_styles():
     # Find all style files
     stylefiles = glob.glob('spiffyplots/**/*.mplstyle', recursive=True)
