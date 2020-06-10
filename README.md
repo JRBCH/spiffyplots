@@ -1,19 +1,6 @@
-===========
-SpiffyPlots
-===========
+# SpiffyPlots
 
-
-.. image:: https://img.shields.io/pypi/v/spiffyplots.svg
-        :target: https://pypi.python.org/pypi/spiffyplots
-
-.. image:: https://img.shields.io/travis/JRBCH/spiffyplots.svg
-        :target: https://travis-ci.com/JRBCH/spiffyplots
-
-.. image:: https://readthedocs.org/projects/spiffyplots/badge/?version=latest
-        :target: https://spiffyplots.readthedocs.io/en/latest/?badge=latest
-        :alt: Documentation Status
-
-
+[![Build Status](https://travis-ci.com/JRBCH/spiffyplots.svg?token=i92PyxWJ7xxe45sHGGQE&branch=master)](https://travis-ci.com/JRBCH/spiffyplots)
 
 
 A collection of matplotlib style sheets and plotting tools for publication-ready figures
@@ -23,15 +10,13 @@ A collection of matplotlib style sheets and plotting tools for publication-ready
 * Documentation: https://spiffyplots.readthedocs.io.
 
 
-Features
---------
+## Features
 
 * TODO
 
-Credits
--------
+## Credits
 
-This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
+ * This package was created with Cookiecutter and the `audreyr/cookiecutter-pypackage` project template.
 
-.. _Cookiecutter: https://github.com/audreyr/cookiecutter
-.. _`audreyr/cookiecutter-pypackage`: https://github.com/audreyr/cookiecutter-pypackage
+ * The idea for easy-to-use and pypi-deployable matplotlib stylesheets stems from John Garrett's
+ [SciencePlots](https://github.com/garrettj403/SciencePlots) package.
