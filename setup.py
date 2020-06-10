@@ -52,9 +52,9 @@ def install_styles():
             os.path.join(mpl_stylelib_dir, os.path.basename(stylefile)))
 
 class PostInstallMoveFile(install):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        atexit.register(install_styles)
+    def run(self):
+        install.run(self)
+        install_styles()
 
 setup(
     author="Julian Rossbroich",
