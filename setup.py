@@ -76,14 +76,14 @@ setup(
               'matplotlib-styles'],
     name='spiffyplots',
     packages=['spiffyplots'],
-    package_data={b'spiffyplots': ['styles/**/*.mplstyle']},
+    package_data={'spiffyplots': ['styles/**/*.mplstyle']},
     include_package_data=True,
     test_suite='tests',
     install_requires=requirements,
     tests_require=test_requirements,
     setup_requires=setup_requirements,
     url='https://github.com/JRBCH/spiffyplots',
-    version='0.3.7',
+    version='0.3.8',
     cmdclass={'install': PostInstallMoveFile, },
 
 )
