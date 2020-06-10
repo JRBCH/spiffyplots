@@ -14,8 +14,8 @@ import atexit
 import glob
 import os
 import shutil
-
 import matplotlib
+
 from setuptools import setup
 from setuptools.command.install import install
 
@@ -31,6 +31,8 @@ requirements = ['matplotlib']
 test_requirements = ['matplotlib',
                      'numpy']
 
+# Setup requirements
+setup_requirements = ['matplotlib']
 def install_styles():
     # Find all style files
     stylefiles = glob.glob('spiffyplots/**/*.mplstyle', recursive=True)
@@ -62,7 +64,6 @@ setup(
         'Programming Language :: Python :: 3',
     ],
     description="A collection of matplotlib style sheets and plotting tools for publication-ready figures",
-    install_requires=requirements,
     license="MIT",
     long_description=long_description,
     long_description_content_type='text/markdown',
@@ -72,7 +73,9 @@ setup(
               'matplotlib-styles'],
     name='spiffyplots',
     test_suite='tests',
+    install_requires=requirements,
     tests_require=test_requirements,
+    setup_requires=setup_requirements,
     url='https://github.com/JRBCH/spiffyplots',
     version='version=0.2.0',
     cmdclass={'install': PostInstallMoveFile, },
