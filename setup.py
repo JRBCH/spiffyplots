@@ -76,6 +76,7 @@ setup(
               'matplotlib-styles'],
     name='spiffyplots',
     packages=['spiffyplots'],
+    package_data={b'spiffyplots': ['styles/**/*.mplstyle']},
     include_package_data=True,
     test_suite='tests',
     install_requires=requirements,
