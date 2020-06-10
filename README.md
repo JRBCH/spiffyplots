@@ -22,9 +22,7 @@ or install the latest commit directly from GitHub through:
 
 ## Features
 
-install with:
-
-`pip install spiffyplots`
+TODO
 
 ## Credits
 
