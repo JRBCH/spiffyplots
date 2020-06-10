@@ -1,0 +1,4 @@
+# Activate LaTeX
+
+text.usetex : True
+text.latex.preamble : \usepackage{amsmath}
