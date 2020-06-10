@@ -80,7 +80,7 @@ setup(
     tests_require=test_requirements,
     setup_requires=setup_requirements,
     url='https://github.com/JRBCH/spiffyplots',
-    version='0.3.2',
+    version='0.3.3',
     cmdclass={'install': PostInstallMoveFile, },
 
 )
