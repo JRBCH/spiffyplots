@@ -36,7 +36,7 @@ setup_requirements = ['matplotlib']
 
 def install_styles():
     # Find all style files
-    stylefiles = glob.glob('spiffyplots/**/*.mplstyle', recursive=True)
+    stylefiles = glob.glob('styles/**/*.mplstyle', recursive=True)
 
     # Find stylelib directory (where the *.mplstyle files go)
     mpl_stylelib_dir = os.path.join(matplotlib.get_configdir(), "stylelib")
@@ -78,7 +78,7 @@ setup(
     tests_require=test_requirements,
     setup_requires=setup_requirements,
     url='https://github.com/JRBCH/spiffyplots',
-    version='version=0.2.0',
+    version='version=0.3.0',
     cmdclass={'install': PostInstallMoveFile, },
 
 )
