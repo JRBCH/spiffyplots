@@ -1,48 +1,74 @@
 #!/usr/bin/env python
 
-"""The setup script."""
+"""Setup script for SpiffyPlots.
 
-from setuptools import setup, find_packages
+As this package only distributes matplotlib style sheets so far,
+the setup simply copies the *.mplstyle files into the appropriate directory.
 
-with open('README.rst') as readme_file:
-    readme = readme_file.read()
+This code is based on a StackOverflow answer:
+https://stackoverflow.com/questions/31559225/how-to-ship-or-distribute-a-matplotlib-stylesheet
 
-with open('HISTORY.rst') as history_file:
-    history = history_file.read()
+"""
 
-requirements = [ ]
+import atexit
+import glob
+import os
+import shutil
 
-setup_requirements = [ ]
+import matplotlib
+from setuptools import setup
+from setuptools.command.install import install
 
-test_requirements = [ ]
+# Get description from README
+root = os.path.abspath(os.path.dirname(__file__))
+with open(os.path.join(root, 'README.md'), 'r', encoding='utf-8') as f:
+    long_description = f.read()
+
+# Install requirements
+requirements = ['matplotlib']
+
+def install_styles():
+    # Find all style files
+    stylefiles = glob.glob('spiffyplots/**/*.mplstyle', recursive=True)
+
+    # Find stylelib directory (where the *.mplstyle files go)
+    mpl_stylelib_dir = os.path.join(matplotlib.get_configdir(), "stylelib")
+    if not os.path.exists(mpl_stylelib_dir):
+        os.makedirs(mpl_stylelib_dir)
+
+    # Copy files over
+    print("Installing styles into", mpl_stylelib_dir)
+    for stylefile in stylefiles:
+        print(os.path.basename(stylefile))
+        shutil.copy(
+            stylefile,
+            os.path.join(mpl_stylelib_dir, os.path.basename(stylefile)))
+
+class PostInstallMoveFile(install):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        atexit.register(install_styles)
 
 setup(
     author="Julian Rossbroich",
     author_email='julian.rossbroich@fmi.ch',
-    python_requires='>=3.5',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
-        'Intended Audience :: Developers',
         'License :: OSI Approved :: MIT License',
         'Natural Language :: English',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.5',
-        'Programming Language :: Python :: 3.6',
-        'Programming Language :: Python :: 3.7',
-        'Programming Language :: Python :: 3.8',
     ],
     description="A collection of matplotlib style sheets and plotting tools for publication-ready figures",
     install_requires=requirements,
-    license="MIT license",
-    long_description=readme + '\n\n' + history,
-    include_package_data=True,
-    keywords='spiffyplots',
+    license="MIT",
+    long_description=long_description,
+    long_description_content_type='text/markdown',
+    keywords=['matplotlib',
+              'matplotlib-style-sheets',
+              'data visualization',
+              'matplotlib-styles'],
     name='spiffyplots',
-    packages=find_packages(include=['spiffyplots', 'spiffyplots.*']),
-    setup_requires=setup_requirements,
-    test_suite='tests',
-    tests_require=test_requirements,
     url='https://github.com/JRBCH/spiffyplots',
     version='0.1.0',
-    zip_safe=False,
+    cmdclass={'install': PostInstallMoveFile, },
+
 )
