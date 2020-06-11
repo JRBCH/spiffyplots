@@ -6,16 +6,16 @@
 
 A collection of matplotlib style sheets and plotting tools for publication-ready figures
 
-* Free software: MIT license
+* Free software: GPL-3 license
 * Documentation: https://spiffyplots.readthedocs.io.
 
 ## Installation
 
-Install the latest release through:
+Install the latest release:
 
 `pip install spiffyplots`
 
-or install the latest commit directly from GitHub through:
+or install the latest commit directly from GitHub:
 
 `pip install git+https://github.com/JRBCH/spiffyplots.git`
 
