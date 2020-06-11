@@ -52,8 +52,8 @@ mathtext.fontset : dejavuserif
 hist.bins: 30
 
 # Errorbar caps
-errorbar.capsize: 02.0,
+errorbar.capsize: 2.0,
 
 # Patch settings
-patch.edgecolor: 'white'
+patch.edgecolor: '#FFFFFF' # white
 patch.force_edgecolor: True
