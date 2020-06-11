@@ -109,9 +109,7 @@ class MultiPanel(object):
 
         self.figsize = kwargs.get('figsize', plt.rcParams.get('figure.figsize'))
 
-        self.fig = plt.figure(figsize=self.figsize,
-                              constrained_layout=kwargs.get('constrained_layout', True),
-                              **kwargs)
+        self.fig = plt.figure(**kwargs)
 
         # OPTION 1: INITIALIZATION BASED ON ``labels``
         # # # # # # # # # # # #
@@ -119,7 +117,7 @@ class MultiPanel(object):
         # the shape and grid parameters are ignored.
 
         # If labels is given as a numpy array, decode it into dictionary form.
-        if isinstance(labels, np.array):
+        if isinstance(labels, np.ndarray):
             labels = _decode_label_array(labels)
 
         if isinstance(labels, dict):
@@ -190,14 +188,7 @@ class MultiPanel(object):
         self.gridspec = gs.GridSpec(nrows=self.shape[0],
                                     ncols=self.shape[1],
                                     figure=self.fig,
-                                    left=kwargs.get('left', None),
-                                    bottom=kwargs.get('bottom', None),
-                                    right=kwargs.get('right', None),
-                                    top=kwargs.get('top', None),
-                                    wspace=kwargs.get('wspace', 0.1),
-                                    hspace=kwargs.get('hspace', 0.1),
-                                    width_ratios=kwargs.get('width_ratios', None),
-                                    height_ratios=kwargs.get('height_ratios', None)
+                                    **kwargs
                                     )
 
         Panels = namedtuple('Panels', [i for i in self._labels])
@@ -206,7 +197,7 @@ class MultiPanel(object):
 
         # If labels should be drawn, draw them now.
         if draw_labels:
-            self._draw_labels(label_location=kwargs.get('label_location'),
+            self._draw_labels(label_location=kwargs.get('label_location', (-0.1, 1.1)),
                               size=kwargs.get('label_size', 14),
                               weight=kwargs.get('label weight', 'bold'))
 
@@ -270,13 +261,13 @@ def _get_grid_location(location: Tuple,
         return gridspec[rows, cols]
 
     elif isinstance(rows, Iterable) and isinstance(cols, int):
-        return gridspec[rows[0]:rows[-1], cols]
+        return gridspec[rows[0]:rows[-1]+1, cols]
 
     elif isinstance(rows, int) and isinstance(cols, Iterable):
-        return gridspec[rows, cols[0]:cols[-1]]
+        return gridspec[rows, cols[0]:cols[-1]+1]
 
     elif isinstance(rows, Iterable) and isinstance(cols, Iterable):
-        return gridspec[rows[0]:rows[-1], cols[0]:cols[-1]]
+        return gridspec[rows[0]:rows[-1]+1, cols[0]:cols[-1]+1]
 
 
 def _get_subplot_raster(grid: Iterable[int],
@@ -333,4 +324,4 @@ def _find_max_tuple(x: Iterable[Tuple[Union[Iterable, int], Union[Iterable, int]
     max1 = np.max([np.max(i[0]) for i in x])
     max2 = np.max([np.max(i[1]) for i in x])
 
-    return max1, max2
+    return max1+1, max2+1
