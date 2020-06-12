@@ -2,9 +2,9 @@
 
 
 import unittest
+import pytest
 import spiffyplots.multipanel as mp
 
-import matplotlib.pyplot as plt
 import matplotlib
 import numpy as np
 

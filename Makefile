@@ -51,10 +51,7 @@ lint: ## run black formatter
 	black spiffyplots tests
 
 test: ## run tests quickly with the default Python
-	python setup.py test
-
-test-all: ## run tests on every Python version with tox
-	tox
+	pytest
 
 coverage: ## check code coverage quickly with the default Python
 	coverage run --source spiffyplots setup.py test

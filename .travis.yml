@@ -1,18 +1,21 @@
 language: python
 python:
 - 3.8
+- 3.7
+- 3.6
 
 before_install:
-    - python --version
-    - pip install -U pip
-    - pip install -U tox-travis
-    - pip install -r requirements.txt
+  - python --version
+  - pip install -U pip
+  - pip install -U pytest
+  - pip install codecov
+  - pip install -r requirements.txt
 
 install:
     - pip install . # install package + test dependencies
 
 script:
-    - tox
+    - pytest
 
 after_success:
   - codecov
