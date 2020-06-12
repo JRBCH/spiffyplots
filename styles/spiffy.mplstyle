@@ -4,8 +4,11 @@
 # Set color cycle: blue, green, yellow, red, violet, gray
 axes.prop_cycle : cycler('color', ['0C5DA5', '00B945', 'FF9500', 'FF2C00', '845B97', '474747', '9e9e9e'])
 
+# Set default colormap
+image.cmap: 'YlOrBr',
+
 # Set default figure size
-figure.figsize : 3.5, 2.625
+figure.figsize : 4, 4
 
 # Remove top and right spines
 axes.spines.right : False
@@ -30,6 +33,9 @@ axes.linewidth : 0.5
 grid.linewidth : 0.5
 lines.linewidth : 1.
 
+# Set Marker size
+lines.markersize: 2.0
+
 # Remove legend frame
 legend.frameon : False
 
@@ -41,3 +47,13 @@ savefig.pad_inches : 0.05
 font.serif : Times New Roman
 font.family : serif
 mathtext.fontset : dejavuserif
+
+# Histogram bins
+hist.bins: 30
+
+# Errorbar caps
+errorbar.capsize: 2.0,
+
+# Patch settings
+patch.edgecolor: '#FFFFFF' # white
+patch.force_edgecolor: True
