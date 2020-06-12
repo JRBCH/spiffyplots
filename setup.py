@@ -31,10 +31,11 @@ requirements = ["matplotlib", "wheel", "numpy"]
 test_requirements = ["coverage", "pytest", "pytest-cov"]
 
 # Setup requirements
-setup_requirements = ["matplotlib", "wheel", "pytest-runner"]
+setup_requirements = ["matplotlib", "pytest-runner"]
 
 extras = {
     "test": test_requirements,
+    "setup": setup_requirements,
 }
 
 
