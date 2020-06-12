@@ -16,7 +16,7 @@ import os
 import shutil
 import matplotlib
 
-from setuptools import setup
+from setuptools import setup, find_packages
 from setuptools.command.install import install
 
 # Get description from README
@@ -30,12 +30,8 @@ requirements = ["matplotlib", "wheel", "numpy"]
 # Test suite requirements
 test_requirements = ["coverage", "pytest", "pytest-cov"]
 
-# Setup requirements
-setup_requirements = ["matplotlib", "pytest-runner"]
-
 extras = {
     "test": test_requirements,
-    "setup": setup_requirements,
 }
 
 
@@ -76,13 +72,12 @@ setup(
     ),
     long_description=long_description,
     long_description_content_type="text/markdown",
-    packages=["spiffyplots"],
+    packages=find_packages(),
     package_data={"spiffyplots": ["styles/*"]},
     include_package_data=True,
     test_suite="tests",
     install_requires=requirements,
     tests_require=test_requirements,
-    setup_requires=setup_requirements,
     extras_require=extras,
     cmdclass={"install": PostInstallMoveFile},
 )

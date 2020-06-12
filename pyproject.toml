@@ -1,4 +1,10 @@
- [tool.black]
+[build-system]
+# Minimum requirements for the build system to execute.
+requires = [
+    "setuptools", "matplotlib", "wheel", "pytest-runner"
+]
+
+[tool.black]
     py38 = true
     include = '\.pyi?$'
     exclude = '''
