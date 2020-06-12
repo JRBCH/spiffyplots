@@ -324,4 +324,5 @@ def _find_max_tuple(x: Iterable[Tuple[Union[Iterable, int], Union[Iterable, int]
     max1 = np.max([np.max(i[0]) for i in x])
     max2 = np.max([np.max(i[1]) for i in x])
 
+    # Add plus one to output to transform to dimensionality (i.e. a max value of 0 indicates 1 dimension)
     return max1+1, max2+1
