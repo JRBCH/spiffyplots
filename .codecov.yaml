@@ -1,0 +1,12 @@
+  status:
+    patch: no
+    changes: no
+    project:
+      default: false
+      app:
+        paths: "spiffyplots/"
+        target: 75%
+      tests:
+        paths: "tests/"
+        target: 95%
+

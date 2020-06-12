@@ -11,11 +11,11 @@ before_install:
 install:
     - pip install . # install package + test dependencies
 
-script: tox
+script:
+    - tox
 
 after_success:
   - codecov
-  - bash <(curl -s https://codecov.io/bash)
 
 deploy:
   provider: pypi
