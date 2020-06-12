@@ -34,8 +34,9 @@ test_requirements = ["coverage", "pytest", "pytest-cov"]
 setup_requirements = ["matplotlib", "wheel", "pytest-runner"]
 
 extras = {
-    'test': test_requirements,
+    "test": test_requirements,
 }
+
 
 def install_styles():
     # Find all style files
@@ -65,27 +66,22 @@ setup(
     name="spiffyplots",
     url="https://github.com/JRBCH/spiffyplots",
     version="0.4.2",
-
     author="Julian Rossbroich",
     author_email="julian.rossbroich@fmi.ch",
     license="GPL-3",
-
     description=(
         "A collection of matplotlib style sheets and plotting tools for"
         " publication-ready figures"
     ),
     long_description=long_description,
     long_description_content_type="text/markdown",
-
     packages=["spiffyplots"],
     package_data={"spiffyplots": ["styles/*"]},
     include_package_data=True,
-
     test_suite="tests",
     install_requires=requirements,
     tests_require=test_requirements,
     setup_requires=setup_requirements,
     extras_require=extras,
-
-    cmdclass={"install": PostInstallMoveFile,},
+    cmdclass={"install": PostInstallMoveFile},
 )
