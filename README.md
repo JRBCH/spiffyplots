@@ -1,8 +1,10 @@
 # SpiffyPlots
 
 [![Build Status](https://travis-ci.com/JRBCH/spiffyplots.svg?token=i92PyxWJ7xxe45sHGGQE&branch=master)](https://travis-ci.com/JRBCH/spiffyplots)
+[![codecov](https://codecov.io/gh/JRBCH/spiffyplots/branch/master/graph/badge.svg)](https://codecov.io/gh/JRBCH/spiffyplots)
 [![PyPI version](https://badge.fury.io/py/spiffyplots.svg)](https://badge.fury.io/py/spiffyplots)
 [![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=flat)]()
+[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 A collection of matplotlib style sheets and plotting tools for publication-ready figures.
 
