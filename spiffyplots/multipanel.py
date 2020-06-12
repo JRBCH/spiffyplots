@@ -107,7 +107,7 @@ class MultiPanel(object):
         self._labels = []
         self.panels = []
 
-        self.figsize = kwargs.get('figsize', plt.rcParams.get('figure.figsize'))
+        self.figsize = kwargs.get("figsize", plt.rcParams.get("figure.figsize"))
 
         self.fig = plt.figure(**kwargs)
 
@@ -124,8 +124,10 @@ class MultiPanel(object):
 
             # If other parameters were not passed as their default
             if grid is not None or shape != (2, 2):
-                warnings.warn('``labels`` was provided as a dictionary or array.'
-                              'The input to ``grid`` and ``shape`` will be ignored.')
+                warnings.warn(
+                    "``labels`` was provided as a dictionary or array."
+                    "The input to ``grid`` and ``shape`` will be ignored."
+                )
 
             # Set crucial variables
             self._labels = list(labels.keys())
@@ -151,8 +153,10 @@ class MultiPanel(object):
                     self.shape = _find_max_tuple(grid)
 
                 else:
-                    raise TypeError("Sorry, ``grid`` is not a valid input. "
-                                    "Refer to the documentation for supported input types.")
+                    raise TypeError(
+                        "Sorry, ``grid`` is not a valid input. "
+                        "Refer to the documentation for supported input types."
+                    )
 
             # OPTION 3: INITIALIZATION BASED ON ``shape``
             # # # # # # # # # # # #
@@ -170,62 +174,74 @@ class MultiPanel(object):
 
             # Get labels based on provided vector or revert to default
             if isinstance(labels, bool):
-                self._labels = _get_letters(case=kwargs.get('label_case', 'uppercase'))[:self.npanels]
+                self._labels = _get_letters(case=kwargs.get("label_case", "uppercase"))[
+                    : self.npanels
+                ]
                 draw_labels = labels
 
             elif isinstance(labels, Iterable):
-                assert len(labels) == self.npanels, "Length of label vector does not match number of panels."
+                assert (
+                    len(labels) == self.npanels
+                ), "Length of label vector does not match number of panels."
                 self._labels = list(labels)
                 draw_labels = True
 
             else:
-                raise TypeError("Sorry, ``labels`` is not a valid input. "
-                                "Refer to the documentation for supported input types.")
+                raise TypeError(
+                    "Sorry, ``labels`` is not a valid input. "
+                    "Refer to the documentation for supported input types."
+                )
 
         # MAKE SUBPLOT LAYOUT
         # # # # # # # # # # # #
 
-        self.gridspec = gs.GridSpec(nrows=self.shape[0],
-                                    ncols=self.shape[1],
-                                    figure=self.fig,
-                                    **kwargs
-                                    )
+        self.gridspec = gs.GridSpec(
+            nrows=self.shape[0], ncols=self.shape[1], figure=self.fig, **kwargs
+        )
 
-        Panels = namedtuple('Panels', [i for i in self._labels])
-        self.panels = Panels(*[self.fig.add_subplot(_get_grid_location(loc, self.gridspec))
-                               for loc in self._locations])
+        Panels = namedtuple("Panels", [i for i in self._labels])
+        self.panels = Panels(
+            *[
+                self.fig.add_subplot(_get_grid_location(loc, self.gridspec))
+                for loc in self._locations
+            ]
+        )
 
         # If labels should be drawn, draw them now.
         if draw_labels:
-            self._draw_labels(label_location=kwargs.get('label_location', (-0.1, 1.1)),
-                              size=kwargs.get('label_size', 14),
-                              weight=kwargs.get('label weight', 'bold'))
+            self._draw_labels(
+                label_location=kwargs.get("label_location", (-0.1, 1.1)),
+                size=kwargs.get("label_size", 14),
+                weight=kwargs.get("label weight", "bold"),
+            )
 
-
-    def _draw_labels(self,
-                     label_location: Optional[Tuple] = (-0.1, 1.1),
-                     size: Optional[int] = 14,
-                     weight: Optional[str] = 'bold'
-                     ) -> None:
+    def _draw_labels(
+        self,
+        label_location: Optional[Tuple] = (-0.1, 1.1),
+        size: Optional[int] = 14,
+        weight: Optional[str] = "bold",
+    ) -> None:
 
         for ix in range(self.npanels):
-            self.panels[ix].text(label_location[0],
-                                 label_location[1],
-                                 self._labels[ix],
-                                 transform=self.panels[ix].transAxes,
-                                 size=size,
-                                 weight=weight,
-                                 usetex=False,
-                                 family='sans-serif')
+            self.panels[ix].text(
+                label_location[0],
+                label_location[1],
+                self._labels[ix],
+                transform=self.panels[ix].transAxes,
+                size=size,
+                weight=weight,
+                usetex=False,
+                family="sans-serif",
+            )
 
 
-def _get_letters(case: Optional[str] = 'uppercase') -> str:
+def _get_letters(case: Optional[str] = "uppercase") -> str:
     """
 
     :param case: 'lowercase' or 'uppercase'. Defaults to 'lowercase'.
     :return: string of ordered alphabet
     """
-    if case == 'lowercase':
+    if case == "lowercase":
         return string.ascii_lowercase
     else:
         return string.ascii_uppercase
@@ -241,9 +257,9 @@ def _decode_label_array(labels: np.array) -> dict:
     NotImplemented
 
 
-def _get_grid_location(location: Tuple,
-                       gridspec: matplotlib.gridspec.GridSpec
-                       ) -> matplotlib.gridspec.SubplotSpec:
+def _get_grid_location(
+    location: Tuple, gridspec: matplotlib.gridspec.GridSpec
+) -> matplotlib.gridspec.SubplotSpec:
     """
     From A tuple of locations in a grid, return the SubplotSpec at the given coordinates.
 
@@ -261,17 +277,18 @@ def _get_grid_location(location: Tuple,
         return gridspec[rows, cols]
 
     elif isinstance(rows, Iterable) and isinstance(cols, int):
-        return gridspec[rows[0]:rows[-1]+1, cols]
+        return gridspec[rows[0] : rows[-1] + 1, cols]
 
     elif isinstance(rows, int) and isinstance(cols, Iterable):
-        return gridspec[rows, cols[0]:cols[-1]+1]
+        return gridspec[rows, cols[0] : cols[-1] + 1]
 
     elif isinstance(rows, Iterable) and isinstance(cols, Iterable):
-        return gridspec[rows[0]:rows[-1]+1, cols[0]:cols[-1]+1]
+        return gridspec[rows[0] : rows[-1] + 1, cols[0] : cols[-1] + 1]
 
 
-def _get_subplot_raster(grid: Iterable[int],
-                        ) -> Tuple[Tuple[int,int], Iterable[Tuple], int]:
+def _get_subplot_raster(
+    grid: Iterable[int],
+) -> Tuple[Tuple[int, int], Iterable[Tuple], int]:
     """
     Defines a subplot raster from an iterable of integers that defines the number of plots in each row.
 
@@ -296,13 +313,12 @@ def _get_subplot_raster(grid: Iterable[int],
 
         # Make tuples of locations of each plot
         for panel in range(grid[row]):
-            locations.append((row, range(int(panel*size), int(panel*size+size))))
+            locations.append((row, range(int(panel * size), int(panel * size + size))))
 
     return shape, locations, npanels
 
 
-def _lcm_of_array(a: Iterable[int]
-                  ) -> int:
+def _lcm_of_array(a: Iterable[int]) -> int:
     """
     helper function to calculate the lowest common multiple of an array.
     :param a: Iterable array of integers
@@ -314,8 +330,10 @@ def _lcm_of_array(a: Iterable[int]
         lcm = lcm * a[i] // math.gcd(lcm, a[i])
     return lcm
 
-def _find_max_tuple(x: Iterable[Tuple[Union[Iterable, int], Union[Iterable, int]]]
-                    ) -> Tuple[int, int]:
+
+def _find_max_tuple(
+    x: Iterable[Tuple[Union[Iterable, int], Union[Iterable, int]]]
+) -> Tuple[int, int]:
     """
     Given a list of integer / range tuples, returns the maximum values along the first and second dimension
     :param x: List of Tuples
@@ -325,4 +343,4 @@ def _find_max_tuple(x: Iterable[Tuple[Union[Iterable, int], Union[Iterable, int]
     max2 = np.max([np.max(i[1]) for i in x])
 
     # Add plus one to output to transform to dimensionality (i.e. a max value of 0 indicates 1 dimension)
-    return max1+1, max2+1
+    return max1 + 1, max2 + 1
