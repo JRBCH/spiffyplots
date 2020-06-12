@@ -2,7 +2,7 @@
 
 __author__ = """Julian Rossbroich"""
 __email__ = 'julian.rossbroich@fmi.ch'
-__version__ = '0.4.1'
+__version__ = '0.4.2'
 
 from .multipanel import MultiPanel
 
