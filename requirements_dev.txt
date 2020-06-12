@@ -13,6 +13,7 @@ pytest-cov==2.9.0
 # Automatic code formatting
 pre-commit==2.5.1
 black==19.10b0
+flake8==3.7.8
 
 # Versioning
 bump2version==0.5.11
