@@ -5,7 +5,7 @@
 axes.prop_cycle : cycler('color', ['0C5DA5', '00B945', 'FF9500', 'FF2C00', '845B97', '474747', '9e9e9e'])
 
 # Set default colormap
-image.cmap: 'YlOrBr',
+image.cmap: YlOrBr
 
 # Set default figure size
 figure.figsize : 4, 4
@@ -52,8 +52,8 @@ mathtext.fontset : dejavuserif
 hist.bins: 30
 
 # Errorbar caps
-errorbar.capsize: 2.0,
+errorbar.capsize: 2.0
 
 # Patch settings
-patch.edgecolor: '#FFFFFF' # white
+patch.edgecolor: white
 patch.force_edgecolor: True
