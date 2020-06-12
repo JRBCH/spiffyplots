@@ -1,0 +1,6 @@
+figure.figsize: 5.,5.
+
+axes.spines.left: false
+axes.spines.right: false
+axes.spines.bottom: false
+axes.spines.top: false
