@@ -30,7 +30,8 @@ requirements = ['matplotlib',
 
 # Test suite requirements
 test_requirements = ['matplotlib',
-                     'numpy']
+                     'numpy',
+                     'coverage']
 
 # Setup requirements
 setup_requirements = ['matplotlib',

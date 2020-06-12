@@ -32,6 +32,7 @@ class TestMutiPanel(unittest.TestCase):
     def test_001_panel_default(self):
         """Test something."""
 
+
 class Test_get_letters(unittest.TestCase):
 
     def test_lowercase(self):
