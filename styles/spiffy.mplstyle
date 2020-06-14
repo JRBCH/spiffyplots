@@ -1,8 +1,8 @@
 # This is the base style for the "SpiffyPlots" package.
 # Visit us on GitHub: https://github.com/JRBCH/spiffyplots
 
-# Set color cycle: blue, green, yellow, red, violet, gray
-axes.prop_cycle : cycler('color', ['0C5DA5', '00B945', 'FF9500', 'FF2C00', '845B97', '474747', '9e9e9e'])
+# Set color cycle: Paul Tol's vibrant scheme in the order: blue, red, teal, cyan, orange, magenta, grey
+axes.prop_cycle : cycler('color', ['0077BB', 'CC3311', '009988', '33BBEE', 'EE7733', 'EE3377', 'BBBBBB'])
 
 # Set default colormap
 image.cmap: YlOrBr
@@ -31,10 +31,10 @@ ytick.right : False
 # Set line widths
 axes.linewidth : 0.5
 grid.linewidth : 0.5
-lines.linewidth : 1.
+lines.linewidth : 1
 
 # Set Marker size
-lines.markersize: 2.0
+lines.markersize: 4.0
 
 # Remove legend frame
 legend.frameon : False
@@ -43,13 +43,17 @@ legend.frameon : False
 savefig.bbox : tight
 savefig.pad_inches : 0.05
 
-# Use serif fonts
-font.serif : Times New Roman
-font.family : serif
-mathtext.fontset : dejavuserif
+# FONTS
+# # # # #
+font.family  : sans-serif
+#font.style   : normal
+#font.variant : normal
+#font.weight  : normal
+#font.stretch : normal
+font.size    : 8.0
 
 # Histogram bins
-hist.bins: 30
+hist.bins: 20
 
 # Errorbar caps
 errorbar.capsize: 2.0
@@ -57,3 +61,7 @@ errorbar.capsize: 2.0
 # Patch settings
 patch.edgecolor: white
 patch.force_edgecolor: True
+patch.linewidth: 0.5
+
+# SCATTERPLOT
+scatter.edgecolors: none

@@ -272,7 +272,7 @@ class MultiPanel(object):
             # make separate axis for label
             loc = self._locations[ix]
             axis_loc = (int(np.min(loc[0])), int(np.min(loc[1])))
-            ax = self.fig.add_subplot(_get_grid_location(axis_loc, self.gridspec))
+            ax = self.fig.add_subplot(_get_grid_location(axis_loc, self.gridspec), label=self._labels[ix])
             ax.axis('off')
 
             ax.text(
