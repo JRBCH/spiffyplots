@@ -255,24 +255,31 @@ class MultiPanel(object):
         # If labels should be drawn, draw them now.
         if draw_labels:
             self._draw_labels(
-                label_location=kwargs.pop('label_location', (-0.1, 1.1)),
+                label_location=kwargs.pop('label_location', (-0.2, 1.1)),
                 size=kwargs.pop('label_size', 14),
                 weight=kwargs.pop('label_weight', 'bold')
             )
 
     def _draw_labels(
         self,
-        label_location: Tuple[float, float] = (-0.1, 1.1),
+        label_location: Tuple[float, float] = (-0.2, 1.1),
         size: int = 14,
         weight: str = 'bold'
     ) -> None:
 
         for ix in range(self.npanels):
-            self.panels[ix].text(
+
+            # make separate axis for label
+            loc = self._locations[ix]
+            axis_loc = (int(np.min(loc[0])), int(np.min(loc[1])))
+            ax = self.fig.add_subplot(_get_grid_location(axis_loc, self.gridspec))
+            ax.axis('off')
+
+            ax.text(
                 label_location[0],
                 label_location[1],
                 self._labels[ix],
-                transform=self.panels[ix].transAxes,
+                transform=ax.transAxes,
                 size=size,
                 weight=weight,
                 usetex=False,
