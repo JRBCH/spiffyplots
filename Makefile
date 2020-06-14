@@ -54,10 +54,10 @@ test: ## run tests quickly with the default Python
 	pytest
 
 coverage: ## check code coverage quickly with the default Python
-	coverage run --source spiffyplots setup.py test
+	pytest
 	coverage report -m
-	# coverage html
-	#$(BROWSER) htmlcov/index.html
+	coverage html
+	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
 	rm -f docs/spiffyplots.rst

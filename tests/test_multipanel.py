@@ -34,8 +34,118 @@ class TestMutiPanel(unittest.TestCase):
     def tearDown(self):
         """Tear down test fixtures, if any."""
 
-    def test_001_panel_default(self):
-        """Test something."""
+    def test_init_001_default(self):
+        """
+        Test initialization of MultiPanel object.
+
+        001 - Default initialization with no parameters
+        (Should create a 2x2 grid with 4 equal panels)
+        """
+        fig = mp.MultiPanel()
+
+        # assert 4 panels
+        self.assertEqual(fig.panels.__len__(), 4)
+        self.assertEqual(fig._labels, "ABCD")
+        self.assertEqual(fig.shape, (2, 2))
+
+    def test_init_002_grid_intlist(self):
+        """
+        Test initialization of MultiPanel object.
+
+        002 - Initialization based on ``grid`` being a list of integers that define the number of panels in each row.
+        """
+
+        grid = (3, 4, 4, 1)  # 12 panels
+        fig = mp.MultiPanel(grid=grid)
+
+        self.assertEqual(fig.panels.__len__(), 12)
+        self.assertEqual(fig._labels, "ABCDEFGHIJKL")
+        self.assertEqual(fig.shape, (4, 12))
+
+        grid2 = (2, 1)  # 3 panels with location tuple test
+        fig2 = mp.MultiPanel(grid=grid2)
+
+        self.assertEqual(fig2.panels.__len__(), 3)
+        self.assertEqual(fig2._labels, "ABC")
+        self.assertEqual(fig2.shape, (2, 2))
+        self.assertEqual(fig2._locations, [(0, 0), (0, 1), (1, range(0, 2))])
+
+    def test_init_003_grid_tuples(self):
+        """
+        Test initialization of MultiPanel object.
+
+        003 - Initialization based on ``grid`` being a list of location tuples.
+        """
+
+        grid = [(0, 0), (0, 1), (range(1, 3), 0), (range(1, 3), 1)]
+        fig = mp.MultiPanel(grid=grid)
+
+        self.assertEqual(fig.panels.__len__(), 4)
+        self.assertEqual(fig._labels, "ABCD")
+        self.assertEqual(fig.shape, (3, 2))
+        self.assertEqual(fig._locations, grid)
+
+    def test_init_004_labels_dict(self):
+        """
+        Test initialization of MultiPanel object.
+
+        004 - Initialization based on ``labels`` being a dictionary
+        mapping panel labels to locations.
+        """
+
+        labels = {
+            "A1": (0, 0),
+            "A2": (0, 1),
+            "B": (range(1, 3), 0),
+            "C": (range(1, 3), 1),
+        }
+
+        fig = mp.MultiPanel(labels=labels)
+
+        self.assertEqual(fig.panels.__len__(), 4)
+        self.assertEqual(fig._labels, list(labels.keys()))
+        self.assertEqual(fig.shape, (3, 2))
+        self.assertEqual(fig._locations, list(labels.values()))
+
+    def test_init_005_labels_list(self):
+        """
+        Test initialization of MultiPanel object.
+
+        004 - Initialization based on ``labels`` being a list of custom labels.
+        """
+
+        labels = ["A1", "A2", "B1", "B2"]
+        fig = mp.MultiPanel(labels=labels)
+        self.assertEqual(fig.panels.__len__(), 4)
+        self.assertEqual(fig._labels, labels)
+
+    def test_errors_invalid_inputs(self):
+        """
+        Test TypeErrors if invalid inputs are given
+        """
+        self.assertRaises(TypeError, mp.MultiPanel, grid=[1, 2, "string"])
+
+        self.assertRaises(TypeError, mp.MultiPanel, shape=(1, (2, 4)))
+
+        self.assertRaises(TypeError, mp.MultiPanel, labels=123)
+
+        # Too few labels for the number of panels
+        self.assertRaises(AssertionError, mp.MultiPanel, grid=(1, 3), labels=["ABC"])
+
+    def test_warnings(self):
+        """
+        Test Warnings if some conditions are met
+        """
+
+        # If parameters given are ignored
+        self.assertWarns(
+            Warning, mp.MultiPanel, labels={"A1": (0, 0), "A2": (0, 1)}, shape=(3, 2)
+        )
+
+        # If panels overlap
+        self.assertWarns(
+            Warning, mp.MultiPanel, labels={"A1": (0, 0), "A2": (0, range(2))}
+        )
 
 
 class Test_get_letters(unittest.TestCase):
