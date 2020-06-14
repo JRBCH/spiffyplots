@@ -195,6 +195,14 @@ class MultiPanel(object):
         # MAKE SUBPLOT LAYOUT
         # # # # # # # # # # # #
 
+        # Raise a warning if there are overlapping panels
+        if _panel_overlap(self._locations, self.shape):
+            warnings.warn(
+                "One or more panels overlap! This will not impact functionality, but"
+                "might lead to visually unappealing figures."
+                "Please check your input parameters if this was not intentionally."
+            )
+
         self.gridspec = gs.GridSpec(
             nrows=self.shape[0], ncols=self.shape[1], figure=self.fig, **kwargs
         )
@@ -313,7 +321,10 @@ def _get_subplot_raster(
 
         # Make tuples of locations of each plot
         for panel in range(grid[row]):
-            locations.append((row, range(int(panel * size), int(panel * size + size))))
+            if size == 1:
+                locations.append((row, panel))
+            else:
+                locations.append((row, range(int(panel * size), int(panel * size + size))))
 
     return shape, locations, npanels
 
@@ -344,3 +355,18 @@ def _find_max_tuple(
 
     # Add plus one to output to transform to dimensionality (i.e. a max value of 0 indicates 1 dimension)
     return max1 + 1, max2 + 1
+
+def _panel_overlap(locations, shape):
+
+    # make a testgrid of random numbers
+    testgrid = np.random.rand(*shape)
+
+    testvalues = []
+    for ix in locations:
+        testvalues.append(list(testgrid[ix].flatten()))
+    testvalues = [item for sublist in testvalues for item in sublist]
+
+    # check whether no panels overlap
+    overlap = len(testvalues) != len(set(testvalues))
+
+    return overlap
