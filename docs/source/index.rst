@@ -5,13 +5,15 @@ Welcome to SpiffyPlots's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-   readme
-   installation
-   usage
-   modules
-   contributing
-   authors
-   history
+    installation
+    quickstart
+    guide
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Package reference
+
+   spiffyplots
 
 Indices and tables
 ==================
