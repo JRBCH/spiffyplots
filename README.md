@@ -34,6 +34,11 @@ or install the latest commit directly from GitHub:
     * Automatic labelling of sub-panels
     * Support for custom panel arrangements and labels
 
+## The Spiffy Style
+
+![Spiffy style example](examples/multipanel_spiffy.png)
+
+
 ## Future Plans
 
 * Journal-specific style sheets
