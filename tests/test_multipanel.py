@@ -1,4 +1,4 @@
-"""Tests for `spiffyplots` package."""
+"""Tests for `spiffyplots.multipanel` module."""
 
 
 import unittest

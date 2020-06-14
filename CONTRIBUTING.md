@@ -8,9 +8,15 @@ You can contribute in many ways:
 
 ### Implement new features
 
-* New styles
+Your imagination is your limit, as long as the proposed features are
+useful in the broader context of scientific data visualization.
+
+Example features:
+* New style sheets
 * Journal-specific style sheets
-* Helper functions and object classes for multipanel figures
+* Plotting functions for specific plots
+* Color libraries
+
 
 ### Submit examples
 
@@ -49,7 +55,9 @@ Ready to contribute? Here's how to set up `spiffyplots` for local development.
 
     `$ cd spiffyplots/`
 
-    `$ python setup.py develop`
+    `$ python setup.py install`
+
+    `$ pip install -r requirements_dev.txt`
 
 4. Create a branch for local development::
 
@@ -57,16 +65,10 @@ Ready to contribute? Here's how to set up `spiffyplots` for local development.
 
    Now you can make your changes locally.
 
-5. When you're done making changes, check that your changes pass `flake8` and the
-   tests, including testing other Python versions with `tox`:
+5. If necessary, implement new tests that address your new features.
+When you're done making changes, check that your changes pass the tests:
 
-    `$ flake8 spiffyplots tests`
-
-    `$ python setup.py test or pytest`
-
-    `$ tox`
-
-   To get `flake8` and `tox`, just pip install them into your virtualenv requirements-dev.txt .
+    `$ pytest`
 
 6. Commit your changes and push your branch to GitHub::
 
@@ -92,9 +94,9 @@ Before you submit a pull request, check that it meets these guidelines:
 
 ## Tips
 
-To run a subset of tests:
+To run a subset of tests (e.g. the multipanel module):
 
-    $ python -m unittest tests.test_spiffyplots
+    $ python -m unittest tests.test_multipanel
 
 ## Deploying
 

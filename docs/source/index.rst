@@ -1,13 +1,15 @@
 Welcome to SpiffyPlots's documentation!
 ======================================
 
+
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
 
-    installation
-    quickstart
-    guide
+   installation
+   quickstart
 
 .. toctree::
    :maxdepth: 2

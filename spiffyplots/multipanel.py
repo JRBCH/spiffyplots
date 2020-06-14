@@ -15,30 +15,16 @@ import warnings
 
 
 class MultiPanel(object):
+    # language=rst
     """
-    The central object class of the `spiffy` package.
-    The MultiPanel object initiates a figure with multiple panels.
-    It is build upon matplotlib's GridSpec, but aims to add simplicity and functionality.
-    """
+    The central object of the `multipanel` module. The MultiPanel object initiates a figure with multiple panels.
+        It is build upon matplotlib's GridSpec, but aims to add simplicity and functionality.
 
-    def __init__(
-        self,
-        shape: Optional[Tuple[int, int]] = (2, 2),
-        grid: Union[Iterable[Tuple], Iterable[int]] = None,
-        labels: Union[bool, Iterable[str], Dict[str, tuple], np.array] = False,
-        **kwargs
-    ) -> None:
-
-        # language=rst
-        """
-        Initializes a MultiPanel figure.
-
-        The ``MultiPanel`` object is basically a wrapper of matplotlib's ``GridSpec``,
+    The ``MultiPanel`` object is basically a wrapper of matplotlib's ``GridSpec``,
         but tries to simplify some aspects of multi-panel figure generation, such as Figure labels
         and the layout of panels. Depending on the input, the layout is initialized in one of three ways:
 
-        **OPTION 1: Initialization based on ``labels``**
-
+    **OPTION 1: Initialization based on the** ``labels`` **parameter**
         The ``labels`` parameter can be passed in as a dictionary, mapping custom figure labels [e.g. 'A', 'B', 'C']
         to locations in the grid that are defined by Tuples [e.g. {'A': (0, range(2,5)} will make a plot in the
         first row spanning columns 2-4 and give it the label A.
@@ -55,9 +41,23 @@ class MultiPanel(object):
         format of their labels. If label is passed in as a dictionary or np.array, the ``grid`` and ``shape``
         parameters are ignored.
 
+    **OPTION 2: INITIALIZATION BASED ON ``grid``**
+        If option 1 does not apply, the class will try to be initialized through the ``grid`` parameter.
+    """
+
+    def __init__(
+        self,
+        shape: Optional[Tuple[int, int]] = (2, 2),
+        grid: Union[Iterable[Tuple], Iterable[int]] = None,
+        labels: Union[bool, Iterable[str], Dict[str, tuple], np.array] = False,
+        **kwargs
+    ) -> None:
+
+        # language=rst
+        """
         **OPTION 2: INITIALIZATION BASED ON ``grid``**
 
-        If **OPTION 1** does not apply, the class will try to be initialized through the ``grid`` parameter.
+        If option 1 does not apply, the class will try to be initialized through the ``grid`` parameter.
 
 
         :param shape: Tuple of form ``[rows, columns]`` determining the shape of the MultiPanel matrix
