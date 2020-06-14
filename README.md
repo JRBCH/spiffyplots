@@ -12,6 +12,9 @@ A collection of matplotlib style sheets and plotting tools for publication-ready
 * Free software: GPL-3 license
 * Documentation: https://spiffyplots.readthedocs.io.
 
+#### Simple style example:
+![style example](examples/multipanel_spiffy.png)
+
 ## Installation
 
 Install the latest release:
@@ -21,7 +24,6 @@ Install the latest release:
 or install the latest commit directly from GitHub:
 
 `pip install git+https://github.com/JRBCH/spiffyplots.git`
-
 
 ## Features
 
@@ -33,11 +35,6 @@ or install the latest commit directly from GitHub:
     * Easy and flexible wrapper of matplotlib's GridSpec
     * Automatic labelling of sub-panels
     * Support for custom panel arrangements and labels
-
-## The Spiffy Style
-
-![Spiffy style example](examples/multipanel_spiffy.png)
-
 
 ## Future Plans
 
