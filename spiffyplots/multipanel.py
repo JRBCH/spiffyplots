@@ -1,5 +1,5 @@
-"""
-The Spiffy MultiPanel class and its methods
+# -*- coding: utf-8 -*-
+"""The Spiffy MultiPanel class and its methods.
 """
 
 import matplotlib
@@ -15,34 +15,9 @@ import warnings
 
 
 class MultiPanel(object):
-    # language=rst
+
     """
-    The central object of the `multipanel` module. The MultiPanel object initiates a figure with multiple panels.
-        It is build upon matplotlib's GridSpec, but aims to add simplicity and functionality.
-
-    The ``MultiPanel`` object is basically a wrapper of matplotlib's ``GridSpec``,
-        but tries to simplify some aspects of multi-panel figure generation, such as Figure labels
-        and the layout of panels. Depending on the input, the layout is initialized in one of three ways:
-
-    **OPTION 1: Initialization based on the** ``labels`` **parameter**
-        The ``labels`` parameter can be passed in as a dictionary, mapping custom figure labels [e.g. 'A', 'B', 'C']
-        to locations in the grid that are defined by Tuples [e.g. {'A': (0, range(2,5)} will make a plot in the
-        first row spanning columns 2-4 and give it the label A.
-
-        Similarly, ``labels`` can be passed as a 2-dimensional np.array of strings. In this case, the strings in
-        the cells of the array correspond to the label of the panels. Adjacent identical labels are considered
-        one panel. For example, the array
-        |``[['A', 'A', 'D'],``
-        | ``['B', 'C', 'D'],``
-        | ``['E', 'E', 'E']]``
-        will create 5 panels, each occupying the space that the respective label takes up in the array.
-
-        This option is useful when you want to control both the arrangement of panels, and the order and
-        format of their labels. If label is passed in as a dictionary or np.array, the ``grid`` and ``shape``
-        parameters are ignored.
-
-    **OPTION 2: INITIALIZATION BASED ON ``grid``**
-        If option 1 does not apply, the class will try to be initialized through the ``grid`` parameter.
+    The central object of the `multipanel` module. Initiates a figure with multiple panels.
     """
 
     def __init__(
@@ -52,53 +27,95 @@ class MultiPanel(object):
         labels: Union[bool, Iterable[str], Dict[str, tuple], np.array] = False,
         **kwargs
     ) -> None:
-
-        # language=rst
         """
-        **OPTION 2: INITIALIZATION BASED ON ``grid``**
+        The ``MultiPanel`` object is basically a wrapper of matplotlib's ``GridSpec``,
+        but tries to simplify some aspects of multi-panel figure generation, such as Figure labels
+        and the layout of panels. Depending on the input, the layout is initialized in one of three ways:
 
-        If option 1 does not apply, the class will try to be initialized through the ``grid`` parameter.
+        **OPTION 1: Initialization based on the** ``labels`` **parameter**
+
+            The ``labels`` parameter can be passed in as a dictionary, mapping custom figure labels (e.g. 'a', 'b', 'c')
+            to locations in the grid that are defined by Tuples (e.g. {'A': (0, range(2,5)} will make a plot in the
+            first row spanning columns 2-4 and give it the label A.
+
+            Similarly, ``labels`` can be passed as a 2-dimensional np.array of strings. In this case, the strings in
+            the cells of the array correspond to the label of the panels. Adjacent identical labels are considered
+            one panel. For example, the array::
+                ['A', 'A', 'D']
+                ['B', 'C', 'D']
+                ['E', 'E', 'E']
+
+            will create 5 panels, each occupying the space that the respective label takes up in the array.
+
+            This option is useful when you want to control both the arrangement of panels, and the order and
+            format of their labels. If label is passed in as a dictionary or np.array, the ``grid`` and ``shape``
+            parameters are ignored.
+
+        **OPTION 2: Initialization based on the** ``grid`` **parameter:**
+
+            If option 1 does not apply, the class will try to be initialized through the ``grid`` parameter.
+
+            Example:
+                Generate a two-row figure with 3 columns (panels) in the first row and 2 columns (panels)
+                in the second row::
+                    >>> fig = MultiPanel(grid=[3, 2])
+
+            Example:
+                Generate a 2x3 figure with 5 panels, where one panel spans
+                both rows in the last column::
+                    >>> fig = MultiPanel(grid=[(0, 0), (0, 1), (1, 0), (1, 1), (range(0, 2), 2)]
+
+        **OPTION 3: initialization based on the** ``shape`` **parameter:**
+
+            if neither ``labels`` or ``grid`` are supplied, the class will generate one panel in each cell of the grid
+            matrix, as defined by the ``shape`` parameter.
+
+            Example:
+                Generate a 3x3 grid with
+                9 plots of equal size::
+                    >>> fig = MultiPanel(shape=(3, 3))
+
+        Args:
+            shape (Tuple): Determines the shape of the MultiPanel grid layout.
+
+            grid (Iterable[Tuple], Iterable[int]): Determines the layout of subplots across the MultiPanel matrix.
+                Defaults to one plot in each cell of the ``shape`` matrix. Can be one of:
+
+                * Iterable of grid location tuples of form ``[rows, columns]``, in which rows and columns are
+                  either int (for a single cell) or Iterable (for spanning multiple cells).
+                * Iterable of ints with length ``shape[0]``, which defines the number of plots in each row.
+                  Each plot then has the size ``1 x shape[0]/int``.
+                  **Attention**: ``shape[0]`` must be divisable by every element in ``grid``.
+
+            labels (bool, Iterable[str], dict, np.array): Assigns labels to subplots. Defaults to False.
+                Can be one of:
+
+                * Boolean. If True, labels are assigned to plots first across rows, then across columns.
+                * Iterable of strings assigning labels to subplots, in the same order as defined by ``grid``.
+                * A Dictionary mapping [str] keys to [Tuple] locations in the grid. This setting overrides the grid.
+                * A np.array of the same shape as ``shape``, mapping string names to the locations in the grid.
+                  Figures can span multiple cells in the grid. Also overrides the grid.
 
 
-        :param shape: Tuple of form ``[rows, columns]`` determining the shape of the MultiPanel matrix
+        Keyword Args:
+            figsize (Tuple): Size of the figure. Will be passed into ``matplotlib.pyplot.figure``.
 
-        :param grid: Determines the layout of subplots across the MultiPanel matrix. Defaults to one plot in each
-                    cell of the ``shape`` matrix.
-                    Can be one of:
-                    - Iterable of grid location tuples of form ``[rows, columns]``, in which rows and columns are
-                    either int (for a single cell) or Iterable (for spanning multiple cells).
-                    - Iterable of ints with length ``shape[0]``, which defines the number of plots in each row.
-                    Each plot then has the size ``1 x shape[0]/int``.
-                    Attention: ``shape[0]`` must be divisable by every element in ``grid``.
-
-        :param labels: Assigns labels to subplots. Defaults to False.
-                    Can be one of:
-                    - Boolean. If True, labels are assigned to plots first across rows, then across columns.
-                    - Iterable of strings assigning labels to subplots, in the same order as defined by ``grid``.
-                    - A Dictionary mapping [str] keys to [Tuple] locations in the grid. This setting overrides the grid.
-                    - A np.array of the same shape as ``shape``, mapping string names to the locations in the grid.
-                    Figures can span multiple cells in the grid. Also overrides the grid.
-
-        kwargs for SpiffyPlot functions:
-        :param label_case: String. 'uppercase' or 'lowercase' - passed into function that
-                    generates figure labels.
-        :param label_weight: String. Weight of the figure labels. defaults to 'bold'
-        :param label_size: Int. Font Size for figure labels. defaults to 14.
-        :param label_location: Tuple. Location of the figure labels relative to axis origin.
+            label_case (str): 'uppercase' or 'lowercase'.
+                This and following kwargs are passed to ``MultiPanel._draw_labels``.
+            label_weight (str): Weight of the figure labels. defaults to 'bold'
+            label_size (int): Font Size for figure labels. defaults to 14.
+            label_location (Tuple): Tuple. Location of the figure labels relative to axis origin.
                     Defaults to (-0.1, 1.1)
 
-        kwargs for matplotlib figure:
-        :param figsize: Size of the figure. Will be passed into the matplotlib figure generator.
-
-        kwargs for GridSpec: (see matplotlib documentations)
-        :param left:
-        :param right:
-        :param bottom:
-        :param top:
-        :param wspace:
-        :param hspace:
-        :param width_ratios:
-        :param height_ratios:
+            left (float): left margin.
+                This and following kwargs are passed to ``matplotlib.gridspec.GridSpec``
+            right (float): right margin
+            bottom (float): bottom margin
+            top (float): top margin
+            wspace (float): horizontal spacing
+            hspace (float): vertical spacing
+            width_ratios (Iterable): width ratios of columns
+            height_ratios (Iterable): height ratios of rows
         """
 
         self.npanels = 0
