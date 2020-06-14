@@ -22,15 +22,7 @@ import os
 import sys
 import spiffyplots
 
-<<<<<<< HEAD
 sys.path.insert(0, os.path.abspath("../.."))
-=======
-<<<<<<< HEAD:docs/source/conf.py
-sys.path.insert(0, os.path.abspath("../../.."))
-=======
-sys.path.insert(0, os.path.abspath("../.."))
->>>>>>> master:docs/conf.py
->>>>>>> master
 
 # -- General configuration ---------------------------------------------
 
