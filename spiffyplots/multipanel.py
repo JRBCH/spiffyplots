@@ -28,6 +28,7 @@ class MultiPanel(object):
         labels: Union[bool, Iterable[str], Dict[str, tuple], np.array] = False,
         **kwargs
     ) -> None:
+
         # language=rst
         """
         Initializes a MultiPanel figure.
@@ -88,7 +89,6 @@ class MultiPanel(object):
 
         kwargs for matplotlib figure:
         :param figsize: Size of the figure. Will be passed into the matplotlib figure generator.
-        :param constrained_layout: Boolean passed into figure generation.
 
         kwargs for GridSpec: (see matplotlib documentations)
         :param left:
@@ -107,9 +107,10 @@ class MultiPanel(object):
         self._labels = []
         self.panels = []
 
-        self.figsize = kwargs.get("figsize", plt.rcParams.get("figure.figsize"))
+        # parse kwargs
+        figsize = kwargs.pop("figsize", plt.rcParams.get("figure.figsize"))
 
-        self.fig = plt.figure(**kwargs)
+        self.fig = plt.figure(figsize=figsize)
 
         # OPTION 1: INITIALIZATION BASED ON ``labels``
         # # # # # # # # # # # #
@@ -181,7 +182,7 @@ class MultiPanel(object):
 
             # Get labels based on provided vector or revert to default
             if isinstance(labels, bool):
-                self._labels = _get_letters(case=kwargs.get("label_case", "uppercase"))[
+                self._labels = _get_letters(case=kwargs.pop("label_case", "uppercase"))[
                     : self.npanels
                 ]
                 draw_labels = labels
@@ -210,8 +211,20 @@ class MultiPanel(object):
                 "Please check your input parameters if this was not intentionally."
             )
 
+        # Initialize GridSpec and consider Keyword Arguments
+
         self.gridspec = gs.GridSpec(
-            nrows=self.shape[0], ncols=self.shape[1], figure=self.fig, **kwargs
+            nrows=self.shape[0],
+            ncols=self.shape[1],
+            figure=self.fig,
+            left=kwargs.pop("left", None),
+            bottom=kwargs.pop("bottom", None),
+            right=kwargs.pop("right", None),
+            top=kwargs.pop("top", None),
+            wspace=kwargs.pop("wspace", None),
+            hspace=kwargs.pop("hspace", None),
+            width_ratios=kwargs.pop("width_ratios", None),
+            height_ratios=kwargs.pop("height_ratios", None)
         )
 
         Panels = namedtuple("Panels", [i for i in self._labels])
@@ -225,16 +238,16 @@ class MultiPanel(object):
         # If labels should be drawn, draw them now.
         if draw_labels:
             self._draw_labels(
-                label_location=kwargs.get("label_location", (-0.1, 1.1)),
-                size=kwargs.get("label_size", 14),
-                weight=kwargs.get("label weight", "bold"),
+                label_location=kwargs.pop('label_location', (-0.1, 1.1)),
+                size=kwargs.pop('label_size', 14),
+                weight=kwargs.pop('label_weight', 'bold')
             )
 
     def _draw_labels(
         self,
-        label_location: Optional[Tuple] = (-0.1, 1.1),
-        size: Optional[int] = 14,
-        weight: Optional[str] = "bold",
+        label_location: Tuple[float, float] = (-0.1, 1.1),
+        size: int = 14,
+        weight: str = 'bold'
     ) -> None:
 
         for ix in range(self.npanels):

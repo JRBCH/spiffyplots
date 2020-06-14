@@ -128,6 +128,35 @@ class TestMutiPanel(unittest.TestCase):
         self.assertEqual(fig.panels.__len__(), 4)
         self.assertEqual(fig._labels, labels)
 
+    def test_kwargs(self):
+        """
+        Test if different keyword arguments work as expected
+        """
+
+        # Add keyword arguments for label generator
+        kwargs = {'label_case': 'lowercase',
+                  'label_size': 10,
+                  'label_weight': 'normal',
+                  'label_location': (-0.2, 1),
+
+                  # Add keyword arguments for figure size
+                  'figsize': (8, 8),
+
+                  # Add keyword arguments for gridspec
+                  'left': 0.1,
+                  'bottom': 0.1,
+                  'right': 1,
+                  'top': 1,
+                  'wspace': 0.1,
+                  'hspace': 0.1,
+                  'width_ratios': (1, 2),
+                  'height_ratios': (1, 2)
+                  }
+
+        fig = mp.MultiPanel(**kwargs)
+
+        self.assertEqual(fig._labels, 'abcd')
+
     def test_errors_invalid_inputs(self):
         """
         Test TypeErrors if invalid inputs are given
