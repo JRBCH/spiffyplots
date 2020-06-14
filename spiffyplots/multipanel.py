@@ -63,7 +63,7 @@ class MultiPanel(object):
             Example:
                 Generate a 2x3 figure with 5 panels, where one panel spans
                 both rows in the last column::
-                    >>> fig = MultiPanel(grid=[(0, 0), (0, 1), (1, 0), (1, 1), (range(0, 2), 2)]
+                    >>> fig = MultiPanel(grid=[(0, 0), (0, 1), (1, 0), (1, 1), (range(0, 2), 2)])
 
         **OPTION 3: initialization based on the** ``shape`` **parameter:**
 
