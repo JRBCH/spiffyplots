@@ -60,8 +60,8 @@ coverage: ## check code coverage quickly with the default Python
 	$(BROWSER) htmlcov/index.html
 
 docs: ## generate Sphinx HTML documentation, including API docs
-	rm -f docs/spiffyplots.rst
-	rm -f docs/modules.rst
+	rm -f docs/source/spiffyplots.rst
+	rm -f docs/source/modules.rst
 	sphinx-apidoc -o docs/ spiffyplots
 	$(MAKE) -C docs clean
 	$(MAKE) -C docs html
