@@ -45,7 +45,7 @@ class TestMutiPanel(unittest.TestCase):
 
         # assert 4 panels
         self.assertEqual(fig.panels.__len__(), 4)
-        self.assertEqual(fig._labels, "ABCD")
+        self.assertEqual(fig._labels, 'ABCD')
         self.assertEqual(fig.shape, (2, 2))
 
     def test_init_002_grid_intlist(self):
@@ -59,16 +59,20 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(grid=grid)
 
         self.assertEqual(fig.panels.__len__(), 12)
-        self.assertEqual(fig._labels, "ABCDEFGHIJKL")
+        self.assertEqual(fig._labels, 'ABCDEFGHIJKL')
         self.assertEqual(fig.shape, (4, 12))
 
         grid2 = (2, 1)  # 3 panels with location tuple test
         fig2 = mp.MultiPanel(grid=grid2)
 
         self.assertEqual(fig2.panels.__len__(), 3)
-        self.assertEqual(fig2._labels, "ABC")
+        self.assertEqual(fig2._labels, 'ABC')
         self.assertEqual(fig2.shape, (2, 2))
-        self.assertEqual(fig2._locations, [(0, 0), (0, 1), (1, range(0, 2))])
+        self.assertEqual(fig2._locations, [
+            (0, 0),
+            (0, 1),
+            (1, range(0, 2))
+        ])
 
     def test_init_003_grid_tuples(self):
         """
@@ -77,11 +81,16 @@ class TestMutiPanel(unittest.TestCase):
         003 - Initialization based on ``grid`` being a list of location tuples.
         """
 
-        grid = [(0, 0), (0, 1), (range(1, 3), 0), (range(1, 3), 1)]
+        grid = [
+            (0, 0),
+            (0, 1),
+            (range(1, 3), 0),
+            (range(1, 3), 1)
+        ]
         fig = mp.MultiPanel(grid=grid)
 
         self.assertEqual(fig.panels.__len__(), 4)
-        self.assertEqual(fig._labels, "ABCD")
+        self.assertEqual(fig._labels, 'ABCD')
         self.assertEqual(fig.shape, (3, 2))
         self.assertEqual(fig._locations, grid)
 
@@ -93,12 +102,11 @@ class TestMutiPanel(unittest.TestCase):
         mapping panel labels to locations.
         """
 
-        labels = {
-            "A1": (0, 0),
-            "A2": (0, 1),
-            "B": (range(1, 3), 0),
-            "C": (range(1, 3), 1),
-        }
+        labels = {'A1': (0, 0),
+                  'A2': (0, 1),
+                  'B': (range(1, 3), 0),
+                  'C': (range(1, 3), 1)
+                  }
 
         fig = mp.MultiPanel(labels=labels)
 
@@ -114,8 +122,9 @@ class TestMutiPanel(unittest.TestCase):
         004 - Initialization based on ``labels`` being a list of custom labels.
         """
 
-        labels = ["A1", "A2", "B1", "B2"]
-        fig = mp.MultiPanel(labels=labels)
+        labels = ['A1', 'A2',
+                  'B1', 'B2']
+        fig = mp.MultiPanel(labels = labels)
         self.assertEqual(fig.panels.__len__(), 4)
         self.assertEqual(fig._labels, labels)
 
@@ -123,14 +132,19 @@ class TestMutiPanel(unittest.TestCase):
         """
         Test TypeErrors if invalid inputs are given
         """
-        self.assertRaises(TypeError, mp.MultiPanel, grid=[1, 2, "string"])
+        self.assertRaises(TypeError, mp.MultiPanel,
+                          grid=[1, 2, 'string'])
 
-        self.assertRaises(TypeError, mp.MultiPanel, shape=(1, (2, 4)))
+        self.assertRaises(TypeError, mp.MultiPanel,
+                          shape=(1, (2, 4)))
 
-        self.assertRaises(TypeError, mp.MultiPanel, labels=123)
+        self.assertRaises(TypeError, mp.MultiPanel,
+                          labels=123)
 
         # Too few labels for the number of panels
-        self.assertRaises(AssertionError, mp.MultiPanel, grid=(1, 3), labels=["ABC"])
+        self.assertRaises(AssertionError, mp.MultiPanel,
+                          grid=(1, 3),
+                          labels=['ABC'])
 
     def test_warnings(self):
         """
@@ -138,14 +152,19 @@ class TestMutiPanel(unittest.TestCase):
         """
 
         # If parameters given are ignored
-        self.assertWarns(
-            Warning, mp.MultiPanel, labels={"A1": (0, 0), "A2": (0, 1)}, shape=(3, 2)
-        )
+        self.assertWarns(Warning, mp.MultiPanel,
+                         labels={'A1': (0,0),
+                                 'A2': (0,1)
+                                 },
+                         shape=(3, 2)
+                         )
 
         # If panels overlap
-        self.assertWarns(
-            Warning, mp.MultiPanel, labels={"A1": (0, 0), "A2": (0, range(2))}
-        )
+        self.assertWarns(Warning, mp.MultiPanel,
+                         labels={'A1': (0, 0),
+                                 'A2': (0, range(2))
+                                 }
+                         )
 
 
 class Test_get_letters(unittest.TestCase):
