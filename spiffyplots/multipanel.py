@@ -3,7 +3,7 @@
 """
 
 from collections import defaultdict
-from itertools import product
+from itertools import product, combinations
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gs
@@ -463,17 +463,26 @@ def _find_max_tuple(
     return max1 + 1, max2 + 1
 
 
-def _panel_overlap(locations, shape):
+def _panel_overlap(locations, shape=None):
+    """
+    Check a list of (x,y) location coordinates, which may be ranges, to ensure
+    none overlap
 
-    # make a testgrid of random numbers
-    testgrid = np.random.rand(*shape)
+    :param locations: list of (x,y) tuple locations
+    :param shape: the shape the locations should fit into (deprecated)
+    """
 
-    testvalues = []
-    for ix in locations:
-        testvalues.append(list(testgrid[ix].flatten()))
-    testvalues = [item for sublist in testvalues for item in sublist]
+    # expand all coordinates for each location
+    coords = []
+    for loc in locations:
+        xlocs = loc[0] if isinstance(loc[0],range) else [loc[0]]
+        ylocs = loc[1] if isinstance(loc[1],range) else [loc[1]]
+        coords.append(list(product(xlocs,ylocs)))
 
-    # check whether no panels overlap
-    overlap = len(testvalues) != len(set(testvalues))
+    # examine all pairs of locations to make sure nothing overlaps
+    overlap = False
+    for loc1, loc2 in combinations(coords,2) :
+        overlap = len(set(loc1).intersection(loc2)) != 0
+        if overlap : break
 
     return overlap

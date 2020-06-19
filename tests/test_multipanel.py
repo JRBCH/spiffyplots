@@ -137,6 +137,13 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(labels = labels)
         self.assertEqual(set(fig._locations),set([(0,range(0,2)),(1,range(0,2))]))
 
+        labels = np.array([
+            ['A', 'B','B'],
+            ['C', 'C','C'],
+            ['C', 'C','C']
+        ])
+        fig = mp.MultiPanel(labels = labels)
+
     def test_kwargs(self):
         """
         Test if different keyword arguments work as expected
@@ -252,6 +259,13 @@ class Test_decode_label_array(unittest.TestCase):
             ['B','C','C']
         ])
         self.assertTrue(grid_dict['C'] == (range(0,2),range(1,3)))
+
+        grid_dict = mp._decode_label_array([
+            ['A', 'B','B'],
+            ['C', 'C','C'],
+            ['C', 'C','C']
+        ])
+        self.assertTrue(grid_dict['C'] == (range(1,3),range(0,3)))
 
         # discontiguous labels
         self.assertRaises(TypeError, mp._decode_label_array,
@@ -385,3 +399,53 @@ class Test_find_max_tuple(unittest.TestCase):
     def test_long_mixed(self):
         out = mp._find_max_tuple(self.long_mixed)
         self.assertEqual(out, (11, 5))
+
+    def test_large_subplots(self):
+        grid_dict = mp._decode_label_array([
+            ['A', 'B','B'],
+            ['C', 'C','C'],
+            ['C', 'C','C']
+        ])
+        self.assertEqual(mp._find_max_tuple(grid_dict.values()),(3,3))
+
+class Test_panel_overlap(unittest.TestCase):
+    def test_default(self) :
+        self.assertFalse(mp._panel_overlap([]))
+        self.assertFalse(mp._panel_overlap([
+            (0,0)
+        ]))
+        self.assertFalse(mp._panel_overlap([
+            (0,0),
+            (0,1)
+        ]))
+        self.assertFalse(mp._panel_overlap([
+            (0,0),(1,0),
+            (0,1),(1,1)
+        ]))
+        self.assertTrue(mp._panel_overlap([
+            (0,0),(1,0),
+            (0,1),(1,0)
+        ]))
+        self.assertFalse(mp._panel_overlap([
+            (0,range(0,10)),
+            (1,range(0,10))
+        ]))
+        self.assertTrue(mp._panel_overlap([
+            (0,range(0,3)),
+            (0,range(1,4))
+        ]))
+        self.assertFalse(mp._panel_overlap([
+            (range(0,2),range(0,2)),
+            (range(2,4),range(2,4))
+        ]))
+        self.assertTrue(mp._panel_overlap([
+            (range(0,2),range(0,2)),
+            (range(1,4),range(1,4))
+        ]))
+    def test_large_subplots(self):
+        grid_dict = mp._decode_label_array([
+            ['A', 'B','B'],
+            ['C', 'C','C'],
+            ['C', 'C','C']
+        ])
+        self.assertFalse(mp._panel_overlap(grid_dict.values(),(3,3)))
