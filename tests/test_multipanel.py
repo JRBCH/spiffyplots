@@ -431,8 +431,8 @@ class Test_panel_overlap(unittest.TestCase):
             (1,range(0,10))
         ]))
         self.assertTrue(mp._panel_overlap([
-            (0,range(0,3)),
-            (0,range(1,4))
+            (0,range(0,2)),
+            (0,range(1,2))
         ]))
         self.assertFalse(mp._panel_overlap([
             (range(0,2),range(0,2)),

@@ -223,11 +223,11 @@ class MultiPanel(object):
         # # # # # # # # # # # #
 
         # Raise a warning if there are overlapping panels
-        if _panel_overlap(self._locations, self.shape):
+        overlaps = _panel_overlap(self._locations, self.shape)
+        if len(overlaps) != 0 :
             warnings.warn(
-                "One or more panels overlap! This will not impact functionality, but"
-                "might lead to visually unappealing figures."
-                "Please check your input parameters if this was not intentionally."
+                "One or more panel coordinates overlap: {}! You probably do not "
+                "want this, double check your input coordinates."
             )
 
         # Initialize GridSpec and consider Keyword Arguments
@@ -482,7 +482,7 @@ def _panel_overlap(locations, shape=None):
     # examine all pairs of locations to make sure nothing overlaps
     overlap = False
     for loc1, loc2 in combinations(coords,2) :
-        overlap = len(set(loc1).intersection(loc2)) != 0
+        overlap = set(loc1).intersection(loc2)
         if overlap : break
 
     return overlap
