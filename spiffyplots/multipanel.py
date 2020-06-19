@@ -300,7 +300,7 @@ def _get_letters(case: Optional[str] = "uppercase") -> str:
     else:
         return string.ascii_uppercase
 
-def _is_label_grid_spec(labels) -> bool:
+def _is_iter_of_iters(labels) -> bool:
     """
     Helper function to check for iterable of iterables
     """
@@ -317,7 +317,16 @@ def _decode_label_array(labels: Iterable[Iterable]) -> dict:
     :return: The mapping in dictionary form
     """
 
+
+
     # make sure we've got a list of lists
+    if not _is_iter_of_iters(labels) :
+        raise TypeError(
+                "Sorry, ``labels`` must be a iterable of iterables, where "
+                "each sub-iterable is the same length"
+            )
+
+
     label_grid = [list(_) for _ in labels]
 
     # verify labels format

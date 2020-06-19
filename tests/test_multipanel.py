@@ -224,6 +224,14 @@ class Test_get_letters(unittest.TestCase):
         self.assertEqual(out[2], "C")
         self.assertEqual(out[-1], "Z")
 
+class Test_is_iter_of_iters(unittest.TestCase) :
+    def test_default(self) :
+        """Test _is_iter_of_iters"""
+        self.assertTrue(mp._is_iter_of_iters([[1]]))
+        self.assertTrue(mp._is_iter_of_iters([[1],[2]]))
+        self.assertTrue(mp._is_iter_of_iters(['ABC','DEF']))
+        self.assertTrue(mp._is_iter_of_iters([]))
+        self.assertFalse(mp._is_iter_of_iters(1))
 
 class Test_decode_label_array(unittest.TestCase):
     def test_simple_array(self):
