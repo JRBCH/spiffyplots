@@ -3,7 +3,7 @@
 """
 
 from collections import defaultdict
-from itertools import chain, product
+from itertools import product
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gs
