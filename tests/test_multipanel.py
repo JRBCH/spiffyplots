@@ -276,6 +276,11 @@ class Test_decode_label_array(unittest.TestCase):
         ]))
         self.assertTrue(grid_dict['D'] == (1,range(0,3)))
 
+        # should raise on invalid input
+        self.assertRaises(TypeError, mp._decode_label_array,
+                1
+        )
+
     def test_complex_array(self):
         NotImplemented
 
