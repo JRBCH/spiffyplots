@@ -1,5 +1,6 @@
 """Tests for `spiffyplots.multipanel` module."""
 
+from itertools import product
 
 import unittest
 import pytest
@@ -105,7 +106,7 @@ class TestMutiPanel(unittest.TestCase):
         """
         Test initialization of MultiPanel object.
 
-        004 - Initialization based on ``labels`` being a list of custom labels.
+        005 - Initialization based on ``labels`` being a list of custom labels.
         """
 
         labels = ['A1', 'A2',
@@ -113,6 +114,28 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(labels = labels)
         self.assertEqual(fig.panels.__len__(), 4)
         self.assertEqual(fig._labels, labels)
+
+    def test_init_006_labels_array(self):
+        """
+        Test initialization of MultiPanel object.
+
+        004 - Initialization based on ``labels`` being a numpy array label grid
+        """
+
+        labels = np.array([
+            ['A1', 'A2'],
+            ['B1', 'B2']
+        ])
+        fig = mp.MultiPanel(labels = labels)
+        self.assertEqual(fig.panels.__len__(), 4)
+        self.assertEqual(set(fig._locations),set(product([0,1],[0,1])))
+
+        labels = np.array([
+            ['A', 'A'],
+            ['B', 'B']
+        ])
+        fig = mp.MultiPanel(labels = labels)
+        self.assertEqual(set(fig._locations),set([(0,range(0,2)),(1,range(0,2))]))
 
     def test_kwargs(self):
         """
@@ -204,7 +227,46 @@ class Test_get_letters(unittest.TestCase):
 
 class Test_decode_label_array(unittest.TestCase):
     def test_simple_array(self):
-        NotImplemented
+        grid_dict = mp._decode_label_array([
+            ['A','B','C'],
+            ['D','D','D']
+        ])
+        self.assertTrue(grid_dict['D'] == (1,range(0,3)))
+
+        grid_dict = mp._decode_label_array([
+            ['A','C','E'],
+            ['B','D','E']
+        ])
+        self.assertTrue(grid_dict['E'] == (range(0,2),2))
+
+        grid_dict = mp._decode_label_array([
+            ['A','C','C'],
+            ['B','C','C']
+        ])
+        self.assertTrue(grid_dict['C'] == (range(0,2),range(1,3)))
+
+        # discontiguous labels
+        self.assertRaises(TypeError, mp._decode_label_array,
+                [['A','B'],
+                 ['B','A']]
+        )
+        self.assertRaises(TypeError, mp._decode_label_array,
+                [['A','B','C'],
+                 ['C','B','A']]
+        )
+
+        # different types of iterable inputs
+        grid_dict = mp._decode_label_array([
+            'ABC',
+            'DDD'
+        ])
+        self.assertTrue(grid_dict['D'] == (1,range(0,3)))
+
+        grid_dict = mp._decode_label_array(np.array([
+            ['A','B','C'],
+            ['D','D','D']
+        ]))
+        self.assertTrue(grid_dict['D'] == (1,range(0,3)))
 
     def test_complex_array(self):
         NotImplemented
