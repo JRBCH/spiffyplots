@@ -1,8 +1,12 @@
 [build-system]
 # Minimum requirements for the build system to execute.
 requires = [
-    "setuptools", "matplotlib", "wheel", "pytest-runner"
+    "setuptools",
+    "matplotlib",
+    "wheel",
+    "pytest-runner"
 ]
+build-backend='setuptools.build_meta'
 
 [tool.black]
     py38 = true
@@ -20,4 +24,3 @@ requires = [
       | dist
     )/
     '''
-
