@@ -3,29 +3,25 @@ python:
 - 3.8
 - 3.7
 - 3.6
-
 before_install:
-  - python --version
-  - pip install -U pip
-  - pip install -U pytest
-  - pip install codecov
-
+- python --version
+- pip install -U pip
+- pip install -U pytest
+- pip install codecov
 install:
-    - pip install -r requirements.txt
-    - pip install ".[test]" # install package + test dependencies
-
+- pip install -r requirements.txt
+- pip install ".[test]"
 script:
-    - pytest
-
+- pytest
 after_success:
-  - codecov
-
+- codecov
 deploy:
   provider: pypi
   distributions: sdist bdist_wheel
-  user: "__token__"
+  user: __token__
   skip_existing: true
-  password: pypi-AgEIcHlwaS5vcmcCJDEyMTdmOGZlLWY4MmYtNDI1OC1hNzgxLTYzMWJkZDZiMWZmZgACPHsicGVybWlzc2lvbnMiOiB7InByb2plY3RzIjogWyJzcGlmZnlwbG90cyJdfSwgInZlcnNpb24iOiAxfQAABiDIbj03wm1aP3z5VBxO_mN-_WlFOaGbGBS6zEjdJyeYoA
+  password:
+    secure: mCmOP+4KxrGCbODhPEnh0UYUHUWFA30rTLgwA0Jbn3XGDpKOk2MuOz38oT3ShJ2LYs6nMZn2xruAVl92FMS1sRfF/2OFNDx7SSrOUAwur8KHxV5JM3vuWaEJ3nSde9nNoqwldDF6njxicHpkS/64xU4FB93PjGNIGn8UUdyxsRwgnJW4G/T5noEb0jrBC/EXOGGJlh7WxP1zIGCr8cy2BNmrgWTd5xIYT9NyRqcsOzoSuP9WJQoOpbSW/aGjytjNzhkzDZPXEQg5Tuqbz/JdXpXqEyyyM0sCCYCYdlo8R2dGTaP0VzmpNiUjn6AD0INkjLOakMyUhEp7TfrtsL0sk9D7Zb+7u+OagLGpFRpBbaQxcBuCjcnxGePzBa9rRZDm5CT/CpTNKypNcAh+LszTX65OYs7dXh/crbKdbtntz24Wy7FyzmyTOeJWk/tacAWNl7EET3zrz1YWtcxTcve2W65bI8HFO8OnkAzVDbAsVkVRhywMjm7T9Hm/MF6SNAI1BZT47UKgHSvD4TcT07WrnnMh6gHmZSPbrjSL33I+YYudKoTtQMIlNq09FGGNPx94oD8zdgbDqCy52T597auGr+hIHAfyhjud3IYaBQY3/fBKUKx8h4eJ+FnzwRwn8XOtm+eWdwUBL31PPUhm2j5VVYFHusTlRqVAR1tNBOK7JPw=
   on:
     tags: true
     repo: JRBCH/spiffyplots
