@@ -2,6 +2,8 @@
 """The Spiffy MultiPanel class and its methods.
 """
 
+from collections import defaultdict
+from itertools import product, combinations
 import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gs
@@ -135,7 +137,7 @@ class MultiPanel(object):
         # the shape and grid parameters are ignored.
 
         # If labels is given as a numpy array, decode it into dictionary form.
-        if isinstance(labels, np.ndarray):
+        if isinstance(labels,np.ndarray):
             labels = _decode_label_array(labels)
 
         if isinstance(labels, dict):
@@ -221,11 +223,11 @@ class MultiPanel(object):
         # # # # # # # # # # # #
 
         # Raise a warning if there are overlapping panels
-        if _panel_overlap(self._locations, self.shape):
+        overlaps = _panel_overlap(self._locations, self.shape)
+        if len(overlaps) != 0 :
             warnings.warn(
-                "One or more panels overlap! This will not impact functionality, but"
-                "might lead to visually unappealing figures."
-                "Please check your input parameters if this was not intentionally."
+                "One or more panel coordinates overlap: {}! You probably do not "
+                "want this, double check your input coordinates."
             )
 
         # Initialize GridSpec and consider Keyword Arguments
@@ -298,16 +300,74 @@ def _get_letters(case: Optional[str] = "uppercase") -> str:
     else:
         return string.ascii_uppercase
 
+def _is_iter_of_iters(labels) -> bool:
+    """
+    Helper function to check for iterable of iterables
+    """
+    return isinstance(labels,Iterable) and all(isinstance(_,Iterable) for _ in labels)
 
-def _decode_label_array(labels: np.array) -> dict:
+def _decode_label_array(labels: Iterable[Iterable]) -> dict:
     """
     Helper function to transform a numpy array of subplot specifications into a dictionary
-    mapping labels to locations
-    :param labels: np.array that maps cells in in the grid to a subplot label
+    mapping labels to locations. Generally accepts iterables of iterables, including
+    numpy arrays, list of lists, and list of strings, where the latter assumes
+    labels are individual characters.
+
+    :param labels: grid of labels that maps cells in in the grid to a subplot label
     :return: The mapping in dictionary form
     """
-    NotImplemented
 
+
+
+    # make sure we've got a list of lists
+    if not _is_iter_of_iters(labels) :
+        raise TypeError(
+                "Sorry, ``labels`` must be a iterable of iterables, where "
+                "each sub-iterable is the same length"
+            )
+
+
+    label_grid = [list(_) for _ in labels]
+
+    # verify labels format
+    if not all(len(_) == len(label_grid[0]) for _ in label_grid[1:]) :
+        raise TypeError(
+                "Sorry, ``labels`` must be a iterable of iterables, where "
+                "each sub-iterable is the same length"
+            )
+
+    # collect grid positions for each label
+    label_pos = defaultdict(list)
+    for i,row in enumerate(label_grid) :
+        for j,label in enumerate(row) :
+            label_pos[label].append((i,j))
+
+    # ensure labels spanning grid points are linear contiguous
+    label_dict = {}
+    for label, positions in label_pos.items() :
+
+        rows = list(set([_[0] for _ in positions]))
+        cols = list(set([_[1] for _ in positions]))
+
+        row_range = range(min(rows),max(rows)+1)
+        col_range = range(min(cols),max(cols)+1)
+
+        # check that the label grid positions form a box
+        expected_coords = list(product(rows,cols))
+        if set(positions) != set(expected_coords) :
+            raise TypeError(
+                    "Sorry, label grid spec contains invalid layout; "
+                    "all identical label positions must be adjacent"
+                )
+
+        if len(rows) == 1 :
+            row_range = rows[0]
+        if len(cols) == 1 :
+            col_range = cols[0]
+
+        label_dict[label] = (row_range, col_range)
+
+    return label_dict
 
 def _get_grid_location(
     location: Tuple, gridspec: matplotlib.gridspec.GridSpec
@@ -403,17 +463,26 @@ def _find_max_tuple(
     return max1 + 1, max2 + 1
 
 
-def _panel_overlap(locations, shape):
+def _panel_overlap(locations, shape=None):
+    """
+    Check a list of (x,y) location coordinates, which may be ranges, to ensure
+    none overlap
 
-    # make a testgrid of random numbers
-    testgrid = np.random.rand(*shape)
+    :param locations: list of (x,y) tuple locations
+    :param shape: the shape the locations should fit into (deprecated)
+    """
 
-    testvalues = []
-    for ix in locations:
-        testvalues.append(list(testgrid[ix].flatten()))
-    testvalues = [item for sublist in testvalues for item in sublist]
+    # expand all coordinates for each location
+    coords = []
+    for loc in locations:
+        xlocs = loc[0] if isinstance(loc[0],range) else [loc[0]]
+        ylocs = loc[1] if isinstance(loc[1],range) else [loc[1]]
+        coords.append(list(product(xlocs,ylocs)))
 
-    # check whether no panels overlap
-    overlap = len(testvalues) != len(set(testvalues))
+    # examine all pairs of locations to make sure nothing overlaps
+    overlap = False
+    for loc1, loc2 in combinations(coords,2) :
+        overlap = set(loc1).intersection(loc2)
+        if overlap : break
 
     return overlap
