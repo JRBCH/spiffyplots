@@ -22,8 +22,9 @@ after_success:
 
 deploy:
   provider: pypi
-  distributions: sdist
+  distributions: sdist bdist_wheel
   user: "__token__"
+  skip_existing: true
   password: pypi-AgEIcHlwaS5vcmcCJDEyMTdmOGZlLWY4MmYtNDI1OC1hNzgxLTYzMWJkZDZiMWZmZgACPHsicGVybWlzc2lvbnMiOiB7InByb2plY3RzIjogWyJzcGlmZnlwbG90cyJdfSwgInZlcnNpb24iOiAxfQAABiDIbj03wm1aP3z5VBxO_mN-_WlFOaGbGBS6zEjdJyeYoA
   on:
     tags: true
