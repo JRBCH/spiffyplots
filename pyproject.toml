@@ -6,7 +6,7 @@ requires = [
     "wheel",
     "pytest-runner"
 ]
-build-backend='setuptools.build_meta'
+build-backend = 'setuptools.build_meta'
 
 [tool.black]
     py38 = true
