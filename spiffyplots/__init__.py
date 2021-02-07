@@ -5,3 +5,4 @@ __email__ = "julian.rossbroich@fmi.ch"
 __version__ = "0.5.1"
 
 from .multipanel import MultiPanel
+from .lineplots import multiline
