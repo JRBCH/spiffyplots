@@ -8,7 +8,7 @@ axes.prop_cycle : cycler('color', ['0077BB', 'CC3311', '009988', '33BBEE', 'EE77
 image.cmap: YlOrBr
 
 # Set default figure size
-figure.figsize : 4, 4
+figure.figsize : 3, 3
 
 # Remove top and right spines
 axes.spines.right : False
@@ -39,11 +39,18 @@ lines.markersize: 4.0
 # Remove legend frame
 legend.frameon : False
 
-# Always use constrained layout
-# MISSING COMMAND HERE
+# CONSTRAINED LAYOUT
+# # # # # # # # # # # # #
+
+figure.constrained_layout.use: True
+#figure.constrained_layout.h_pad:  0.04167  # Padding around axes objects. Float representing
+#figure.constrained_layout.w_pad:  0.04167  # inches. Default is 3./72. inches (3 pts)
+#figure.constrained_layout.hspace: 0.02     # Space between subplot groups. Float representing
+#figure.constrained_layout.wspace: 0.02     # a fraction of the subplot widths being separated.
 
 # FONTS
 # # # # #
+
 font.family  : sans-serif
 #font.style   : normal
 #font.variant : normal
