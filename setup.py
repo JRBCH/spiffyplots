@@ -25,7 +25,7 @@ with open(os.path.join(root, "README.md"), "r", encoding="utf-8") as f:
     long_description = f.read()
 
 # Install requirements
-requirements = ["matplotlib", "wheel", "numpy"]
+requirements = ["matplotlib", "numpy"]
 
 # Test suite requirements
 test_requirements = ["coverage", "pytest", "pytest-cov"]
@@ -62,7 +62,7 @@ class PostInstallMoveFile(install):
 setup(
     name="spiffyplots",
     url="https://github.com/JRBCH/spiffyplots",
-    version="0.5.1",
+    version="0.5.2",
     author="Julian Rossbroich",
     author_email="julian.rossbroich@fmi.ch",
     license="GPL-3",
@@ -73,7 +73,6 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     packages=find_packages(),
-    package_data={"spiffyplots": ["styles/*"]},
     include_package_data=True,
     test_suite="tests",
     install_requires=requirements,

@@ -39,9 +39,8 @@ lines.markersize: 4.0
 # Remove legend frame
 legend.frameon : False
 
-# Always save as 'tight'
-savefig.bbox : tight
-savefig.pad_inches : 0.05
+# Always use constrained layout
+# MISSING COMMAND HERE
 
 # FONTS
 # # # # #
