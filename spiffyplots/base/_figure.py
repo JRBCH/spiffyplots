@@ -12,4 +12,3 @@ class Figure(mpl_Figure):
         Overrides the add_subplot function to add a
         spiffyplots `Panel` object instead of a matplotlib `Axes` object.
         """
-
