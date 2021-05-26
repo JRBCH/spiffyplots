@@ -62,7 +62,7 @@ class PostInstallMoveFile(install):
 setup(
     name="spiffyplots",
     url="https://github.com/JRBCH/spiffyplots",
-    version="0.6.0",
+    version="0.6.1",
     author="Julian Rossbroich",
     author_email="julian.rossbroich@fmi.ch",
     license="GPL-3",
