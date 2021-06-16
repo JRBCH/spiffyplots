@@ -290,6 +290,38 @@ class MultiPanel(object):
                 family="sans-serif",
             )
 
+    def save(self,
+             path: str,
+             format: Union[str, tuple, list] = 'pdf',
+             **kwargs
+             ):
+        """
+        Saves the figure as one or multiple file types
+
+        Args:
+            path:   file path
+                    Example:
+                        `save(path='figures/figure1, format='pdf)` will save the object as
+                        figures/figure1.pdf
+            format: the file format(s) to save as. Defaults to 'pdf'
+
+        """
+
+        if not isinstance(format, str):
+            assert isinstance(format, (tuple, list)), "Pass file format as string or tuple/list of strings please"
+            format = tuple(format)
+
+        for type in format:
+            fname = '{}.{}'.format(path, type)
+            self.fig.savefig(fname, **kwargs)
+            print('Saved figure as {}'.format(fname))
+
+    def close(self):
+        """
+        Closes the matplotlib figure object
+        """
+        plt.close(self.fig)
+
 
 def _get_letters(case: Optional[str] = "uppercase") -> str:
     """
