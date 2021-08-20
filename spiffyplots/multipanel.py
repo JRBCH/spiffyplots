@@ -129,7 +129,7 @@ class MultiPanel(object):
         # parse kwargs
         figsize = kwargs.pop("figsize", plt.rcParams.get("figure.figsize"))
 
-        self.fig = plt.figure(figsize=figsize)
+        self.fig = plt.figure(figsize=figsize, **kwargs)
 
         # OPTION 1: INITIALIZATION BASED ON ``labels``
         # # # # # # # # # # # #
