@@ -128,8 +128,9 @@ class MultiPanel(object):
 
         # parse kwargs
         figsize = kwargs.pop("figsize", plt.rcParams.get("figure.figsize"))
+        dpi = kwargs.pop("dpi", plt.rcParams.get("figure.dpi"))
 
-        self.fig = plt.figure(figsize=figsize, **kwargs)
+        self.fig = plt.figure(figsize=figsize, dpi=dpi)
 
         # OPTION 1: INITIALIZATION BASED ON ``labels``
         # # # # # # # # # # # #
