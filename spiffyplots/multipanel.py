@@ -107,7 +107,7 @@ class MultiPanel(object):
             label_weight (str): Weight of the figure labels. defaults to 'bold'
             label_size (int): Font Size for figure labels. defaults to 14.
             label_location (Tuple): Tuple. Location of the figure labels relative to axis origin.
-                    Defaults to (-0.1, 1.1)
+                    Defaults to (-0.25, 1.05)
 
             left (float): left margin.
                 This and following kwargs are passed to ``matplotlib.gridspec.GridSpec``
@@ -258,16 +258,16 @@ class MultiPanel(object):
         # If labels should be drawn, draw them now.
         if draw_labels:
             self._draw_labels(
-                label_location=kwargs.pop("label_location", (-0.2, 1.1)),
-                size=kwargs.pop("label_size", 14),
+                label_location=kwargs.pop("label_location", (-0.25, 1.05)),
+                size=kwargs.pop("label_size", 12),
                 weight=kwargs.pop("label_weight", "bold"),
             )
 
     def _draw_labels(
         self,
-        label_location: Tuple[float, float] = (-0.2, 1.1),
-        size: int = 14,
-        weight: str = "bold",
+        label_location,
+        size,
+        weight,
     ) -> None:
 
         for ix in range(self.npanels):
