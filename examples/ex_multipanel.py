@@ -61,9 +61,7 @@ colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 fig = MultiPanel(
     grid=(4, 2),
     figsize=(9, 4),
-    labels=True,
-    label_location=(-0.2, 1.05),
-    label_size=10
+    labels=True
 )
 
 hist(fig.panels[0], data["hist-gauss"], colors[0])
@@ -83,9 +81,7 @@ colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 fig = MultiPanel(
     grid=(4, 2),
     figsize=(9, 4),
-    labels=True,
-    label_location=(-0.25, 1.05),
-    label_size=12
+    labels=True
 )
 
 hist(fig.panels[0], data["hist-gauss"], colors[0])
@@ -96,4 +92,5 @@ hist(fig.panels[2], data["hist-gamma"], colors[1])
 scatter(fig.panels[3], data["scatter2-x"], data["scatter2-y"], colors[1])
 timeseries(fig.panels[5], data["timeseries2"], data["timeseries2-true"], colors[1])
 
+plt.show()
 fig.fig.savefig("multipanel_spiffy.png")
