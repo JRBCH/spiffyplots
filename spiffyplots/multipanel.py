@@ -98,12 +98,15 @@ class MultiPanel:
         Keyword Args:
             figsize (Tuple): Size of the figure. Will be passed into ``matplotlib.pyplot.figure``.
 
-            label_case (str): 'uppercase' or 'lowercase'.
+            label_case (str): 'uppercase' or 'lowercase'. Defaults to 'lowercase'.
                 This and following kwargs are passed to ``MultiPanel._draw_labels``.
             label_weight (str): Weight of the figure labels. defaults to 'bold'
-            label_size (int): Font Size for figure labels. defaults to 14.
-            label_location (Tuple): Tuple. Location of the figure labels relative to axis origin.
-                    Defaults to (-0.25, 1.05)
+            label_size (int): Font size for figure labels. Defaults to 12.
+            label_offset (Tuple): Label offset in points from the panel's top-left
+                corner. Defaults to (-20, 6).
+            label_location (Tuple): Deprecated label location in panel axes fractions.
+                Use ``label_offset`` for layout-independent alignment.
+            label_color (str): Color of the figure labels. Defaults to 'black'.
 
             left (float): left margin.
                 This and following kwargs are passed to ``matplotlib.gridspec.GridSpec``
@@ -195,7 +198,7 @@ class MultiPanel:
 
             # Get labels based on provided vector or revert to default
             if isinstance(labels, bool):
-                self._labels = _get_letters(case=kwargs.pop("label_case", "uppercase"))[
+                self._labels = _get_letters(case=kwargs.pop("label_case", "lowercase"))[
                     : self.npanels
                 ]
                 draw_labels = labels
@@ -250,38 +253,60 @@ class MultiPanel:
 
         # If labels should be drawn, draw them now.
         if draw_labels:
+            has_label_location = "label_location" in kwargs
+            has_label_offset = "label_offset" in kwargs
+            if has_label_location and has_label_offset:
+                raise TypeError("Pass only one of `label_offset` and `label_location`.")
+
+            label_location = kwargs.pop("label_location", None)
+            label_offset = kwargs.pop("label_offset", (-20, 6))
+            if has_label_location:
+                warnings.warn(
+                    "`label_location` is deprecated; use `label_offset` for "
+                    "layout-independent point offsets.",
+                    DeprecationWarning,
+                    stacklevel=2,
+                )
+
             self._draw_labels(
-                label_location=kwargs.pop("label_location", (-0.25, 1.05)),
+                label_offset=label_offset,
+                label_location=label_location,
                 size=kwargs.pop("label_size", 12),
                 weight=kwargs.pop("label_weight", "bold"),
+                color=kwargs.pop("label_color", "black"),
             )
 
-    def _draw_labels(
-        self,
-        label_location,
-        size,
-        weight,
-    ) -> None:
+    def _draw_labels(self, label_offset, label_location, size, weight, color) -> None:
 
-        for ix in range(self.npanels):
-            # make separate axis for label
-            loc = self._locations[ix]
-            axis_loc = (int(np.min(loc[0])), int(np.min(loc[1])))
-            ax = self.fig.add_subplot(
-                _get_grid_location(axis_loc, self.gridspec), label=self._labels[ix]
-            )
-            ax.axis("off")
-
-            ax.text(
-                label_location[0],
-                label_location[1],
-                self._labels[ix],
-                transform=ax.transAxes,
-                size=size,
-                weight=weight,
-                usetex=False,
-                family="sans-serif",
-            )
+        text_kwargs = {
+            "size": size,
+            "weight": weight,
+            "ha": "left",
+            "va": "baseline",
+            "usetex": False,
+            "family": "sans-serif",
+            "color": color,
+        }
+        for ax, label in zip(self.panels, self._labels, strict=True):
+            if label_location is not None:
+                ax.text(
+                    label_location[0],
+                    label_location[1],
+                    label,
+                    transform=ax.transAxes,
+                    clip_on=False,
+                    **text_kwargs,
+                )
+            else:
+                ax.annotate(
+                    label,
+                    xy=(0, 1),
+                    xycoords="axes fraction",
+                    xytext=label_offset,
+                    textcoords="offset points",
+                    annotation_clip=False,
+                    **text_kwargs,
+                )
 
     def save(self, path: str, format: str | tuple | list = "pdf", **kwargs):
         """
@@ -316,7 +341,7 @@ class MultiPanel:
         plt.close(self.fig)
 
 
-def _get_letters(case: str | None = "uppercase") -> str:
+def _get_letters(case: str | None = "lowercase") -> str:
     """
 
     :param case: 'lowercase' or 'uppercase'. Defaults to 'lowercase'.

@@ -15,6 +15,8 @@ All notable changes to this project will be documented here. The format follows
 #### Changed
 
 - Require Python 3.10 or newer and Matplotlib 3.8 or newer.
+- Use lowercase panel labels and panel attribute names by
+  default. Uppercase remains available with `label_case="uppercase"`.
 - Ship the style sheets inside the package and register them with Matplotlib
   when `spiffyplots` is imported, instead of copying them into the Matplotlib
   config directory at install time. Now requires importing `spiffyplots` before calling
@@ -25,6 +27,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### Bugfixes
 
+- Align panel labels using point offsets from their panels and avoid creating
+  extra invisible axes for labels.
 - Allow `MultiPanel` to create single-panel layouts and save to PDF with the
   default `format="pdf"` argument.
 - Install the style sheets. `pip install spiffyplots` previously shipped none

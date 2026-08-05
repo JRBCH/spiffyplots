@@ -33,7 +33,8 @@ class TestMutiPanel(unittest.TestCase):
 
         # assert 4 panels
         self.assertEqual(fig.panels.__len__(), 4)
-        self.assertEqual(fig._labels, "ABCD")
+        self.assertEqual(fig._labels, "abcd")
+        self.assertIs(fig.panels.a, fig.panels[0])
         self.assertEqual(fig.shape, (2, 2))
 
     def test_init_002_grid_intlist(self):
@@ -47,14 +48,14 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(grid=grid)
 
         self.assertEqual(fig.panels.__len__(), 12)
-        self.assertEqual(fig._labels, "ABCDEFGHIJKL")
+        self.assertEqual(fig._labels, "abcdefghijkl")
         self.assertEqual(fig.shape, (4, 12))
 
         grid2 = (2, 1)  # 3 panels with location tuple test
         fig2 = mp.MultiPanel(grid=grid2)
 
         self.assertEqual(fig2.panels.__len__(), 3)
-        self.assertEqual(fig2._labels, "ABC")
+        self.assertEqual(fig2._labels, "abc")
         self.assertEqual(fig2.shape, (2, 2))
         self.assertEqual(fig2._locations, [(0, 0), (0, 1), (1, range(2))])
 
@@ -69,7 +70,7 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(grid=grid)
 
         self.assertEqual(fig.panels.__len__(), 4)
-        self.assertEqual(fig._labels, "ABCD")
+        self.assertEqual(fig._labels, "abcd")
         self.assertEqual(fig.shape, (3, 2))
         self.assertEqual(fig._locations, grid)
 
@@ -144,6 +145,51 @@ class TestMutiPanel(unittest.TestCase):
             self.assertTrue(output_path.with_suffix(".pdf").is_file())
             figure.close()
 
+    def test_label_defaults_and_alignment(self):
+        cm = 1 / 2.54
+        figsize_alignment = (15.24 * cm, 7.62 * cm)
+        with matplotlib.style.context("spiffy"):
+            figure = mp.MultiPanel(grid=[3, 2], figsize=figsize_alignment, labels=True)
+            figure.fig.canvas.draw()
+
+        label_artists = [panel.texts[0] for panel in figure.panels]
+        renderer = figure.fig.canvas.get_renderer()
+        label_bounds = [label.get_window_extent(renderer) for label in label_artists]
+
+        self.assertEqual(figure._labels, "abcde")
+        self.assertEqual(len(figure.fig.axes), len(figure.panels))
+        self.assertEqual(label_artists[0].get_position(), (-20, 6))
+        self.assertEqual(label_artists[0].get_family(), ["sans-serif"])
+        self.assertEqual(label_artists[0].get_weight(), "bold")
+        self.assertEqual(label_artists[0].get_fontsize(), 12)
+
+        # Labels share an x position when panels share a left edge.
+        self.assertAlmostEqual(label_bounds[0].x0, label_bounds[3].x0)
+        # Labels share a baseline when panels share a top edge.
+        self.assertAlmostEqual(label_bounds[0].y0, label_bounds[1].y0)
+        self.assertAlmostEqual(label_bounds[1].y0, label_bounds[2].y0)
+        figure.close()
+
+    def test_label_options(self):
+        uppercase = mp.MultiPanel(shape=(1, 2), labels=True, label_case="uppercase")
+        self.assertEqual(uppercase._labels, "AB")
+        uppercase.close()
+
+        with self.assertWarns(DeprecationWarning):
+            legacy = mp.MultiPanel(
+                shape=(1, 2), labels=True, label_location=(-0.2, 1.0)
+            )
+        self.assertEqual(legacy.panels[0].texts[0].get_position(), (-0.2, 1.0))
+        legacy.close()
+
+        with self.assertRaises(TypeError):
+            mp.MultiPanel(
+                shape=(1, 2),
+                labels=True,
+                label_offset=(-20, 6),
+                label_location=(-0.2, 1.0),
+            )
+
     def test_kwargs(self):
         """
         Test if different keyword arguments work as expected
@@ -217,8 +263,8 @@ class Test_get_letters(unittest.TestCase):
     def test_default(self):
         """Test _get_letters."""
         out = mp._get_letters()
-        self.assertEqual(out[2], "C")
-        self.assertEqual(out[-1], "Z")
+        self.assertEqual(out[2], "c")
+        self.assertEqual(out[-1], "z")
 
 
 class Test_is_iter_of_iters(unittest.TestCase):
