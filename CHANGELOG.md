@@ -9,6 +9,7 @@ All notable changes to this project will be documented here. The format follows
 #### New features
 
 - Add `save` and `close` methods to `MultiPanel`.
+- Add `populate_random_data` for quickly filling MultiPanel figures with example data.
 - Style sheets are reachable by their package-relative name, for example
   `plt.style.use("spiffyplots.styles.spiffy")`, on Matplotlib 3.7 or newer.
 
@@ -19,6 +20,7 @@ All notable changes to this project will be documented here. The format follows
   default. Uppercase remains available with `label_case="uppercase"`.
 - Refresh and automate generation of the Matplotlib and Spiffyplots
   comparison figures.
+- Refresh the `MultiPanel` notebook with populated grid and label examples.
 - Ship the style sheets inside the package and register them with Matplotlib
   when `spiffyplots` is imported, instead of copying them into the Matplotlib
   config directory at install time. Now requires importing `spiffyplots` before calling

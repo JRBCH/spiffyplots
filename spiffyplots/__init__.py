@@ -7,6 +7,7 @@ import matplotlib.style
 
 from .lineplots import multiline
 from .multipanel import MultiPanel
+from .random_data import populate_random_data
 
 __author__ = """Julian Rossbroich"""
 __email__ = "julian.rossbroich@fmi.ch"
@@ -14,7 +15,7 @@ __version__ = "0.6.1"
 
 STYLES_PATH = Path(__file__).parent / "styles"
 
-__all__ = ["STYLES_PATH", "MultiPanel", "multiline"]
+__all__ = ["STYLES_PATH", "MultiPanel", "multiline", "populate_random_data"]
 
 
 def _register_styles() -> dict:
