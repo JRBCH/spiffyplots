@@ -1,0 +1,88 @@
+name: Tests
+
+on:
+  push:
+    branches: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        # Oldest and newest matplotlib that ships wheels for each Python.
+        # The 3.11 namespace refactor is the boundary worth guarding.
+        include:
+          - {python: "3.10", matplotlib: "3.8.*"}
+          - {python: "3.10", matplotlib: "3.10.*"}
+          - {python: "3.11", matplotlib: "3.8.*"}
+          - {python: "3.11", matplotlib: "3.11.*"}
+          - {python: "3.12", matplotlib: "3.8.*"}
+          - {python: "3.12", matplotlib: "3.11.*"}
+          - {python: "3.13", matplotlib: "3.9.*"}
+          - {python: "3.13", matplotlib: "3.11.*"}
+          - {python: "3.14", matplotlib: "3.10.*"}
+          - {python: "3.14", matplotlib: "3.11.*"}
+
+    name: py${{ matrix.python }} / mpl ${{ matrix.matplotlib }}
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: astral-sh/setup-uv@v5
+        with:
+          enable-cache: true
+
+      - name: Install with pinned matplotlib
+        run: |
+          uv venv --python ${{ matrix.python }}
+          uv pip install ".[test]" "matplotlib==${{ matrix.matplotlib }}"
+
+      - name: Report resolved versions
+        run: uv run python -c "import matplotlib, numpy, sys; print(sys.version); print('matplotlib', matplotlib.__version__); print('numpy', numpy.__version__)"
+
+      - name: Test
+        run: uv run pytest -q
+
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+      - run: uv run ruff check .
+      - run: uv run ruff format --check .
+
+  package:
+    runs-on: ubuntu-latest
+    name: styles reach a clean install
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Build sdist and wheel
+        run: uv build
+
+      - name: Style sheets present in both artifacts
+        run: |
+          test "$(tar tzf dist/*.tar.gz | grep -c '\.mplstyle$')" -eq 11
+          test "$(unzip -l dist/*.whl | grep -c '\.mplstyle$')" -eq 11
+
+      - name: Install the wheel and register every style
+        env:
+          MPLCONFIGDIR: /tmp/empty-mpl-config
+        run: |
+          uv venv --python 3.12 /tmp/check
+          uv pip install --python /tmp/check dist/*.whl
+          /tmp/check/bin/python - <<'PY'
+          import matplotlib.style
+          import spiffyplots
+          expected = {
+              "spiffy", "muted", "vibrant", "bright", "retro", "high-vis",
+              "heatmap", "minor-ticks", "top-axis", "right-axis", "latex",
+          }
+          missing = expected - set(matplotlib.style.available)
+          assert not missing, f"not registered: {sorted(missing)}"
+          print(f"all {len(expected)} styles registered from a clean config dir")
+          PY
