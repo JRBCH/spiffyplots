@@ -78,6 +78,38 @@ def test_base_style_applies():
     with plt.style.context("spiffy"):
         assert plt.rcParams["axes.linewidth"] == 0.5
         assert plt.rcParams["axes.spines.top"] is False
+        assert plt.rcParams["ps.fonttype"] == 42
+
+
+def test_base_style_exports_editable_text(tmp_path):
+    """Vector exports avoid Type 3 fonts and preserve SVG text objects."""
+    pdf_path = tmp_path / "spiffy.pdf"
+    svg_path = tmp_path / "spiffy.svg"
+
+    with plt.style.context("spiffy"):
+        figure, axis = plt.subplots()
+        axis.set_xlabel("UNIQUEWORD")
+        figure.savefig(pdf_path)
+        figure.savefig(svg_path)
+        plt.close(figure)
+
+    assert b"/Type3" not in pdf_path.read_bytes()
+    assert "<text" in svg_path.read_text()
+
+
+@pytest.mark.skipif(not HAS_LATEX, reason="no LaTeX installation available")
+def test_latex_style_exports_embedded_font(tmp_path):
+    """The LaTeX modifier remains embeddable with the base PDF font type."""
+    pdf_path = tmp_path / "latex.pdf"
+
+    with plt.style.context(["spiffy", "latex"]):
+        figure, axis = plt.subplots()
+        axis.set_xlabel("UNIQUEWORD")
+        figure.savefig(pdf_path)
+        plt.close(figure)
+
+    pdf_bytes = pdf_path.read_bytes()
+    assert b"/Type3" not in pdf_bytes and b"/FontFile" in pdf_bytes
 
 
 def test_styles_compose():

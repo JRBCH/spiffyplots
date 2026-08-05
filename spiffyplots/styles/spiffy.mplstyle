@@ -58,6 +58,12 @@ font.family  : sans-serif
 #font.stretch : normal
 font.size    : 8.0
 
+# Journals usually require embedded TrueType fonts, not Type 3, and editable text, see below.
+# https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/
+pdf.fonttype : 42
+ps.fonttype  : 42
+svg.fonttype : none
+
 # Histogram bins
 hist.bins: 20
 

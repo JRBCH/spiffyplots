@@ -32,6 +32,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### Bugfixes
 
+- Export PDF and PostScript text as embedded TrueType fonts and preserve SVG
+  text as editable text instead of outlines in the base style.
 - Accept nested Python sequences as label grids and support arbitrary labels
   and more than 26 panels.
 - Warn when constrained layout ignores explicit `MultiPanel` margins or

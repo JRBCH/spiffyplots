@@ -59,6 +59,13 @@ Available styles: `spiffy`, the color schemes `bright`, `high-vis`, `muted`,
 `retro` and `vibrant`, and the modifiers `latex`, `minor-ticks`, `right-axis`,
 `top-axis` and `heatmap`.
 
+The base `spiffy` style keeps vector text publication-ready and editable. PDF
+and PostScript output embeds TrueType fonts rather than Type 3 fonts, while SVG
+output retains `<text>` elements instead of converting glyphs to paths.
+
+If for some reason you want to restore
+Matplotlib's default outlined SVG behavior, set `plt.rcParams["svg.fonttype"] = "path"`.
+
 ## Features
 
 * Matplotlib style sheets
