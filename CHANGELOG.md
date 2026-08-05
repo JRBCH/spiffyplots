@@ -17,11 +17,10 @@ All notable changes to this project will be documented here. The format follows
 - Require Python 3.10 or newer and Matplotlib 3.8 or newer.
 - Ship the style sheets inside the package and register them with Matplotlib
   when `spiffyplots` is imported, instead of copying them into the Matplotlib
-  config directory at install time. Import `spiffyplots` before calling
+  config directory at install time. Now requires importing `spiffyplots` before calling
   `plt.style.use`.
 - Use `uv` for development and Ruff for linting and formatting.
-- Replace Travis with GitHub Actions, testing the oldest and newest Matplotlib
-  available for each supported Python.
+- Replace Travis with GitHub Actions
 - Forward figure arguments, including DPI, and adjust default label positions.
 
 #### Bugfixes
