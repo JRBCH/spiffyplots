@@ -1,9 +1,8 @@
 """Tests for the bundled matplotlib style sheets.
 
-These check that the styles actually ship and register. The package spent
-years shipping none of them, which went unnoticed because a stale copy in
-``~/.matplotlib/stylelib`` made it look fine locally, so the
-``clean_mpl_config`` fixture below is not optional decoration.
+These check that the styles actually exist after installation
+(this was broken up to spiffyplots 0.6.1), and the package didn't really
+install the styles (Sorry, my bad!)
 """
 
 import os
