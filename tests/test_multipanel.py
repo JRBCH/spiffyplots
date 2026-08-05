@@ -2,6 +2,8 @@
 
 import unittest
 from itertools import product
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import matplotlib
 import numpy as np
@@ -123,6 +125,24 @@ class TestMutiPanel(unittest.TestCase):
 
         labels = np.array([["A", "B", "B"], ["C", "C", "C"], ["C", "C", "C"]])
         fig = mp.MultiPanel(labels=labels)
+
+    def test_init_single_panel(self):
+        for kwargs in ({"shape": (1, 1)}, {"grid": [(0, 0)]}):
+            with self.subTest(**kwargs):
+                figure = mp.MultiPanel(**kwargs)
+
+                self.assertEqual(len(figure.panels), 1)
+                figure.close()
+
+    def test_save_default_format(self):
+        with TemporaryDirectory() as tmpdir:
+            output_path = Path(tmpdir) / "figure"
+            figure = mp.MultiPanel()
+
+            figure.save(output_path)
+
+            self.assertTrue(output_path.with_suffix(".pdf").is_file())
+            figure.close()
 
     def test_kwargs(self):
         """
@@ -354,8 +374,8 @@ class Test_find_max_tuple(unittest.TestCase):
 
 class Test_panel_overlap(unittest.TestCase):
     def test_default(self):
-        self.assertFalse(mp._panel_overlap([]))
-        self.assertFalse(mp._panel_overlap([(0, 0)]))
+        self.assertEqual(mp._panel_overlap([]), set())
+        self.assertEqual(mp._panel_overlap([(0, 0)]), set())
         self.assertFalse(mp._panel_overlap([(0, 0), (0, 1)]))
         self.assertFalse(mp._panel_overlap([(0, 0), (1, 0), (0, 1), (1, 1)]))
         self.assertTrue(mp._panel_overlap([(0, 0), (1, 0), (0, 1), (1, 0)]))

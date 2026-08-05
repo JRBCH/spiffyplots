@@ -296,14 +296,16 @@ class MultiPanel:
 
         """
 
-        if not isinstance(format, str):
+        if isinstance(format, str):
+            formats = (format,)
+        else:
             assert isinstance(format, (tuple, list)), (
                 "Pass file format as string or tuple/list of strings please"
             )
-            format = tuple(format)
+            formats = tuple(format)
 
-        for type in format:
-            fname = f"{path}.{type}"
+        for file_format in formats:
+            fname = f"{path}.{file_format}"
             self.fig.savefig(fname, **kwargs)
             print(f"Saved figure as {fname}")
 
@@ -503,7 +505,7 @@ def _panel_overlap(locations, shape=None):
         coords.append(list(product(xlocs, ylocs)))
 
     # examine all pairs of locations to make sure nothing overlaps
-    overlap = False
+    overlap = set()
     for loc1, loc2 in combinations(coords, 2):
         overlap = set(loc1).intersection(loc2)
         if overlap:

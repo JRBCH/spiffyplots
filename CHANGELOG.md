@@ -25,6 +25,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### Bugfixes
 
+- Allow `MultiPanel` to create single-panel layouts and save to PDF with the
+  default `format="pdf"` argument.
 - Install the style sheets. `pip install spiffyplots` previously shipped none
   of them, so `plt.style.use("spiffy")` failed on a clean environment.
 - Correct `multiline` to use the supplied coordinates and axis.
