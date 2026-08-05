@@ -1,5 +1,5 @@
 [build-system]
-requires = ["setuptools>=77", "matplotlib>=3.11.1"]
+requires = ["setuptools>=77"]
 build-backend = "setuptools.build_meta"
 
 [project]
@@ -7,13 +7,14 @@ name = "spiffyplots"
 version = "0.6.1"
 description = "Publication-ready Matplotlib styles and plotting tools"
 readme = "README.md"
-requires-python = ">=3.11"
+requires-python = ">=3.10"
 license = "GPL-3.0-only"
 authors = [
     { name = "Julian Rossbroich", email = "julian.rossbroich@fmi.ch" },
 ]
 dependencies = [
-    "matplotlib>=3.11.1",
+    # 3.8 is the oldest release that supports numpy>=2.
+    "matplotlib>=3.8",
     "numpy",
 ]
 
@@ -45,6 +46,9 @@ dev = [
 [tool.setuptools.packages.find]
 include = ["spiffyplots*"]
 
+[tool.setuptools.package-data]
+spiffyplots = ["styles/**/*.mplstyle"]
+
 [tool.ruff]
-target-version = "py311"
+target-version = "py310"
 extend-exclude = ["*.ipynb"]

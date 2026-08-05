@@ -1,10 +1,44 @@
 """Top-level package for SpiffyPlots."""
 
-__author__ = """Julian Rossbroich"""
-__email__ = "julian.rossbroich@fmi.ch"
-__version__ = "0.6.1"
+from pathlib import Path
+
+import matplotlib
+import matplotlib.style
 
 from .lineplots import multiline
 from .multipanel import MultiPanel
 
-__all__ = ["MultiPanel", "multiline"]
+__author__ = """Julian Rossbroich"""
+__email__ = "julian.rossbroich@fmi.ch"
+__version__ = "0.6.1"
+
+STYLES_PATH = Path(__file__).parent / "styles"
+
+__all__ = ["STYLES_PATH", "MultiPanel", "multiline"]
+
+
+def _register_styles() -> dict:
+    """Add the bundled style sheets to matplotlib's style library.
+
+    Styles register under their bare filename, so nested folders such as
+    ``styles/color`` are flattened: ``plt.style.use("muted")``, not
+    ``plt.style.use("color/muted")``.
+
+    Uses only public matplotlib API. ``read_style_directory`` and
+    ``update_nested_dict``, the obvious helpers here, are deprecated in
+    matplotlib 3.11 and removed in 3.13.
+
+    Goes through ``matplotlib.style`` rather than ``matplotlib.pyplot`` so
+    registration does not itself require a backend. Importing this package
+    still pulls in pyplot via :class:`~spiffyplots.multipanel.MultiPanel`.
+    """
+    sheets = {
+        path.stem: matplotlib.rc_params_from_file(path, use_default_template=False)
+        for path in sorted(STYLES_PATH.rglob("*.mplstyle"))
+    }
+    matplotlib.style.library.update(sheets)
+    matplotlib.style.available[:] = sorted(matplotlib.style.library)
+    return sheets
+
+
+_register_styles()

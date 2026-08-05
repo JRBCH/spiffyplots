@@ -1,15 +1,14 @@
 # SpiffyPlots
 
-[![Build Status](https://travis-ci.com/JRBCH/spiffyplots.svg?token=i92PyxWJ7xxe45sHGGQE&branch=master)](https://travis-ci.com/JRBCH/spiffyplots)
-[![codecov](https://codecov.io/gh/JRBCH/spiffyplots/branch/master/graph/badge.svg)](https://codecov.io/gh/JRBCH/spiffyplots)
+[![Tests](https://github.com/JRBCH/spiffyplots/actions/workflows/test.yaml/badge.svg)](https://github.com/JRBCH/spiffyplots/actions/workflows/test.yaml)
 [![Documentation Status](https://readthedocs.org/projects/spiffyplots/badge/?version=latest)](https://spiffyplots.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/spiffyplots.svg)](https://badge.fury.io/py/spiffyplots)
-[![GitHub last commit](https://img.shields.io/github/last-commit/google/skia.svg?style=flat)]()
+[![GitHub last commit](https://img.shields.io/github/last-commit/JRBCH/spiffyplots.svg?style=flat)]()
 [![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
 
 A collection of matplotlib style sheets and plotting tools for publication-ready figures.
 
-Requires Python 3.11 or newer and Matplotlib 3.11.1 or newer.
+Requires Python 3.10 or newer and Matplotlib 3.8 or newer.
 
 * Free software: GPL-3 license
 * Documentation: https://spiffyplots.readthedocs.io.
@@ -34,6 +33,31 @@ uv sync
 uv run ruff check .
 uv run pytest
 ```
+
+## Using the style sheets
+
+The style sheets ship inside the package and register themselves with
+matplotlib when `spiffyplots` is imported:
+
+```python
+import spiffyplots  # registers the styles
+import matplotlib.pyplot as plt
+
+plt.style.use("spiffy")  # base style
+plt.style.use(["spiffy", "muted"])  # base style plus a Paul Tol color scheme
+```
+
+Import `spiffyplots` **before** calling `plt.style.use`. If you would rather
+not depend on import order, the same sheets are reachable by their
+package-relative name, which needs no import at all:
+
+```python
+plt.style.use("spiffyplots.styles.spiffy")
+```
+
+Available styles: `spiffy`, the color schemes `bright`, `high-vis`, `muted`,
+`retro` and `vibrant`, and the modifiers `latex`, `minor-ticks`, `right-axis`,
+`top-axis` and `heatmap`.
 
 ## Features
 

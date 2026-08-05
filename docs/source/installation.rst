@@ -8,7 +8,7 @@ Installation
 Stable release
 --------------
 
-SpiffyPlots requires Python 3.11 or newer.
+SpiffyPlots requires Python 3.10 or newer and Matplotlib 3.8 or newer.
 
 To install SpiffyPlots, run this command in your terminal:
 
