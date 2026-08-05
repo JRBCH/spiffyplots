@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 """Setup script for SpiffyPlots.
 
 As this package only distributes matplotlib style sheets so far,
@@ -14,28 +12,14 @@ import atexit
 import glob
 import os
 import shutil
-import matplotlib
 
-from setuptools import setup, find_packages
+from setuptools import setup
 from setuptools.command.install import install
-
-# Get description from README
-root = os.path.abspath(os.path.dirname(__file__))
-with open(os.path.join(root, "README.md"), "r", encoding="utf-8") as f:
-    long_description = f.read()
-
-# Install requirements
-requirements = ["matplotlib", "numpy"]
-
-# Test suite requirements
-test_requirements = ["coverage", "pytest", "pytest-cov"]
-
-extras = {
-    "test": test_requirements,
-}
 
 
 def install_styles():
+    import matplotlib
+
     # Find all style files
     stylefiles = glob.glob("styles/**/*.mplstyle", recursive=True)
 
@@ -60,23 +44,5 @@ class PostInstallMoveFile(install):
 
 
 setup(
-    name="spiffyplots",
-    url="https://github.com/JRBCH/spiffyplots",
-    version="0.6.1",
-    author="Julian Rossbroich",
-    author_email="julian.rossbroich@fmi.ch",
-    license="GPL-3",
-    description=(
-        "A collection of matplotlib style sheets and plotting tools for"
-        " publication-ready figures"
-    ),
-    long_description=long_description,
-    long_description_content_type="text/markdown",
-    packages=find_packages(),
-    include_package_data=True,
-    test_suite="tests",
-    install_requires=requirements,
-    tests_require=test_requirements,
-    extras_require=extras,
     cmdclass={"install": PostInstallMoveFile},
 )

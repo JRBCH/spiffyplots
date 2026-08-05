@@ -71,9 +71,6 @@ target/
 # Jupyter Notebook
 .ipynb_checkpoints
 
-# pyenv
-.python-version
-
 # celery beat schedule file
 celerybeat-schedule
 
@@ -101,10 +98,17 @@ ENV/
 # mypy
 .mypy_cache/
 
+# Ruff
+.ruff_cache/
+
 # IDE settings
 .vscode/
 
 # PyCharm
 .idea
+
+# coding agent instructions
+/AGENTS.md
+/CLAUDE.md
 
 *.DS_Store

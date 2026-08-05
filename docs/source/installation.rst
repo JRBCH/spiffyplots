@@ -8,6 +8,8 @@ Installation
 Stable release
 --------------
 
+SpiffyPlots requires Python 3.11 or newer.
+
 To install SpiffyPlots, run this command in your terminal:
 
 .. code-block:: console
@@ -40,12 +42,13 @@ Or download the `tarball`_:
 
     $ curl -OJL https://github.com/JRBCH/spiffyplots/tarball/master
 
-Once you have a copy of the source, you can install it with:
+Once you have a copy of the source, synchronize the development environment with `uv`_:
 
 .. code-block:: console
 
-    $ python setup.py install
+    $ uv sync
 
 
 .. _Github repo: https://github.com/JRBCH/spiffyplots
 .. _tarball: https://github.com/JRBCH/spiffyplots/tarball/master
+.. _uv: https://docs.astral.sh/uv/

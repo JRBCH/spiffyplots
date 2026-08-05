@@ -1,25 +1,50 @@
 [build-system]
-# Minimum requirements for the build system to execute.
-requires = [
-    "setuptools",
-    "matplotlib",
-    "pytest-runner"
-]
-build-backend = 'setuptools.build_meta'
+requires = ["setuptools>=77", "matplotlib>=3.11.1"]
+build-backend = "setuptools.build_meta"
 
-[tool.black]
-    py38 = true
-    include = '\.pyi?$'
-    exclude = '''
-    /(
-        \.git
-      | \.hg
-      | \.mypy_cache
-      | \.tox
-      | \.venv
-      | _build
-      | buck-out
-      | build
-      | dist
-    )/
-    '''
+[project]
+name = "spiffyplots"
+version = "0.6.1"
+description = "Publication-ready Matplotlib styles and plotting tools"
+readme = "README.md"
+requires-python = ">=3.11"
+license = "GPL-3.0-only"
+authors = [
+    { name = "Julian Rossbroich", email = "julian.rossbroich@fmi.ch" },
+]
+dependencies = [
+    "matplotlib>=3.11.1",
+    "numpy",
+]
+
+[project.optional-dependencies]
+test = [
+    "coverage",
+    "pytest",
+    "pytest-cov",
+]
+
+[project.urls]
+Documentation = "https://spiffyplots.readthedocs.io"
+Issues = "https://github.com/JRBCH/spiffyplots/issues"
+Repository = "https://github.com/JRBCH/spiffyplots"
+
+[dependency-groups]
+dev = [
+    "bump2version",
+    "coverage",
+    "pre-commit",
+    "pytest",
+    "pytest-cov",
+    "ruff",
+    "sphinx",
+    "twine",
+    "watchdog",
+]
+
+[tool.setuptools.packages.find]
+include = ["spiffyplots*"]
+
+[tool.ruff]
+target-version = "py311"
+extend-exclude = ["*.ipynb"]

@@ -1,3 +1,2 @@
-matplotlib
-wheel
+matplotlib>=3.11.1
 numpy
