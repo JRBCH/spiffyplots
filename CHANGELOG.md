@@ -31,6 +31,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### Bugfixes
 
+- Accept list and NumPy array spans and NumPy integer coordinates in
+  `MultiPanel` grid specifications.
 - Report the overlapping coordinates in `MultiPanel` layout warnings.
 - Align panel labels using point offsets from their panels and avoid creating
   extra invisible axes for labels.

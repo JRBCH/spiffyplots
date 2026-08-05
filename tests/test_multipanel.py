@@ -74,6 +74,20 @@ class TestMutiPanel(unittest.TestCase):
         self.assertEqual(fig.shape, (3, 2))
         self.assertEqual(fig._locations, grid)
 
+    def test_init_grid_accepts_iterable_spans(self):
+        for span in ([0, 1], np.arange(2)):
+            with self.subTest(span=span):
+                figure = mp.MultiPanel(grid=[(0, 0), (0, 1), (span, 2)])
+
+                self.assertEqual(len(figure.panels), 3)
+                figure.close()
+
+    def test_init_grid_accepts_numpy_integer_coordinates(self):
+        figure = mp.MultiPanel(grid=[(np.int64(0), np.int64(0))])
+
+        self.assertEqual(len(figure.panels), 1)
+        figure.close()
+
     def test_init_004_labels_dict(self):
         """
         Test initialization of MultiPanel object.
@@ -448,3 +462,8 @@ class Test_panel_overlap(unittest.TestCase):
             [["A", "B", "B"], ["C", "C", "C"], ["C", "C", "C"]]
         )
         self.assertFalse(mp._panel_overlap(grid_dict.values(), (3, 3)))
+
+    def test_iterable_spans(self):
+        self.assertEqual(
+            mp._panel_overlap([([0, 1], 2), (np.arange(1, 3), 2)]), {(1, 2)}
+        )

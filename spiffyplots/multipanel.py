@@ -6,6 +6,7 @@ import warnings
 from collections import defaultdict, namedtuple
 from collections.abc import Iterable
 from itertools import combinations, product
+from numbers import Integral
 
 import matplotlib
 import matplotlib.gridspec as gs
@@ -435,19 +436,27 @@ def _get_grid_location(
     :return: matplotlib SubplotSpec object
     """
     rows, cols = location
+    row_values = _expand_grid_coordinate(rows)
+    col_values = _expand_grid_coordinate(cols)
 
-    # if both are integers
-    if isinstance(rows, int) and isinstance(cols, int):
-        return gridspec[rows, cols]
+    row_index = (
+        row_values[0]
+        if len(row_values) == 1
+        else slice(row_values[0], row_values[-1] + 1)
+    )
+    col_index = (
+        col_values[0]
+        if len(col_values) == 1
+        else slice(col_values[0], col_values[-1] + 1)
+    )
+    return gridspec[row_index, col_index]
 
-    elif isinstance(rows, Iterable) and isinstance(cols, int):
-        return gridspec[rows[0] : rows[-1] + 1, cols]
 
-    elif isinstance(rows, int) and isinstance(cols, Iterable):
-        return gridspec[rows, cols[0] : cols[-1] + 1]
-
-    elif isinstance(rows, Iterable) and isinstance(cols, Iterable):
-        return gridspec[rows[0] : rows[-1] + 1, cols[0] : cols[-1] + 1]
+def _expand_grid_coordinate(coordinate: int | Iterable[int]) -> list[int]:
+    """Return a grid coordinate as a concrete sequence of integer positions."""
+    if isinstance(coordinate, Integral):
+        return [int(coordinate)]
+    return list(coordinate)
 
 
 def _get_subplot_raster(
@@ -526,8 +535,8 @@ def _panel_overlap(locations, shape=None):
     # expand all coordinates for each location
     coords = []
     for loc in locations:
-        xlocs = loc[0] if isinstance(loc[0], range) else [loc[0]]
-        ylocs = loc[1] if isinstance(loc[1], range) else [loc[1]]
+        xlocs = _expand_grid_coordinate(loc[0])
+        ylocs = _expand_grid_coordinate(loc[1])
         coords.append(list(product(xlocs, ylocs)))
 
     # examine all pairs of locations to make sure nothing overlaps
