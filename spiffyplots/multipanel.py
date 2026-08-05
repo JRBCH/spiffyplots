@@ -223,8 +223,9 @@ class MultiPanel:
         overlaps = _panel_overlap(self._locations, self.shape)
         if len(overlaps) != 0:
             warnings.warn(
-                "One or more panel coordinates overlap: {}! You probably do not "
-                "want this, double check your input coordinates."
+                f"One or more panel coordinates overlap: {sorted(overlaps)}! "
+                "You probably do not want this, double check your input coordinates.",
+                stacklevel=2,
             )
 
         # Initialize GridSpec and consider Keyword Arguments

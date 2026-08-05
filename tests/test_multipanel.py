@@ -246,6 +246,15 @@ class TestMutiPanel(unittest.TestCase):
             Warning, mp.MultiPanel, labels={"A1": (0, 0), "A2": (0, range(2))}
         )
 
+    def test_overlap_warning_reports_coordinates_and_caller(self):
+        with self.assertWarnsRegex(
+            UserWarning, r"panel coordinates overlap: \[\(0, 0\)\]"
+        ) as caught:
+            figure = mp.MultiPanel(grid=[(0, 0), (0, 0)])
+
+        self.assertEqual(Path(caught.filename), Path(__file__))
+        figure.close()
+
 
 class Test_get_letters(unittest.TestCase):
     def test_lowercase(self):

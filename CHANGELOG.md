@@ -31,6 +31,7 @@ All notable changes to this project will be documented here. The format follows
 
 #### Bugfixes
 
+- Report the overlapping coordinates in `MultiPanel` layout warnings.
 - Align panel labels using point offsets from their panels and avoid creating
   extra invisible axes for labels.
 - Allow `MultiPanel` to create single-panel layouts and save to PDF with the
