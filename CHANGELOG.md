@@ -17,6 +17,8 @@ All notable changes to this project will be documented here. The format follows
 - Require Python 3.10 or newer and Matplotlib 3.8 or newer.
 - Use lowercase panel labels and panel attribute names by
   default. Uppercase remains available with `label_case="uppercase"`.
+- Refresh and automate generation of the Matplotlib and Spiffyplots
+  comparison figures.
 - Ship the style sheets inside the package and register them with Matplotlib
   when `spiffyplots` is imported, instead of copying them into the Matplotlib
   config directory at install time. Now requires importing `spiffyplots` before calling

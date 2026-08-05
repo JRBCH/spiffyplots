@@ -1,0 +1,30 @@
+name: Regenerate examples
+
+on:
+  push:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  generate:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+
+      - name: Generate Matplotlib and Spiffyplots examples
+        env:
+          MPLBACKEND: Agg
+          MPLCONFIGDIR: /tmp/spiffyplots-example-mplconfig
+        run: uv run python examples/ex_multipanel.py
+
+      - name: Upload generated figures
+        uses: actions/upload-artifact@v4
+        with:
+          name: multipanel-examples
+          path: |
+            examples/multipanel_mpl.png
+            examples/multipanel_spiffy.png

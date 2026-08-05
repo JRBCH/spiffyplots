@@ -72,6 +72,14 @@ When you're done making changes, check that your changes pass the tests:
 
     `$ uv run pytest`
 
+If a change affects figure layout or a Matplotlib style, regenerate and inspect
+both comparison figures before committing:
+
+    `$ uv run python examples/ex_multipanel.py`
+
+GitHub Actions also runs this script after every push and uploads both generated
+figures as workflow artifacts.
+
 1. Commit your changes and push your branch to GitHub::
 
     `$ git add .`
