@@ -225,6 +225,13 @@ class MultiPanel:
         dpi = kwargs.pop("dpi", plt.rcParams.get("figure.dpi"))
         units = kwargs.pop("units", "in")
 
+        if len(figsize) != 2:
+            raise ValueError(
+                f"figsize must be a (width, height) pair, got {len(figsize)} "
+                "values. Pass the unit separately, for example "
+                "MultiPanel(figsize=(8.9, 6.0), units='cm')."
+            )
+
         self.fig = plt.figure(
             figsize=_convert_figsize(*figsize, units=units),
             dpi=dpi,

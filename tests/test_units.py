@@ -17,8 +17,10 @@ def test_figsize_converts_to_inches(size, units, expected):
     assert figsize(*size, units=units) == pytest.approx(expected)
 
 
-def test_figsize_defaults_to_millimetres():
-    assert figsize(25.4, 50.8) == pytest.approx((1, 2))
+def test_figsize_requires_explicit_units():
+    """``MultiPanel`` reads a bare figsize as inches, so this must not default."""
+    with pytest.raises(TypeError):
+        figsize(25.4, 50.8)
 
 
 def test_unit_constants_convert_to_inches():

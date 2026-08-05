@@ -307,6 +307,15 @@ class TestMutiPanel(unittest.TestCase):
 
         self.assertEqual(set(mp.plt.get_fignums()), figures_before)
 
+    def test_matplotlib_figsize_unit_tuple_is_rejected_clearly(self):
+        """Matplotlib 3.11 accepts (w, h, unit); this points at ``units=`` instead."""
+        figures_before = set(mp.plt.get_fignums())
+
+        with self.assertRaisesRegex(ValueError, r"units='cm'"):
+            mp.MultiPanel(figsize=(8.9, 6.0, "cm"))
+
+        self.assertEqual(set(mp.plt.get_fignums()), figures_before)
+
     def test_gridspec_geometry_warns_with_constrained_layout(self):
         with (
             matplotlib.style.context("spiffy"),

@@ -25,7 +25,7 @@ millimetres while still passing the inches Matplotlib expects:
     figure.panels[0].plot([0, 1, 2], [0, 1, 4])
     figure.panels[1].plot([0, 1, 2], [0, 1, 2])
 
-    figure.savefig("overview.pdf", dpi=300, bbox_inches="tight")
+    figure.savefig("overview.pdf")
     figure.close()
 
 ``MultiPanel`` can also perform the same conversion directly:
@@ -40,7 +40,7 @@ millimetres while still passing the inches Matplotlib expects:
 For arithmetic with Matplotlib's other figure constructors, :data:`spiffyplots.CM`
 and :data:`spiffyplots.MM` convert one centimetre or millimetre to inches.
 
-The bundled color and modifier styles compose with the base style:
+The bundled color and modifier styles can be combined:
 
 .. code-block:: python
 

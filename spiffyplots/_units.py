@@ -6,14 +6,13 @@ MM = 1 / 25.4
 _UNIT_FACTORS = {"in": 1.0, "cm": CM, "mm": MM}
 
 
-def figsize(width: float, height: float, units: str = "mm") -> tuple[float, float]:
+def figsize(width: float, height: float, units: str) -> tuple[float, float]:
     """Return a ``(width, height)`` figure size converted to inches.
 
     Args:
         width: Figure width in ``units``.
         height: Figure height in ``units``.
-        units: Input unit: ``"in"``, ``"cm"``, or ``"mm"``. Defaults to
-            millimetres.
+        units: Input unit: ``"in"``, ``"cm"``, or ``"mm"``
 
     Raises:
         ValueError: If ``units`` is unsupported.

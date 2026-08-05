@@ -47,9 +47,8 @@ plt.style.use("spiffy")  # base style
 plt.style.use(["spiffy", "muted"])  # base style plus a Paul Tol color scheme
 ```
 
-Import `spiffyplots` **before** calling `plt.style.use`. If you would rather
-not depend on import order, the same sheets are reachable by their
-package-relative name, which needs no import at all:
+Import `spiffyplots` **before** calling `plt.style.use`. Alternatively, the same sheets are reachable by their
+package-relative name, without importing `spiffyplots`:
 
 ```python
 plt.style.use("spiffyplots.styles.spiffy")
@@ -59,9 +58,8 @@ Available styles: `spiffy`, the color schemes `bright`, `high-vis`, `muted`,
 `retro` and `vibrant`, and the modifiers `latex`, `minor-ticks`, `right-axis`,
 `top-axis` and `heatmap`.
 
-The base `spiffy` style keeps vector text publication-ready and editable. PDF
-and PostScript output embeds TrueType fonts rather than Type 3 fonts, while SVG
-output retains `<text>` elements instead of converting glyphs to paths.
+The base `spiffy` style keeps vector text editable. PDF
+and PostScript embeds TrueType fonts, and SVG retains `<text>` elements instead of converting glyphs to paths.
 
 If for some reason you want to restore
 Matplotlib's default outlined SVG behavior, set `plt.rcParams["svg.fonttype"] = "path"`.
