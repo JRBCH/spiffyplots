@@ -3,6 +3,7 @@
 
 watchdog
 Sphinx
+sphinx-rtd-theme
 twine
 
 # Linting and formatting

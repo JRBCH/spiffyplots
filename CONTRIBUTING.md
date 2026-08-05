@@ -55,7 +55,7 @@ Ready to contribute? Here's how to set up `spiffyplots` for local development.
 
     `$ uv sync`
 
-   This project requires Python 3.11 or newer.
+   This project requires Python 3.10 or newer.
 
 4. Create a branch for local development::
 
@@ -72,13 +72,14 @@ When you're done making changes, check that your changes pass the tests:
 
     `$ uv run pytest`
 
+Build the documentation with warnings treated as errors:
+
+    `$ uv run --group docs sphinx-build -W --keep-going -b html docs/source docs/_build/html`
+
 If a change affects figure layout or a Matplotlib style, regenerate and inspect
 both comparison figures before committing:
 
     `$ uv run python examples/ex_multipanel.py`
-
-GitHub Actions also runs this script after every push and uploads both generated
-figures as workflow artifacts.
 
 1. Commit your changes and push your branch to GitHub::
 
@@ -98,8 +99,8 @@ Before you submit a pull request, check that it meets these guidelines:
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
    feature to the list in README.md.
-3. The pull request should work for Python 3.11 and newer. Check
-   https://travis-ci.com/JRBCH/spiffyplots/pull_requests
+3. The pull request should work for Python 3.10 and newer. Check
+   https://github.com/JRBCH/spiffyplots/actions/workflows/test.yaml
    and make sure that the tests pass for all supported Python versions.
 
 ## Tips
@@ -110,14 +111,21 @@ To run a subset of tests (e.g. the multipanel module):
 
 ## Deploying
 
-A reminder for the maintainers on how to deploy.
-Make sure all your changes are committed.
-Then run:
+A reminder for maintainers:
 
-`$ uv run bump2version patch # ` (possible #: major / minor / patch)
+1. Configure the `pypi` GitHub environment to require manual approval.
+2. Configure a PyPI Trusted Publisher for repository `JRBCH/spiffyplots`,
+   workflow `publish.yaml`, and environment `pypi`. Revoke the old Travis API
+   token if it has not already been revoked.
+3. Make sure all changes are committed, then bump the version and create the
+   release tag:
 
-`$ git push`
+    `$ uv run bump2version patch` (or `minor` / `major`)
 
-`$ git push --tags`
+4. Push the release commit and tag. The `Publish` GitHub Actions workflow
+   builds the distributions and waits for approval before publishing them to
+   PyPI with short-lived OIDC credentials.
 
-Travis will then deploy to PyPI if tests pass.
+    `$ git push`
+
+    `$ git push --tags`

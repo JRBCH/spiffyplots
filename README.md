@@ -70,12 +70,14 @@ Available styles: `spiffy`, the color schemes `bright`, `high-vis`, `muted`,
     * Automatic labelling of sub-panels
     * Support for custom panel arrangements and labels
 
-## Future Plans
+## Roadmap
 
-* Journal-specific style sheets
-* Automatic optimization of figure size for multipanel figures
-* `color` module for quick access to colors and cmaps
-* `panel` wrapper class for matplotlib axes objects with custom plotting methods for often used plots.
+* Named access to the bundled color palettes and helpers for ramps and
+  colormaps
+* Figure-size helpers that accept centimetres and millimetres
+* Verified journal-specific figure sizes and style sheets
+* A clearer interface between panel-oriented layouts and GridSpec column
+  ratios
 
 ## Credits
 

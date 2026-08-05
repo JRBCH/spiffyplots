@@ -67,48 +67,54 @@ class MultiPanel:
 
         **OPTION 1: Initialization based on the** ``labels`` **parameter**
 
-            The ``labels`` parameter can be passed in as a dictionary, mapping custom figure labels (e.g. 'a', 'b', 'c')
-            to locations in the grid that are defined by Tuples (e.g. {'A': (0, range(2,5)} will make a plot in the
-            first row spanning columns 2-4 and give it the label A.
+        The ``labels`` parameter can be passed in as a dictionary, mapping custom
+        figure labels (e.g. 'a', 'b', 'c') to locations in the grid that are
+        defined by tuples. For example, ``{'A': (0, range(2, 5))}`` makes a plot
+        in the first row spanning columns 2-4 and gives it the label A.
 
-            Similarly, ``labels`` can be passed as a 2-dimensional NumPy array
-            or nested sequence of strings. In this case, the strings in the
-            cells correspond to panel labels. Adjacent identical labels are
-            considered one panel. For example, the array::
-                ['A', 'A', 'D']
-                ['B', 'C', 'D']
-                ['E', 'E', 'E']
+        Similarly, ``labels`` can be passed as a 2-dimensional NumPy array or
+        nested sequence of strings. In this case, the strings in the cells
+        correspond to panel labels. Adjacent identical labels are considered one
+        panel. For example, the array::
 
-            will create 5 panels, each occupying the space that the respective label takes up in the array.
+            [['A', 'A', 'D'],
+             ['B', 'C', 'D'],
+             ['E', 'E', 'E']]
 
-            This option is useful when you want to control both the arrangement of panels, and the order and
-            format of their labels. If labels is passed as a dictionary, nested
-            sequence, or NumPy array, the ``grid`` and ``shape`` parameters are
-            ignored.
+        creates 5 panels, each occupying the space that the respective label
+        takes up in the array.
+
+        This option is useful when you want to control both the arrangement of
+        panels and the order and format of their labels. If labels is passed as a
+        dictionary, nested sequence, or NumPy array, the ``grid`` and ``shape``
+        parameters are ignored.
 
         **OPTION 2: Initialization based on the** ``grid`` **parameter:**
 
-            If option 1 does not apply, the class will try to be initialized through the ``grid`` parameter.
+        If option 1 does not apply, the class will try to be initialized through
+        the ``grid`` parameter.
 
-            Example:
-                Generate a two-row figure with 3 columns (panels) in the first row and 2 columns (panels)
-                in the second row::
-                    >>> fig = MultiPanel(grid=[3, 2])
+        Generate a two-row figure with 3 columns (panels) in the first row and 2
+        columns (panels) in the second row::
 
-            Example:
-                Generate a 2x3 figure with 5 panels, where one panel spans
-                both rows in the last column::
-                    >>> fig = MultiPanel(grid=[(0, 0), (0, 1), (1, 0), (1, 1), (range(0, 2), 2)])
+            >>> fig = MultiPanel(grid=[3, 2])
+
+        Generate a 2x3 figure with 5 panels, where one panel spans both rows in
+        the last column::
+
+            >>> fig = MultiPanel(
+            ...     grid=[(0, 0), (0, 1), (1, 0), (1, 1), (range(0, 2), 2)]
+            ... )
 
         **OPTION 3: initialization based on the** ``shape`` **parameter:**
 
-            if neither ``labels`` or ``grid`` are supplied, the class will generate one panel in each cell of the grid
-            matrix, as defined by the ``shape`` parameter.
+        If neither ``labels`` nor ``grid`` is supplied, the class generates one
+        panel in each cell of the grid matrix, as defined by the ``shape``
+        parameter.
 
-            Example:
-                Generate a 3x3 grid with
-                9 plots of equal size::
-                    >>> fig = MultiPanel(shape=(3, 3))
+        Generate a 3x3 grid with 9 plots of equal size::
+
+            >>> fig = MultiPanel(shape=(3, 3))
 
         Args:
             shape (Tuple): Determines the shape of the MultiPanel grid layout.

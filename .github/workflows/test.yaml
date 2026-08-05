@@ -54,6 +54,14 @@ jobs:
       - run: uv run ruff check .
       - run: uv run ruff format --check .
 
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: astral-sh/setup-uv@v5
+      - name: Build documentation
+        run: uv run --group docs sphinx-build -W --keep-going -b html docs/source docs/_build/html
+
   package:
     runs-on: ubuntu-latest
     name: styles reach a clean install

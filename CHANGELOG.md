@@ -26,7 +26,8 @@ All notable changes to this project will be documented here. The format follows
   config directory at install time. Now requires importing `spiffyplots` before calling
   `plt.style.use`.
 - Use `uv` for development and Ruff for linting and formatting.
-- Replace Travis with GitHub Actions
+- Replace Travis with GitHub Actions and PyPI Trusted Publishing.
+- Restore reproducible Read the Docs builds and add documentation checks to CI.
 - Forward figure arguments, including DPI, and adjust default label positions.
 
 #### Bugfixes

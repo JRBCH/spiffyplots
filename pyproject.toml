@@ -31,6 +31,10 @@ Issues = "https://github.com/JRBCH/spiffyplots/issues"
 Repository = "https://github.com/JRBCH/spiffyplots"
 
 [dependency-groups]
+docs = [
+    "sphinx",
+    "sphinx-rtd-theme",
+]
 dev = [
     "bump2version",
     "coverage",
@@ -38,7 +42,6 @@ dev = [
     "pytest",
     "pytest-cov",
     "ruff",
-    "sphinx",
     "twine",
     "watchdog",
 ]

@@ -1,5 +1,5 @@
 Welcome to SpiffyPlots's documentation!
-======================================
+========================================
 
 
 
@@ -15,7 +15,7 @@ Welcome to SpiffyPlots's documentation!
    :maxdepth: 2
    :caption: Package reference
 
-   spiffyplots
+   modules
 
 Indices and tables
 ==================
