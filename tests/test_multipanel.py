@@ -1,6 +1,7 @@
 """Tests for `spiffyplots.multipanel` module."""
 
 import unittest
+import warnings
 from itertools import product
 from pathlib import Path
 from tempfile import TemporaryDirectory
@@ -231,6 +232,57 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(**kwargs)
 
         self.assertEqual(fig._labels, "abcd")
+
+    def test_unknown_kwargs_raise_before_creating_figure(self):
+        figures_before = set(mp.plt.get_fignums())
+
+        with self.assertRaisesRegex(
+            TypeError, r"unexpected keyword arguments: figsizee, labelsize"
+        ):
+            mp.MultiPanel(labelsize=20, figsizee=(12, 9))
+
+        self.assertEqual(set(mp.plt.get_fignums()), figures_before)
+
+    def test_gridspec_geometry_warns_with_constrained_layout(self):
+        with (
+            matplotlib.style.context("spiffy"),
+            self.assertWarnsRegex(
+                UserWarning, r"`left`, `hspace`.*mutually exclusive"
+            ) as caught,
+        ):
+            figure = mp.MultiPanel(shape=(2, 2), left=0.4, hspace=0.9)
+
+        self.assertEqual(Path(caught.filename), Path(__file__))
+        self.assertTrue(figure.fig.get_constrained_layout())
+        figure.close()
+
+    def test_gridspec_kwargs_without_constrained_layout(self):
+        with (
+            matplotlib.style.context("spiffy"),
+            matplotlib.rc_context({"figure.constrained_layout.use": False}),
+            warnings.catch_warnings(),
+        ):
+            warnings.simplefilter("error")
+            figure = mp.MultiPanel(
+                shape=(2, 2), left=0.4, hspace=0.9, width_ratios=(1, 2)
+            )
+            figure.fig.canvas.draw()
+
+        self.assertAlmostEqual(figure.panels[0].get_position().x0, 0.4)
+        self.assertEqual(figure.gridspec.get_width_ratios(), (1, 2))
+        figure.close()
+
+    def test_gridspec_ratios_work_with_constrained_layout(self):
+        with (
+            matplotlib.style.context("spiffy"),
+            warnings.catch_warnings(),
+        ):
+            warnings.simplefilter("error")
+            figure = mp.MultiPanel(shape=(1, 2), width_ratios=(1, 2))
+
+        self.assertTrue(figure.fig.get_constrained_layout())
+        self.assertEqual(figure.gridspec.get_width_ratios(), (1, 2))
+        figure.close()
 
     def test_errors_invalid_inputs(self):
         """

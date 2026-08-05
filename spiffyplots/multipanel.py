@@ -110,15 +110,49 @@ class MultiPanel:
             label_color (str): Color of the figure labels. Defaults to 'black'.
 
             left (float): left margin.
-                This and following kwargs are passed to ``matplotlib.gridspec.GridSpec``
+                This and the following five geometry kwargs are passed to
+                ``matplotlib.gridspec.GridSpec``. They are mutually exclusive
+                with constrained layout: when constrained layout is active,
+                they are ignored and ``MultiPanel`` emits a warning. Disable
+                constrained layout before constructing the figure to use them.
             right (float): right margin
             bottom (float): bottom margin
             top (float): top margin
             wspace (float): horizontal spacing
             hspace (float): vertical spacing
-            width_ratios (Iterable): width ratios of columns
-            height_ratios (Iterable): height ratios of rows
+            width_ratios (Iterable): width ratios of columns. Works with or
+                without constrained layout.
+            height_ratios (Iterable): height ratios of rows. Works with or
+                without constrained layout.
         """
+
+        gridspec_kwarg_names = (
+            "left",
+            "bottom",
+            "right",
+            "top",
+            "wspace",
+            "hspace",
+            "width_ratios",
+            "height_ratios",
+        )
+        supported_kwargs = {
+            "figsize",
+            "dpi",
+            "label_case",
+            "label_weight",
+            "label_size",
+            "label_offset",
+            "label_location",
+            "label_color",
+            *gridspec_kwarg_names,
+        }
+        unexpected_kwargs = sorted(set(kwargs) - supported_kwargs)
+        if unexpected_kwargs:
+            raise TypeError(
+                "MultiPanel() got unexpected keyword arguments: "
+                f"{', '.join(unexpected_kwargs)}"
+            )
 
         self.npanels = 0
         self.shape = shape
@@ -231,18 +265,29 @@ class MultiPanel:
 
         # Initialize GridSpec and consider Keyword Arguments
 
+        gridspec_kwargs = {
+            name: kwargs.pop(name, None) for name in gridspec_kwarg_names
+        }
+        geometry_kwargs = [
+            name
+            for name in gridspec_kwarg_names[:6]
+            if gridspec_kwargs[name] is not None
+        ]
+        if geometry_kwargs and self.fig.get_constrained_layout():
+            formatted_kwargs = ", ".join(f"`{name}`" for name in geometry_kwargs)
+            warnings.warn(
+                f"GridSpec keyword arguments {formatted_kwargs} are ignored while "
+                "constrained layout is active. Explicit GridSpec geometry and "
+                "constrained layout are mutually exclusive; disable constrained "
+                "layout to use these values.",
+                stacklevel=2,
+            )
+
         self.gridspec = gs.GridSpec(
             nrows=self.shape[0],
             ncols=self.shape[1],
             figure=self.fig,
-            left=kwargs.pop("left", None),
-            bottom=kwargs.pop("bottom", None),
-            right=kwargs.pop("right", None),
-            top=kwargs.pop("top", None),
-            wspace=kwargs.pop("wspace", None),
-            hspace=kwargs.pop("hspace", None),
-            width_ratios=kwargs.pop("width_ratios", None),
-            height_ratios=kwargs.pop("height_ratios", None),
+            **gridspec_kwargs,
         )
 
         Panels = namedtuple("Panels", [i for i in self._labels])
