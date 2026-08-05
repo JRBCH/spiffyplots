@@ -288,6 +288,25 @@ class TestMutiPanel(unittest.TestCase):
 
         self.assertEqual(set(mp.plt.get_fignums()), figures_before)
 
+    def test_figsize_units_are_converted_to_inches(self):
+        sizes = (("in", (1, 2)), ("cm", (2.54, 5.08)), ("mm", (25.4, 50.8)))
+        for units, size in sizes:
+            with self.subTest(units=units):
+                figure = mp.MultiPanel(
+                    shape=(1, 1), figsize=size, units=units, labels=False
+                )
+
+                np.testing.assert_allclose(figure.fig.get_size_inches(), (1, 2))
+                figure.close()
+
+    def test_unknown_figsize_units_raise_before_creating_figure(self):
+        figures_before = set(mp.plt.get_fignums())
+
+        with self.assertRaisesRegex(ValueError, "expected 'in', 'cm', or 'mm'"):
+            mp.MultiPanel(figsize=(1, 2), units="pt")
+
+        self.assertEqual(set(mp.plt.get_fignums()), figures_before)
+
     def test_gridspec_geometry_warns_with_constrained_layout(self):
         with (
             matplotlib.style.context("spiffy"),

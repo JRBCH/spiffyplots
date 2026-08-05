@@ -76,12 +76,12 @@ Matplotlib's default outlined SVG behavior, set `plt.rcParams["svg.fonttype"] = 
     * Easy and flexible wrapper of matplotlib's GridSpec
     * Automatic labelling of sub-panels
     * Support for custom panel arrangements and labels
+    * Figure sizes in inches, centimetres or millimetres
 
 ## Roadmap
 
 * Named access to the bundled color palettes and helpers for ramps and
   colormaps
-* Figure-size helpers that accept centimetres and millimetres
 * Verified journal-specific figure sizes and style sheets
 * A clearer interface between panel-oriented layouts and GridSpec column
   ratios

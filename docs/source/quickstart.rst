@@ -9,18 +9,17 @@ before selecting the base ``spiffy`` style:
 
     import matplotlib
     import spiffyplots
-    from spiffyplots import MultiPanel
+    from spiffyplots import MultiPanel, figsize
 
     matplotlib.style.use("spiffy")
 
 Create multi-panel figures with :class:`~spiffyplots.multipanel.MultiPanel`.
-Figure dimensions are converted from centimetres here because Matplotlib
-expects inches:
+Use :func:`spiffyplots.figsize` to express dimensions in centimetres or
+millimetres while still passing the inches Matplotlib expects:
 
 .. code-block:: python
 
-    cm = 1 / 2.54
-    figsize_overview = (11 * cm, 3.5 * cm)
+    figsize_overview = figsize(11, 3.5, units="cm")
 
     figure = MultiPanel(shape=(1, 2), figsize=figsize_overview, labels=False)
     figure.panels[0].plot([0, 1, 2], [0, 1, 4])
@@ -28,6 +27,18 @@ expects inches:
 
     figure.savefig("overview.pdf", dpi=300, bbox_inches="tight")
     figure.close()
+
+``MultiPanel`` can also perform the same conversion directly:
+
+.. code-block:: python
+
+    figure = MultiPanel(
+        shape=(1, 2), figsize=(110, 35), units="mm", labels=False
+    )
+    figure.close()
+
+For arithmetic with Matplotlib's other figure constructors, :data:`spiffyplots.CM`
+and :data:`spiffyplots.MM` convert one centimetre or millimetre to inches.
 
 The bundled color and modifier styles compose with the base style:
 

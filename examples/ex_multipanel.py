@@ -6,7 +6,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import numpy as np
 
-from spiffyplots import MultiPanel
+from spiffyplots import CM, MultiPanel
 
 # Part 1: generate common data and define shared plotting helpers.
 SEED = 0
@@ -20,8 +20,7 @@ GAMMA_SCALE = 8
 SCATTER_ALPHA = 0.6
 BAND_ALPHA = 0.3
 
-cm = 1 / 2.54
-figsize_example = (22.86 * cm, 10.16 * cm)
+figsize_example = (22.86 * CM, 10.16 * CM)
 figure_dpi = 150
 label_offset_default = (-20, 6)
 label_size_default = 12

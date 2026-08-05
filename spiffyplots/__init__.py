@@ -5,6 +5,7 @@ from pathlib import Path
 import matplotlib
 import matplotlib.style
 
+from ._units import CM, MM, figsize
 from .lineplots import multiline
 from .multipanel import MultiPanel
 from .random_data import populate_random_data
@@ -15,7 +16,15 @@ __version__ = "0.6.1"
 
 STYLES_PATH = Path(__file__).parent / "styles"
 
-__all__ = ["STYLES_PATH", "MultiPanel", "multiline", "populate_random_data"]
+__all__ = [
+    "CM",
+    "MM",
+    "STYLES_PATH",
+    "MultiPanel",
+    "figsize",
+    "multiline",
+    "populate_random_data",
+]
 
 
 def _register_styles() -> dict:

@@ -13,6 +13,8 @@ import matplotlib.gridspec as gs
 import matplotlib.pyplot as plt
 import numpy as np
 
+from ._units import figsize as _convert_figsize
+
 
 class _PanelCollection(Sequence):
     """Read-only panel sequence with positional and label-based access."""
@@ -145,7 +147,10 @@ class MultiPanel:
 
 
         Keyword Args:
-            figsize (Tuple): Size of the figure. Will be passed into ``matplotlib.pyplot.figure``.
+            figsize (Tuple): Width and height of the figure. Defaults to
+                ``rcParams["figure.figsize"]``.
+            units (str): Unit for ``figsize``: ``"in"``, ``"cm"``, or ``"mm"``.
+                Defaults to ``"in"``.
 
             label_case (str): 'uppercase' or 'lowercase'. Defaults to 'lowercase'.
                 This and following kwargs are passed to ``MultiPanel._draw_labels``.
@@ -187,6 +192,7 @@ class MultiPanel:
         supported_kwargs = {
             "figsize",
             "dpi",
+            "units",
             "label_case",
             "label_weight",
             "label_size",
@@ -211,8 +217,12 @@ class MultiPanel:
         # parse kwargs
         figsize = kwargs.pop("figsize", plt.rcParams.get("figure.figsize"))
         dpi = kwargs.pop("dpi", plt.rcParams.get("figure.dpi"))
+        units = kwargs.pop("units", "in")
 
-        self.fig = plt.figure(figsize=figsize, dpi=dpi)
+        self.fig = plt.figure(
+            figsize=_convert_figsize(*figsize, units=units),
+            dpi=dpi,
+        )
 
         # OPTION 1: INITIALIZATION BASED ON ``labels``
         # # # # # # # # # # # #

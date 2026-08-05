@@ -1,6 +1,15 @@
 spiffyplots package
 ===================
 
+Figure size helpers
+-------------------
+
+.. autofunction:: spiffyplots.figsize
+
+.. autodata:: spiffyplots.CM
+
+.. autodata:: spiffyplots.MM
+
 spiffyplots.colors module
 -------------------------
 

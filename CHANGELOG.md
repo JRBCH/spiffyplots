@@ -8,6 +8,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### New features
 
+- Add a `figsize` converter, `CM` and `MM` constants, and a `units` option for
+  constructing `MultiPanel` figures in centimetres or millimetres.
 - Add `save`, `savefig` and `close` methods to `MultiPanel`
 - Add `populate_random_data` for quickly filling MultiPanel figures with example data.
 - Style sheets are reachable by their package-relative name, for example
