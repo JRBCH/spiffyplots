@@ -1,7 +1,8 @@
-import numpy as np
+from collections.abc import Iterable
+
 import matplotlib.pyplot as plt
+import numpy as np
 from matplotlib.collections import LineCollection
-from typing import Dict, Tuple, Union, Optional, Iterable
 
 
 def multiline(x: Iterable, y: Iterable, c: Iterable, axis=None, **kwargs):
@@ -28,7 +29,9 @@ def multiline(x: Iterable, y: Iterable, c: Iterable, axis=None, **kwargs):
         axis = plt.gca()
 
     # Make a LineCollection Object
-    segments = [np.column_stack([x, y]) for x, y in zip(xs, ys)]
+    segments = [
+        np.column_stack([x_values, y_values]) for x_values, y_values in zip(x, y)
+    ]
     lc = LineCollection(segments, **kwargs)
 
     # set coloring of line segments
@@ -37,6 +40,6 @@ def multiline(x: Iterable, y: Iterable, c: Iterable, axis=None, **kwargs):
 
     # add lines to axes and rescale
     #    Note: adding a collection doesn't autoscalee xlim/ylim
-    ax.add_collection(lc)
-    ax.autoscale()
+    axis.add_collection(lc)
+    axis.autoscale()
     return lc
