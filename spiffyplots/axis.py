@@ -1,6 +1,7 @@
 """
 Defines the SpiffyPanel object class that inherits from matplotlib.Axes.
 """
+
 from matplotlib.axes import Axes
 
 # Spiffy functions to call from axis objects

@@ -6,3 +6,5 @@ add spiffy functionality while still allowing for the original matplotlib syntax
 
 from ._figure import Figure
 from ._panel import Panel
+
+__all__ = ["Figure", "Panel"]

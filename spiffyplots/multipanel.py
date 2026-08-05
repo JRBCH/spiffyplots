@@ -1,33 +1,29 @@
-# -*- coding: utf-8 -*-
-"""The Spiffy MultiPanel class and its methods.
-"""
+"""The Spiffy MultiPanel class and its methods."""
 
-from collections import defaultdict
-from itertools import product, combinations
-import matplotlib
-import matplotlib.pyplot as plt
-import matplotlib.gridspec as gs
-import numpy as np
-import string
 import math
-
-from collections import namedtuple
-from typing import Dict, Tuple, Union, Optional, Iterable
+import string
 import warnings
+from collections import defaultdict, namedtuple
+from collections.abc import Iterable
+from itertools import combinations, product
+
+import matplotlib
+import matplotlib.gridspec as gs
+import matplotlib.pyplot as plt
+import numpy as np
 
 
-class MultiPanel(object):
-
+class MultiPanel:
     """
     The central object of the `multipanel` module. Initiates a figure with multiple panels.
     """
 
     def __init__(
         self,
-        shape: Optional[Tuple[int, int]] = (2, 2),
-        grid: Union[Iterable[Tuple], Iterable[int]] = None,
-        labels: Union[bool, Iterable[str], Dict[str, tuple], np.array] = False,
-        **kwargs
+        shape: tuple[int, int] | None = (2, 2),
+        grid: Iterable[tuple] | Iterable[int] | None = None,
+        labels: bool | Iterable[str] | dict[str, tuple] | np.ndarray = False,
+        **kwargs,
     ) -> None:
         """
         The ``MultiPanel`` object is basically a wrapper of matplotlib's ``GridSpec``,
@@ -142,7 +138,6 @@ class MultiPanel(object):
             labels = _decode_label_array(labels)
 
         if isinstance(labels, dict):
-
             # If other parameters were not passed as their default
             if grid is not None or shape != (2, 2):
                 warnings.warn(
@@ -158,18 +153,16 @@ class MultiPanel(object):
             draw_labels = True
 
         else:
-
             # OPTION 2: INITIALIZATION BASED ON ``grid``
             # # # # # # # # # # # #
 
             if grid is not None:
-
                 # OPTION 2.1: grid is passed as an Iterable of ints
                 if all(isinstance(i, int) for i in grid):
                     self.shape, grid, self.npanels = _get_subplot_raster(grid)
 
                 # OPTION 2.2: grid is passed as an Iterable of Tuples
-                elif all(isinstance(i, Tuple) for i in grid):
+                elif all(isinstance(i, tuple) for i in grid):
                     self.npanels = len(grid)
                     self.shape = _find_max_tuple(grid)
 
@@ -193,7 +186,7 @@ class MultiPanel(object):
                         "Refer to the documentation for supported input types."
                     )
 
-                grid = list()
+                grid = []
                 for row in range(self.shape[0]):
                     for col in range(self.shape[1]):
                         grid.append((row, col))
@@ -208,9 +201,9 @@ class MultiPanel(object):
                 draw_labels = labels
 
             elif isinstance(labels, Iterable):
-                assert (
-                    len(labels) == self.npanels
-                ), "Length of label vector does not match number of panels."
+                assert len(labels) == self.npanels, (
+                    "Length of label vector does not match number of panels."
+                )
                 self._labels = list(labels)
                 draw_labels = True
 
@@ -271,7 +264,6 @@ class MultiPanel(object):
     ) -> None:
 
         for ix in range(self.npanels):
-
             # make separate axis for label
             loc = self._locations[ix]
             axis_loc = (int(np.min(loc[0])), int(np.min(loc[1])))
@@ -291,11 +283,7 @@ class MultiPanel(object):
                 family="sans-serif",
             )
 
-    def save(self,
-             path: str,
-             format: Union[str, tuple, list] = 'pdf',
-             **kwargs
-             ):
+    def save(self, path: str, format: str | tuple | list = "pdf", **kwargs):
         """
         Saves the figure as one or multiple file types
 
@@ -309,13 +297,15 @@ class MultiPanel(object):
         """
 
         if not isinstance(format, str):
-            assert isinstance(format, (tuple, list)), "Pass file format as string or tuple/list of strings please"
+            assert isinstance(format, (tuple, list)), (
+                "Pass file format as string or tuple/list of strings please"
+            )
             format = tuple(format)
 
         for type in format:
-            fname = '{}.{}'.format(path, type)
+            fname = f"{path}.{type}"
             self.fig.savefig(fname, **kwargs)
-            print('Saved figure as {}'.format(fname))
+            print(f"Saved figure as {fname}")
 
     def close(self):
         """
@@ -324,7 +314,7 @@ class MultiPanel(object):
         plt.close(self.fig)
 
 
-def _get_letters(case: Optional[str] = "uppercase") -> str:
+def _get_letters(case: str | None = "uppercase") -> str:
     """
 
     :param case: 'lowercase' or 'uppercase'. Defaults to 'lowercase'.
@@ -379,9 +369,8 @@ def _decode_label_array(labels: Iterable[Iterable]) -> dict:
     # ensure labels spanning grid points are linear contiguous
     label_dict = {}
     for label, positions in label_pos.items():
-
-        rows = list(set([_[0] for _ in positions]))
-        cols = list(set([_[1] for _ in positions]))
+        rows = list({position[0] for position in positions})
+        cols = list({position[1] for position in positions})
 
         row_range = range(min(rows), max(rows) + 1)
         col_range = range(min(cols), max(cols) + 1)
@@ -405,7 +394,7 @@ def _decode_label_array(labels: Iterable[Iterable]) -> dict:
 
 
 def _get_grid_location(
-    location: Tuple, gridspec: matplotlib.gridspec.GridSpec
+    location: tuple, gridspec: matplotlib.gridspec.GridSpec
 ) -> matplotlib.gridspec.SubplotSpec:
     """
     From A tuple of locations in a grid, return the SubplotSpec at the given coordinates.
@@ -435,7 +424,7 @@ def _get_grid_location(
 
 def _get_subplot_raster(
     grid: Iterable[int],
-) -> Tuple[Tuple[int, int], Iterable[Tuple], int]:
+) -> tuple[tuple[int, int], Iterable[tuple], int]:
     """
     Defines a subplot raster from an iterable of integers that defines the number of plots in each row.
 
@@ -454,7 +443,6 @@ def _get_subplot_raster(
     shape = (len(grid), _lcm_of_array(grid))
 
     for row in range(len(grid)):
-
         # Size of each plot in this row
         size = shape[1] / grid[row]
 
@@ -484,8 +472,8 @@ def _lcm_of_array(a: Iterable[int]) -> int:
 
 
 def _find_max_tuple(
-    x: Iterable[Tuple[Union[Iterable, int], Union[Iterable, int]]]
-) -> Tuple[int, int]:
+    x: Iterable[tuple[Iterable | int, Iterable | int]],
+) -> tuple[int, int]:
     """
     Given a list of integer / range tuples, returns the maximum values along the first and second dimension
     :param x: List of Tuples

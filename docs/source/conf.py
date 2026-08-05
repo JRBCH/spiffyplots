@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 #
 # spiffyplots documentation build configuration file, created by
 # sphinx-quickstart on Fri Jun  9 13:47:02 2017.
@@ -20,6 +19,7 @@
 #
 import os
 import sys
+
 import spiffyplots
 
 sys.path.insert(0, os.path.abspath("../.."))

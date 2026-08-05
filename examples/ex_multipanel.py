@@ -1,8 +1,10 @@
 """
 Plotting examples for SpiffyPlots
 """
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
+
 from spiffyplots import MultiPanel
 
 # Data
@@ -58,11 +60,7 @@ def timeseries(axis, y, true=False, c="black"):
 # PLOTTING
 colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
-fig = MultiPanel(
-    grid=(4, 2),
-    figsize=(9, 4),
-    labels=True
-)
+fig = MultiPanel(grid=(4, 2), figsize=(9, 4), labels=True)
 
 hist(fig.panels[0], data["hist-gauss"], colors[0])
 scatter(fig.panels[1], data["scatter1-x"], data["scatter1-y"], colors[0])
@@ -78,11 +76,7 @@ fig.fig.savefig("multipanel_mpl.png")
 plt.style.use("spiffy")
 colors = plt.rcParams["axes.prop_cycle"].by_key()["color"]
 
-fig = MultiPanel(
-    grid=(4, 2),
-    figsize=(9, 4),
-    labels=True
-)
+fig = MultiPanel(grid=(4, 2), figsize=(9, 4), labels=True)
 
 hist(fig.panels[0], data["hist-gauss"], colors[0])
 scatter(fig.panels[1], data["scatter1-x"], data["scatter1-y"], colors[0])

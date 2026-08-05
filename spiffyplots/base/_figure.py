@@ -1,5 +1,4 @@
 from matplotlib.figure import Figure as mpl_Figure
-from ._panel import Panel
 
 
 class Figure(mpl_Figure):

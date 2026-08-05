@@ -1,13 +1,12 @@
 """Tests for `spiffyplots.multipanel` module."""
 
-from itertools import product
-
 import unittest
-import pytest
-import spiffyplots.multipanel as mp
+from itertools import product
 
 import matplotlib
 import numpy as np
+
+import spiffyplots.multipanel as mp
 
 
 class TestMutiPanel(unittest.TestCase):
@@ -55,7 +54,7 @@ class TestMutiPanel(unittest.TestCase):
         self.assertEqual(fig2.panels.__len__(), 3)
         self.assertEqual(fig2._labels, "ABC")
         self.assertEqual(fig2.shape, (2, 2))
-        self.assertEqual(fig2._locations, [(0, 0), (0, 1), (1, range(0, 2))])
+        self.assertEqual(fig2._locations, [(0, 0), (0, 1), (1, range(2))])
 
     def test_init_003_grid_tuples(self):
         """
@@ -120,7 +119,7 @@ class TestMutiPanel(unittest.TestCase):
 
         labels = np.array([["A", "A"], ["B", "B"]])
         fig = mp.MultiPanel(labels=labels)
-        self.assertEqual(set(fig._locations), set([(0, range(0, 2)), (1, range(0, 2))]))
+        self.assertEqual(set(fig._locations), {(0, range(2)), (1, range(2))})
 
         labels = np.array([["A", "B", "B"], ["C", "C", "C"], ["C", "C", "C"]])
         fig = mp.MultiPanel(labels=labels)
@@ -215,18 +214,18 @@ class Test_is_iter_of_iters(unittest.TestCase):
 class Test_decode_label_array(unittest.TestCase):
     def test_simple_array(self):
         grid_dict = mp._decode_label_array([["A", "B", "C"], ["D", "D", "D"]])
-        self.assertTrue(grid_dict["D"] == (1, range(0, 3)))
+        self.assertTrue(grid_dict["D"] == (1, range(3)))
 
         grid_dict = mp._decode_label_array([["A", "C", "E"], ["B", "D", "E"]])
-        self.assertTrue(grid_dict["E"] == (range(0, 2), 2))
+        self.assertTrue(grid_dict["E"] == (range(2), 2))
 
         grid_dict = mp._decode_label_array([["A", "C", "C"], ["B", "C", "C"]])
-        self.assertTrue(grid_dict["C"] == (range(0, 2), range(1, 3)))
+        self.assertTrue(grid_dict["C"] == (range(2), range(1, 3)))
 
         grid_dict = mp._decode_label_array(
             [["A", "B", "B"], ["C", "C", "C"], ["C", "C", "C"]]
         )
-        self.assertTrue(grid_dict["C"] == (range(1, 3), range(0, 3)))
+        self.assertTrue(grid_dict["C"] == (range(1, 3), range(3)))
 
         # discontiguous labels
         self.assertRaises(TypeError, mp._decode_label_array, [["A", "B"], ["B", "A"]])
@@ -236,16 +235,13 @@ class Test_decode_label_array(unittest.TestCase):
 
         # different types of iterable inputs
         grid_dict = mp._decode_label_array(["ABC", "DDD"])
-        self.assertTrue(grid_dict["D"] == (1, range(0, 3)))
+        self.assertTrue(grid_dict["D"] == (1, range(3)))
 
         grid_dict = mp._decode_label_array(np.array([["A", "B", "C"], ["D", "D", "D"]]))
-        self.assertTrue(grid_dict["D"] == (1, range(0, 3)))
+        self.assertTrue(grid_dict["D"] == (1, range(3)))
 
         # should raise on invalid input
         self.assertRaises(TypeError, mp._decode_label_array, 1)
-
-    def test_complex_array(self):
-        NotImplemented
 
 
 class Test_get_grid_location(unittest.TestCase):
@@ -262,19 +258,19 @@ class Test_get_grid_location(unittest.TestCase):
         self.assertEqual(out, self.grid[0, 1])
 
     def test_int_rowrange(self):
-        tuple = (range(0, 2), 1)
+        tuple = (range(2), 1)
         out = mp._get_grid_location(tuple, self.grid)
 
         self.assertEqual(out, self.grid[0:2, 1])
 
     def test_int_colrange(self):
-        tuple = (1, range(0, 3))
+        tuple = (1, range(3))
         out = mp._get_grid_location(tuple, self.grid)
 
         self.assertEqual(out, self.grid[1, 0:3])
 
     def test_ranges(self):
-        tuple = (range(0, 2), range(0, 3))
+        tuple = (range(2), range(3))
         out = mp._get_grid_location(tuple, self.grid)
 
         self.assertEqual(out, self.grid[0:2, 0:3])
@@ -293,12 +289,12 @@ class Test_get_subplot_raster(unittest.TestCase):
         """
         self.grid = [2, 3, 1]
         self.locations = [
-            (0, range(0, 3)),
+            (0, range(3)),
             (0, range(3, 6)),
-            (1, range(0, 2)),
+            (1, range(2)),
             (1, range(2, 4)),
             (1, range(4, 6)),
-            (2, range(0, 6)),
+            (2, range(6)),
         ]
 
     def test_raster(self):
@@ -363,13 +359,13 @@ class Test_panel_overlap(unittest.TestCase):
         self.assertFalse(mp._panel_overlap([(0, 0), (0, 1)]))
         self.assertFalse(mp._panel_overlap([(0, 0), (1, 0), (0, 1), (1, 1)]))
         self.assertTrue(mp._panel_overlap([(0, 0), (1, 0), (0, 1), (1, 0)]))
-        self.assertFalse(mp._panel_overlap([(0, range(0, 10)), (1, range(0, 10))]))
-        self.assertTrue(mp._panel_overlap([(0, range(0, 2)), (0, range(1, 2))]))
+        self.assertFalse(mp._panel_overlap([(0, range(10)), (1, range(10))]))
+        self.assertTrue(mp._panel_overlap([(0, range(2)), (0, range(1, 2))]))
         self.assertFalse(
-            mp._panel_overlap([(range(0, 2), range(0, 2)), (range(2, 4), range(2, 4))])
+            mp._panel_overlap([(range(2), range(2)), (range(2, 4), range(2, 4))])
         )
         self.assertTrue(
-            mp._panel_overlap([(range(0, 2), range(0, 2)), (range(1, 4), range(1, 4))])
+            mp._panel_overlap([(range(2), range(2)), (range(1, 4), range(1, 4))])
         )
 
     def test_large_subplots(self):
