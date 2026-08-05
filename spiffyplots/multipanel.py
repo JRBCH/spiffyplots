@@ -355,31 +355,13 @@ class MultiPanel:
                     **text_kwargs,
                 )
 
-    def save(self, path: str, format: str | tuple | list = "pdf", **kwargs):
-        """
-        Saves the figure as one or multiple file types
+    def savefig(self, *args, **kwargs):
+        """Save the wrapped figure with ``matplotlib.figure.Figure.savefig``."""
+        return self.fig.savefig(*args, **kwargs)
 
-        Args:
-            path:   file path
-                    Example:
-                        `save(path='figures/figure1, format='pdf)` will save the object as
-                        figures/figure1.pdf
-            format: the file format(s) to save as. Defaults to 'pdf'
-
-        """
-
-        if isinstance(format, str):
-            formats = (format,)
-        else:
-            assert isinstance(format, (tuple, list)), (
-                "Pass file format as string or tuple/list of strings please"
-            )
-            formats = tuple(format)
-
-        for file_format in formats:
-            fname = f"{path}.{file_format}"
-            self.fig.savefig(fname, **kwargs)
-            print(f"Saved figure as {fname}")
+    def save(self, *args, **kwargs):
+        """Alias for :meth:`savefig`."""
+        return self.savefig(*args, **kwargs)
 
     def close(self):
         """

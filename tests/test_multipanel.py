@@ -4,7 +4,7 @@ import unittest
 import warnings
 from itertools import product
 from pathlib import Path
-from tempfile import TemporaryDirectory
+from unittest.mock import patch
 
 import matplotlib
 import numpy as np
@@ -150,15 +150,25 @@ class TestMutiPanel(unittest.TestCase):
                 self.assertEqual(len(figure.panels), 1)
                 figure.close()
 
-    def test_save_default_format(self):
-        with TemporaryDirectory() as tmpdir:
-            output_path = Path(tmpdir) / "figure"
-            figure = mp.MultiPanel()
+    def test_savefig_forwards_to_matplotlib_figure(self):
+        figure = mp.MultiPanel()
 
-            figure.save(output_path)
+        with patch.object(figure.fig, "savefig", return_value="saved") as savefig:
+            result = figure.savefig("figure.svg", dpi=300)
 
-            self.assertTrue(output_path.with_suffix(".pdf").is_file())
-            figure.close()
+        savefig.assert_called_once_with("figure.svg", dpi=300)
+        self.assertEqual(result, "saved")
+        figure.close()
+
+    def test_save_forwards_to_savefig(self):
+        figure = mp.MultiPanel()
+
+        with patch.object(figure, "savefig", return_value="saved") as savefig:
+            result = figure.save("figure.svg", dpi=300)
+
+        savefig.assert_called_once_with("figure.svg", dpi=300)
+        self.assertEqual(result, "saved")
+        figure.close()
 
     def test_label_defaults_and_alignment(self):
         cm = 1 / 2.54

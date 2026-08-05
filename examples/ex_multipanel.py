@@ -190,5 +190,5 @@ with plt.style.context("spiffy"):
         reference_cosine,
         colors_spiffy[1],
     )
-    figure_spiffy.fig.savefig(output_spiffy, dpi=figure_dpi)
+    figure_spiffy.savefig(output_spiffy, dpi=figure_dpi)
     figure_spiffy.close()
