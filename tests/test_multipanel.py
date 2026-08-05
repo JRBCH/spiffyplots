@@ -34,7 +34,7 @@ class TestMutiPanel(unittest.TestCase):
 
         # assert 4 panels
         self.assertEqual(fig.panels.__len__(), 4)
-        self.assertEqual(fig._labels, "abcd")
+        self.assertEqual(fig._labels, ["a", "b", "c", "d"])
         self.assertIs(fig.panels.a, fig.panels[0])
         self.assertEqual(fig.shape, (2, 2))
 
@@ -49,14 +49,14 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(grid=grid)
 
         self.assertEqual(fig.panels.__len__(), 12)
-        self.assertEqual(fig._labels, "abcdefghijkl")
+        self.assertEqual(fig._labels, list("abcdefghijkl"))
         self.assertEqual(fig.shape, (4, 12))
 
         grid2 = (2, 1)  # 3 panels with location tuple test
         fig2 = mp.MultiPanel(grid=grid2)
 
         self.assertEqual(fig2.panels.__len__(), 3)
-        self.assertEqual(fig2._labels, "abc")
+        self.assertEqual(fig2._labels, ["a", "b", "c"])
         self.assertEqual(fig2.shape, (2, 2))
         self.assertEqual(fig2._locations, [(0, 0), (0, 1), (1, range(2))])
 
@@ -71,7 +71,7 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(grid=grid)
 
         self.assertEqual(fig.panels.__len__(), 4)
-        self.assertEqual(fig._labels, "abcd")
+        self.assertEqual(fig._labels, ["a", "b", "c", "d"])
         self.assertEqual(fig.shape, (3, 2))
         self.assertEqual(fig._locations, grid)
 
@@ -122,6 +122,41 @@ class TestMutiPanel(unittest.TestCase):
         fig = mp.MultiPanel(labels=labels)
         self.assertEqual(fig.panels.__len__(), 4)
         self.assertEqual(fig._labels, labels)
+
+    def test_init_label_grid_accepts_nested_lists(self):
+        figure = mp.MultiPanel(labels=[["A", "A"], ["B", "C"]])
+
+        self.assertEqual(figure._labels, ["A", "B", "C"])
+        self.assertEqual(figure.shape, (2, 2))
+        self.assertIs(figure.panels["A"], figure.panels[0])
+        self.assertIs(figure.panels.A, figure.panels[0])
+        figure.close()
+
+    def test_string_sequence_remains_flat_labels(self):
+        labels = ["AAB", "CCB"]
+        figure = mp.MultiPanel(shape=(1, 2), labels=labels)
+
+        self.assertEqual(figure._labels, labels)
+        self.assertIs(figure.panels["CCB"], figure.panels[1])
+        figure.close()
+
+    def test_panels_accept_arbitrary_labels(self):
+        labels = ["A 1", "B-2"]
+        figure = mp.MultiPanel(shape=(1, 2), labels=labels)
+
+        self.assertIs(figure.panels["A 1"], figure.panels[0])
+        self.assertIs(figure.panels["B-2"], figure.panels[1])
+        with self.assertRaises(TypeError):
+            figure.panels[0] = figure.panels[1]
+        figure.close()
+
+    def test_default_labels_extend_beyond_alphabet(self):
+        figure = mp.MultiPanel(shape=(1, 28), labels=True)
+
+        self.assertEqual(figure._labels[-3:], ["z", "aa", "ab"])
+        self.assertIs(figure.panels.aa, figure.panels[26])
+        self.assertIs(figure.panels["ab"], figure.panels[27])
+        figure.close()
 
     def test_init_006_labels_array(self):
         """
@@ -181,7 +216,7 @@ class TestMutiPanel(unittest.TestCase):
         renderer = figure.fig.canvas.get_renderer()
         label_bounds = [label.get_window_extent(renderer) for label in label_artists]
 
-        self.assertEqual(figure._labels, "abcde")
+        self.assertEqual(figure._labels, ["a", "b", "c", "d", "e"])
         self.assertEqual(len(figure.fig.axes), len(figure.panels))
         self.assertEqual(label_artists[0].get_position(), (-20, 6))
         self.assertEqual(label_artists[0].get_family(), ["sans-serif"])
@@ -197,7 +232,7 @@ class TestMutiPanel(unittest.TestCase):
 
     def test_label_options(self):
         uppercase = mp.MultiPanel(shape=(1, 2), labels=True, label_case="uppercase")
-        self.assertEqual(uppercase._labels, "AB")
+        self.assertEqual(uppercase._labels, ["A", "B"])
         uppercase.close()
 
         with self.assertWarns(DeprecationWarning):
@@ -241,7 +276,7 @@ class TestMutiPanel(unittest.TestCase):
 
         fig = mp.MultiPanel(**kwargs)
 
-        self.assertEqual(fig._labels, "abcd")
+        self.assertEqual(fig._labels, ["a", "b", "c", "d"])
 
     def test_unknown_kwargs_raise_before_creating_figure(self):
         figures_before = set(mp.plt.get_fignums())
@@ -350,6 +385,10 @@ class Test_get_letters(unittest.TestCase):
         out = mp._get_letters()
         self.assertEqual(out[2], "c")
         self.assertEqual(out[-1], "z")
+
+    def test_more_than_one_alphabet(self):
+        out = mp._get_letters(count=29)
+        self.assertEqual(out[-4:], ["z", "aa", "ab", "ac"])
 
 
 class Test_is_iter_of_iters(unittest.TestCase):

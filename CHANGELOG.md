@@ -31,6 +31,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### Bugfixes
 
+- Accept nested Python sequences as label grids and support arbitrary labels
+  and more than 26 panels.
 - Warn when constrained layout ignores explicit `MultiPanel` margins or
   spacing, while retaining support for row and column ratios.
 - Reject unknown `MultiPanel` keyword arguments before creating a figure.

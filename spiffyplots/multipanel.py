@@ -3,8 +3,8 @@
 import math
 import string
 import warnings
-from collections import defaultdict, namedtuple
-from collections.abc import Iterable
+from collections import defaultdict
+from collections.abc import Iterable, Sequence
 from itertools import combinations, product
 from numbers import Integral
 
@@ -12,6 +12,34 @@ import matplotlib
 import matplotlib.gridspec as gs
 import matplotlib.pyplot as plt
 import numpy as np
+
+
+class _PanelCollection(Sequence):
+    """Read-only panel sequence with positional and label-based access."""
+
+    def __init__(self, panels, labels):
+        labels = tuple(labels)
+        if not all(isinstance(label, str) for label in labels):
+            raise TypeError("Panel labels must be strings.")
+        if len(set(labels)) != len(labels):
+            raise ValueError("Panel labels must be unique.")
+
+        self._panels = tuple(panels)
+        self._by_label = dict(zip(labels, self._panels, strict=True))
+
+    def __getitem__(self, index):
+        if isinstance(index, str):
+            return self._by_label[index]
+        return self._panels[index]
+
+    def __len__(self):
+        return len(self._panels)
+
+    def __getattr__(self, name):
+        try:
+            return self._by_label[name]
+        except KeyError:
+            raise AttributeError(name) from None
 
 
 class MultiPanel:
@@ -23,7 +51,13 @@ class MultiPanel:
         self,
         shape: tuple[int, int] | None = (2, 2),
         grid: Iterable[tuple] | Iterable[int] | None = None,
-        labels: bool | Iterable[str] | dict[str, tuple] | np.ndarray = False,
+        labels: (
+            bool
+            | Iterable[str]
+            | Iterable[Iterable[str]]
+            | dict[str, tuple]
+            | np.ndarray
+        ) = False,
         **kwargs,
     ) -> None:
         """
@@ -37,9 +71,10 @@ class MultiPanel:
             to locations in the grid that are defined by Tuples (e.g. {'A': (0, range(2,5)} will make a plot in the
             first row spanning columns 2-4 and give it the label A.
 
-            Similarly, ``labels`` can be passed as a 2-dimensional np.array of strings. In this case, the strings in
-            the cells of the array correspond to the label of the panels. Adjacent identical labels are considered
-            one panel. For example, the array::
+            Similarly, ``labels`` can be passed as a 2-dimensional NumPy array
+            or nested sequence of strings. In this case, the strings in the
+            cells correspond to panel labels. Adjacent identical labels are
+            considered one panel. For example, the array::
                 ['A', 'A', 'D']
                 ['B', 'C', 'D']
                 ['E', 'E', 'E']
@@ -47,8 +82,9 @@ class MultiPanel:
             will create 5 panels, each occupying the space that the respective label takes up in the array.
 
             This option is useful when you want to control both the arrangement of panels, and the order and
-            format of their labels. If label is passed in as a dictionary or np.array, the ``grid`` and ``shape``
-            parameters are ignored.
+            format of their labels. If labels is passed as a dictionary, nested
+            sequence, or NumPy array, the ``grid`` and ``shape`` parameters are
+            ignored.
 
         **OPTION 2: Initialization based on the** ``grid`` **parameter:**
 
@@ -92,8 +128,14 @@ class MultiPanel:
                 * Boolean. If True, labels are assigned to plots first across rows, then across columns.
                 * Iterable of strings assigning labels to subplots, in the same order as defined by ``grid``.
                 * A Dictionary mapping [str] keys to [Tuple] locations in the grid. This setting overrides the grid.
-                * A np.array of the same shape as ``shape``, mapping string names to the locations in the grid.
-                  Figures can span multiple cells in the grid. Also overrides the grid.
+                * A nested sequence or NumPy array of the same shape as ``shape``,
+                  mapping string names to locations in the grid. Figures can
+                  span multiple cells in the grid. Also overrides the grid.
+
+                The resulting axes are available through the read-only
+                ``panels`` sequence by position or label, for example
+                ``panels[0]`` or ``panels["A 1"]``. Labels that are valid Python
+                identifiers also support attribute access such as ``panels.a``.
 
 
         Keyword Args:
@@ -168,18 +210,18 @@ class MultiPanel:
 
         # OPTION 1: INITIALIZATION BASED ON ``labels``
         # # # # # # # # # # # #
-        # When labels is given as a numpy array or dictionary,
+        # When labels is given as a label grid or dictionary,
         # the shape and grid parameters are ignored.
 
-        # If labels is given as a numpy array, decode it into dictionary form.
-        if isinstance(labels, np.ndarray):
+        # Decode NumPy arrays and nested non-string sequences into dictionary form.
+        if isinstance(labels, np.ndarray) or _is_nested_label_grid(labels):
             labels = _decode_label_array(labels)
 
         if isinstance(labels, dict):
             # If other parameters were not passed as their default
             if grid is not None or shape != (2, 2):
                 warnings.warn(
-                    "``labels`` was provided as a dictionary or array."
+                    "``labels`` was provided as a dictionary or label grid. "
                     "The input to ``grid`` and ``shape`` will be ignored."
                 )
 
@@ -233,9 +275,9 @@ class MultiPanel:
 
             # Get labels based on provided vector or revert to default
             if isinstance(labels, bool):
-                self._labels = _get_letters(case=kwargs.pop("label_case", "lowercase"))[
-                    : self.npanels
-                ]
+                self._labels = _get_letters(
+                    case=kwargs.pop("label_case", "lowercase"), count=self.npanels
+                )
                 draw_labels = labels
 
             elif isinstance(labels, Iterable):
@@ -290,12 +332,12 @@ class MultiPanel:
             **gridspec_kwargs,
         )
 
-        Panels = namedtuple("Panels", [i for i in self._labels])
-        self.panels = Panels(
-            *[
+        self.panels = _PanelCollection(
+            [
                 self.fig.add_subplot(_get_grid_location(loc, self.gridspec))
                 for loc in self._locations
-            ]
+            ],
+            self._labels,
         )
 
         # If labels should be drawn, draw them now.
@@ -370,16 +412,42 @@ class MultiPanel:
         plt.close(self.fig)
 
 
-def _get_letters(case: str | None = "lowercase") -> str:
+def _get_letters(case: str | None = "lowercase", count: int = 26) -> list[str]:
     """
 
     :param case: 'lowercase' or 'uppercase'. Defaults to 'lowercase'.
-    :return: string of ordered alphabet
+    :param count: number of labels to return. Defaults to 26.
+    :return: ordered letter labels, continuing with aa/AA after z/Z
     """
     if case == "lowercase":
-        return string.ascii_lowercase
+        alphabet = string.ascii_lowercase
     else:
-        return string.ascii_uppercase
+        alphabet = string.ascii_uppercase
+
+    labels = []
+    for index in range(count):
+        label = ""
+        while True:
+            index, remainder = divmod(index, len(alphabet))
+            label = alphabet[remainder] + label
+            if index == 0:
+                break
+            index -= 1
+        labels.append(label)
+    return labels
+
+
+def _is_nested_label_grid(labels) -> bool:
+    """Return whether labels is a non-empty nested, non-string sequence."""
+    return (
+        isinstance(labels, Sequence)
+        and not isinstance(labels, (str, bytes))
+        and len(labels) > 0
+        and all(
+            isinstance(row, Iterable) and not isinstance(row, (str, bytes))
+            for row in labels
+        )
+    )
 
 
 def _is_iter_of_iters(labels) -> bool:
