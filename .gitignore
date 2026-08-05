@@ -111,4 +111,7 @@ ENV/
 /AGENTS.md
 /CLAUDE.md
 
+# local issue tracker
+/ISSUES/
+
 *.DS_Store
