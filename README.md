@@ -9,6 +9,8 @@
 
 A collection of matplotlib style sheets and plotting tools for publication-ready figures.
 
+Requires Python 3.11 or newer and Matplotlib 3.11.1 or newer.
+
 * Free software: GPL-3 license
 * Documentation: https://spiffyplots.readthedocs.io.
 
@@ -24,6 +26,14 @@ Install the latest release:
 or install the latest commit directly from GitHub:
 
 `pip install git+https://github.com/JRBCH/spiffyplots.git`
+
+For local development, install `uv` and run:
+
+```console
+uv sync
+uv run ruff check .
+uv run pytest
+```
 
 ## Features
 

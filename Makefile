@@ -1,4 +1,4 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help
+.PHONY: clean clean-test clean-pyc clean-build docs help format lint test coverage dist install
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -47,21 +47,25 @@ clean-test: ## remove test and coverage artifacts
 	rm -fr htmlcov/
 	rm -fr .pytest_cache
 
-lint: ## run black formatter
-	black spiffyplots tests
+format: ## format Python code with Ruff
+	uv run ruff format .
+
+lint: ## check Python formatting and lint
+	uv run ruff format --check .
+	uv run ruff check .
 
 test: ## run tests quickly with the default Python
-	pytest
+	uv run pytest
 
 coverage: ## check code coverage quickly with the default Python
-	pytest
-	coverage report -m
-	coverage html
+	uv run pytest
+	uv run coverage report -m
+	uv run coverage html
 	$(BROWSER) htmlcov/index.html
 
 dist: clean ## builds source and wheel package
-	python setup.py sdist
+	uv build
 	ls -l dist
 
 install: clean ## install the package to the active Python's site-packages
-	python setup.py install
+	uv sync

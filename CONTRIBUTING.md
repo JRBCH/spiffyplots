@@ -49,15 +49,13 @@ Ready to contribute? Here's how to set up `spiffyplots` for local development.
 
     `$ git clone git@github.com:your_name_here/spiffyplots.git`
 
-3. Install your local copy into a virtualenv. Assuming you have virtualenvwrapper installed, this is how you set up your fork for local development::
-
-    `$ mkvirtualenv spiffyplots`
+3. Install [uv](https://docs.astral.sh/uv/), then create and synchronize the local development environment::
 
     `$ cd spiffyplots/`
 
-    `$ python setup.py install`
+    `$ uv sync`
 
-    `$ pip install -r requirements_dev.txt`
+   This project requires Python 3.11 or newer.
 
 4. Create a branch for local development::
 
@@ -68,9 +66,13 @@ Ready to contribute? Here's how to set up `spiffyplots` for local development.
 5. If necessary, implement new tests that address your new features.
 When you're done making changes, check that your changes pass the tests:
 
-    `$ pytest`
+    `$ uv run ruff format --check .`
 
-6. Commit your changes and push your branch to GitHub::
+    `$ uv run ruff check .`
+
+    `$ uv run pytest`
+
+1. Commit your changes and push your branch to GitHub::
 
     `$ git add .`
 
@@ -78,7 +80,7 @@ When you're done making changes, check that your changes pass the tests:
 
     `$ git push origin name-of-your-bugfix-or-feature`
 
-7. Submit a pull request through the GitHub website.
+2. Submit a pull request through the GitHub website.
 
 ## Pull Request Guidelines
 
@@ -87,8 +89,8 @@ Before you submit a pull request, check that it meets these guidelines:
 1. The pull request should include tests.
 2. If the pull request adds functionality, the docs should be updated. Put
    your new functionality into a function with a docstring, and add the
-   feature to the list in README.rst.
-3. The pull request should work for Python 3.5, 3.6, 3.7 and 3.8, and for PyPy. Check
+   feature to the list in README.md.
+3. The pull request should work for Python 3.11 and newer. Check
    https://travis-ci.com/JRBCH/spiffyplots/pull_requests
    and make sure that the tests pass for all supported Python versions.
 
@@ -96,7 +98,7 @@ Before you submit a pull request, check that it meets these guidelines:
 
 To run a subset of tests (e.g. the multipanel module):
 
-    $ python -m unittest tests.test_multipanel
+    $ uv run python -m unittest tests.test_multipanel
 
 ## Deploying
 
@@ -104,7 +106,7 @@ A reminder for the maintainers on how to deploy.
 Make sure all your changes are committed.
 Then run:
 
-`$ bump2version patch # ` (possible #: major / minor / patch)
+`$ uv run bump2version patch # ` (possible #: major / minor / patch)
 
 `$ git push`
 
