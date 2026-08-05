@@ -17,6 +17,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### Changed
 
+- Document that `MultiPanel.width_ratios` has one value per column of the
+  computed `shape`, rather than one value per visible panel.
 - Require Python 3.10 or newer and Matplotlib 3.8 or newer.
 - Use lowercase panel labels and panel attribute names by
   default. Uppercase remains available with `label_case="uppercase"`.

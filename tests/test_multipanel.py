@@ -348,6 +348,14 @@ class TestMutiPanel(unittest.TestCase):
         self.assertEqual(figure.gridspec.get_width_ratios(), (1, 2))
         figure.close()
 
+    def test_width_ratios_follow_computed_grid_shape(self):
+        width_ratios = (1, 1, 2, 2, 1, 1)
+        figure = mp.MultiPanel(grid=[3, 2], width_ratios=width_ratios)
+
+        self.assertEqual(figure.shape, (2, 6))
+        self.assertEqual(figure.gridspec.get_width_ratios(), width_ratios)
+        figure.close()
+
     def test_errors_invalid_inputs(self):
         """
         Test TypeErrors if invalid inputs are given

@@ -119,7 +119,10 @@ class MultiPanel:
             >>> fig = MultiPanel(shape=(3, 3))
 
         Args:
-            shape (Tuple): Determines the shape of the MultiPanel grid layout.
+            shape (Tuple): Determines the shape of the underlying GridSpec
+                raster. After initialization, this public attribute always
+                contains the computed ``(rows, columns)`` raster, including
+                layouts derived from ``grid`` or ``labels``.
 
             grid (Iterable[Tuple], Iterable[int]): Determines the layout of subplots across the MultiPanel matrix.
                 Defaults to one plot in each cell of the ``shape`` matrix. Can be one of:
@@ -173,8 +176,11 @@ class MultiPanel:
             top (float): top margin
             wspace (float): horizontal spacing
             hspace (float): vertical spacing
-            width_ratios (Iterable): width ratios of columns. Works with or
-                without constrained layout.
+            width_ratios (Iterable): One width ratio per underlying GridSpec
+                column, not per visible panel. Its length must equal
+                ``shape[1]``. For example, ``grid=[3, 2]`` computes
+                ``shape == (2, 6)`` and therefore needs six ratios. Works with
+                or without constrained layout.
             height_ratios (Iterable): height ratios of rows. Works with or
                 without constrained layout.
         """

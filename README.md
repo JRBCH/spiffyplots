@@ -83,8 +83,6 @@ Matplotlib's default outlined SVG behavior, set `plt.rcParams["svg.fonttype"] = 
 * Named access to the bundled color palettes and helpers for ramps and
   colormaps
 * Verified journal-specific figure sizes and style sheets
-* A clearer interface between panel-oriented layouts and GridSpec column
-  ratios
 
 ## Credits
 
