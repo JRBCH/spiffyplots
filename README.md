@@ -103,11 +103,13 @@ cmap = spiffy.cmap.discrete_rainbow(8)
 ### Perceptually uniform colormaps
 [cmcrameri](https://github.com/callumrollo/cmcrameri) and
 [colorcet](https://github.com/holoviz/colorcet) do that very well, and
-`spiffy.cmap` reaches their colormaps too once either is installed:
+`spiffy.cmap` reaches their colormaps too once either is installed.
+To install them together with `spiffyplots`:
 
 ```console
 pip install "spiffyplots[colormaps]"
 ```
+
 
 ```python
 import spiffyplots as spiffy
@@ -116,18 +118,6 @@ cmap = spiffy.cmap.batlow  # cmcrameri, registered as `cmc.batlow`
 cmap = spiffy.cmap.kbc  # colorcet, registered as `cet_kbc`
 ```
 
-No import of `cmcrameri` or `colorcet` is needed: `spiffy.cmap` imports whichever
-one is required the first time a name misses, so `import spiffyplots` stays fast.
-
-Matplotlib wins bare-name ties, so `spiffy.cmap.gray` is Matplotlib's gray, not
-colorcet's. Prefix to get the other one:
-
-```python
-cmap = spiffy.cmap.cet_gray  # colorcet's gray
-cmap = spiffy.cmap.get("cmc.berlin")  # cmcrameri's berlin, `cmc.` is not an attribute
-```
-
-## Features
 
 * Matplotlib style sheets
     * General style sheets for quick and beautiful out-of-the-box plotting

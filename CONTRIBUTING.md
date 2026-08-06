@@ -1,5 +1,8 @@
 # Contributing
 
+I mainly wrote this package for my own use and as a learning opportunity.
+However, if you find it useful and want to contribute, any contributions are highly appreciated!
+
 SpiffyPlots requires Python 3.10 or newer and uses
 [uv](https://docs.astral.sh/uv/) for development.
 
