@@ -159,7 +159,8 @@ class MultiPanel:
             label_case (str): 'uppercase' or 'lowercase'. Defaults to 'lowercase'.
                 This and following kwargs are passed to ``MultiPanel._draw_labels``.
             label_weight (str): Weight of the figure labels. defaults to 'bold'
-            label_size (int): Font size for figure labels. Defaults to 12.
+            label_size (int): Font size for figure labels. Defaults to
+                ``rcParams["axes.labelsize"]``
             label_offset (Tuple): Label offset in points from the panel's top-left
                 corner. Defaults to (-20, 6).
             label_location (Tuple): Deprecated label location in panel axes fractions.
@@ -390,12 +391,15 @@ class MultiPanel:
             self._draw_labels(
                 label_offset=label_offset,
                 label_location=label_location,
-                size=kwargs.pop("label_size", 12),
+                size=kwargs.pop("label_size", None),
                 weight=kwargs.pop("label_weight", "bold"),
                 color=kwargs.pop("label_color", "black"),
             )
 
     def _draw_labels(self, label_offset, label_location, size, weight, color) -> None:
+        if size is None:
+            size = matplotlib.rcParams["axes.labelsize"]
+
         if label_location is not None:
             for ax, label in zip(self.panels, self._labels, strict=True):
                 ax.text(

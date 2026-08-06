@@ -95,6 +95,30 @@ def test_base_style_applies():
         assert plt.rcParams["ps.fonttype"] == 42
 
 
+def test_base_style_text_stays_in_the_journal_size_band():
+    """Every size-bearing rcParam is pinned between 5 and 7 pt."""
+    size_params = [
+        "font.size",
+        "axes.labelsize",
+        "axes.titlesize",
+        "xtick.labelsize",
+        "ytick.labelsize",
+        "legend.fontsize",
+        "legend.title_fontsize",
+        "figure.titlesize",
+        "figure.labelsize",
+    ]
+
+    with plt.style.context("spiffy"):
+        for param in size_params:
+            size = plt.rcParams[param]
+            assert isinstance(size, float), f"{param} is {size!r}, not a point size"
+            assert 5.0 <= size <= 7.0, f"{param} is {size}pt, outside the 5-7pt band"
+
+        assert plt.rcParams["axes.labelsize"] == 7.0
+        assert plt.rcParams["xtick.labelsize"] == 6.0
+
+
 def test_base_style_exports_editable_text(tmp_path):
     """Vector exports avoid Type 3 fonts and preserve SVG text objects."""
     pdf_path = tmp_path / "spiffy.pdf"

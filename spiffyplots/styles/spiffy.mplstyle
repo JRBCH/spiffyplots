@@ -1,17 +1,14 @@
 # This is the base style for the "SpiffyPlots" package.
-# Visit us on GitHub: https://github.com/JRBCH/spiffyplots
+# https://github.com/JRBCH/spiffyplots
 
-# Color cycle: spiffyplots.colors.SPIFFY_CYCLE, Paul Tol's vibrant scheme reordered.
-# Keep the two in step; tests/test_styles.py checks.
+# Default color cycle: Paul Tol's vibrant scheme reordered.
 axes.prop_cycle : cycler('color', ['0077BB', 'CC3311', '009988', '33BBEE', 'EE7733', 'EE3377', '000000', 'BBBBBB'])
 
-# Default colormap: Paul Tol's iridescent, registered by spiffyplots on import.
-# This is why `import spiffyplots` is needed before `plt.style.use("spiffy")`: a
-# sheet naming an unregistered colormap applies silently, then fails at draw time.
+# Default colormap: Paul Tol's iridescent
 image.cmap: tol.iridescent
 
 # Set default figure size
-figure.figsize : 3, 3
+figure.figsize : 4, 2.5
 
 # Remove top and right spines
 axes.spines.right : False
@@ -59,7 +56,17 @@ font.family  : sans-serif
 #font.variant : normal
 #font.weight  : normal
 #font.stretch : normal
-font.size    : 8.0
+
+# Fontsize defaults are chosen between 6 and 7 pt
+font.size             : 6.0
+axes.labelsize        : 7.0     # This is also the default for the panel label (a, b, c, ...) in multipanel figures
+axes.titlesize        : 7.0
+xtick.labelsize       : 6.0
+ytick.labelsize       : 6.0
+legend.fontsize       : 6.0
+legend.title_fontsize : 6.0
+figure.titlesize      : 7.0
+figure.labelsize      : 7.0
 
 # Helvetica first, then Arial and metric-compatible clones for machines without it.
 font.sans-serif : Helvetica, Arial, Nimbus Sans, Liberation Sans, DejaVu Sans

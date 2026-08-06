@@ -221,7 +221,7 @@ class TestMutiPanel(unittest.TestCase):
         self.assertEqual(label_artists[0].get_position(), (-20, 6))
         self.assertEqual(label_artists[0].get_family(), ["sans-serif"])
         self.assertEqual(label_artists[0].get_weight(), "bold")
-        self.assertEqual(label_artists[0].get_fontsize(), 12)
+        self.assertEqual(label_artists[0].get_fontsize(), 7)
 
         # Labels share an x position when panels share a left edge.
         self.assertAlmostEqual(label_bounds[0].x0, label_bounds[3].x0)

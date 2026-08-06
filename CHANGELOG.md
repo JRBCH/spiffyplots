@@ -8,34 +8,26 @@ All notable changes to this project will be documented here. The format follows
 
 #### New features
 
+- Add `spiffyplots.label_panels`: FUnction to draw panel letters on any matplotlib figure, not
+  just a `MultiPanel`.
 - Add the `latex-helvetica` style sheet: LaTeX rendering with Helvetica for both
   text and math. Requires the `sfmath` LaTeX package.
 
 #### Changed
 
-- **The default font is now Helvetica**, falling back through Arial, Nimbus Sans
-  and Liberation Sans to DejaVu Sans. The clones are metrically compatible with
-  the first two, so text lays out at the same widths on machines without the
-  real face. Journals that ask for a "standard" sans-serif, Nature among them,
-  name Helvetica or Arial.
-- **Math now renders in the text font.** `$\Delta w$` in an axis label no longer
-  switches typeface mid-string. Stretchy glyphs such as `\sqrt` bars and
-  `\left( \right)` delimiters have no Helvetica equivalent and still come from
-  matplotlib's fallback math font.
+- **Changed default font sizes to ~7 pt.**
+- **Changed the default figure size to 4 x 2.5 in.**
+- Panel letters now default to `rcParams["axes.labelsize"]`
+- **The default font is now Helvetica**
+- Math now renders in the text font when not using latex.
 - The `latex` style sheet now resets the font list, so
   `plt.style.use(["spiffy", "latex"])` gives Computer Modern Sans with Computer
-  Modern math. Without the reset matplotlib loads `helvet` on seeing Helvetica
-  in the font list, which would have kept Helvetica text against Computer
   Modern math.
 
 ### v0.7.0 (06-Aug-2026)
 
 #### New features
 
-- Add `spiffyplots.label_panels`: panel letters on any matplotlib figure, not
-  just a `MultiPanel`. Defaults to the figure's axes in reading order, skipping
-  colorbars, and returns the `Text` artists. `MultiPanel` now draws its own
-  labels through it.
 - Add `spiffyplots.colors`: easy access to colors from various color schemes
   (`colors.tol_vibrant.blue`), plus `from_cmap` and `shades`.
 - Add `spiffyplots.cmap`: Paul Tol's colormaps, registered under a `tol.`

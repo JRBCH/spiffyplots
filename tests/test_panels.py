@@ -170,6 +170,14 @@ class TestLabelPanels(unittest.TestCase):
         self.assertEqual(text.get_fontsize(), 17)
         self.assertEqual(text.get_color(), "blue")
 
+    def test_size_none_follows_axes_labelsize(self):
+        """Panel letters follow axes.labelsize, not font.size."""
+        fig, ax = plt.subplots()
+        with matplotlib.rc_context({"font.size": 6.0, "axes.labelsize": 7.0}):
+            (text,) = label_panels(fig, axes=[ax])
+
+        self.assertEqual(text.get_fontsize(), 7.0)
+
     def test_weight_and_size(self):
         fig, ax = plt.subplots()
         (text,) = label_panels(fig, axes=[ax], size=14, weight="normal", color="green")

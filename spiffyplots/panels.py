@@ -1,12 +1,13 @@
 """Panel letters for any matplotlib figure.
 
-The label is anchored to the ``(0, 1)`` corner of each panel in axes fraction
+The label is anchored to the top left corner of each panel
 and offset from there in points, so it sits a fixed physical distance from the
-corner and does not drift when panels differ in size.
+corner.
 """
 
 import string
 
+from matplotlib import rcParams
 from matplotlib.text import Text
 
 __all__ = ["label_panels"]
@@ -122,7 +123,7 @@ def label_panels(
         offset: ``(dx, dy)`` in points from the top-left corner of each panel.
         case: ``'lowercase'`` or ``'uppercase'``, used only when ``labels`` is
             not given.
-        size: font size. Defaults to the rcParams default.
+        size: font size. Defaults to ``rcParams["axes.labelsize"]``.
         weight: font weight.
         color: text color. Defaults to the rcParams default.
         **text_kwargs: passed to :meth:`~matplotlib.axes.Axes.annotate`, and
@@ -165,14 +166,13 @@ def label_panels(
     # Sans-serif and no TeX suits panel letters even inside a serif figure, but
     # both stay overridable through **text_kwargs.
     annotate_kwargs = {
+        "size": rcParams["axes.labelsize"] if size is None else size,
         "weight": weight,
         "ha": "left",
         "va": "baseline",
         "usetex": False,
         "family": "sans-serif",
     }
-    if size is not None:
-        annotate_kwargs["size"] = size
     if color is not None:
         annotate_kwargs["color"] = color
     annotate_kwargs.update(text_kwargs)
