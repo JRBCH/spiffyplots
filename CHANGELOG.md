@@ -29,6 +29,12 @@ All notable changes to this project will be documented here. The format follows
   `plt.style.use(["spiffy", "latex"])` gives Computer Modern Sans with Computer
   Modern math.
 
+#### Bugfixes
+
+- Fix `multiline`: accept a shared 1D `x` or one array per line, validate that
+  x/y point counts and line/value counts agree, and preserve explicit axis
+  limits instead of forcing autoscale.
+
 ### v0.7.0 (06-Aug-2026)
 
 #### New features
