@@ -1,6 +1,5 @@
 """Generate equivalent Matplotlib and Spiffyplots multi-panel examples."""
 
-import string
 from pathlib import Path
 
 import matplotlib.pyplot as plt
@@ -20,12 +19,8 @@ GAMMA_SCALE = 8
 SCATTER_ALPHA = 0.6
 BAND_ALPHA = 0.3
 
-figsize_example = (22.86 * CM, 10.16 * CM)
+figsize_example = (15 * CM, 7.5 * CM)
 figure_dpi = 150
-label_offset_default = (-20, 6)
-label_size_default = 12
-label_weight_default = "bold"
-label_family_default = "sans-serif"
 color_reference = "black"
 
 output_directory = Path(__file__).resolve().parent
@@ -124,22 +119,6 @@ with plt.style.context("default"):
         axis_e,
         axis_f,
     )
-
-    labels_matplotlib = string.ascii_lowercase[: len(panels_matplotlib)]
-    for label, axis in zip(labels_matplotlib, panels_matplotlib, strict=True):
-        axis.annotate(
-            label,
-            xy=(0, 1),
-            xycoords="axes fraction",
-            xytext=label_offset_default,
-            textcoords="offset points",
-            size=label_size_default,
-            weight=label_weight_default,
-            family=label_family_default,
-            horizontalalignment="left",
-            verticalalignment="baseline",
-            annotation_clip=False,
-        )
 
     figure_matplotlib.savefig(output_matplotlib, dpi=figure_dpi)
     plt.close(figure_matplotlib)
