@@ -18,6 +18,14 @@ spiffyplots.colors module
     :undoc-members:
     :show-inheritance:
 
+spiffyplots.cmap module
+-----------------------
+
+.. automodule:: spiffyplots.cmap
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 spiffyplots.lineplots module
 ----------------------------
 

@@ -19,6 +19,12 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Perceptually uniform colormap families, deliberately not vendored.
+# spiffyplots.cmap resolves their names once either is importable.
+colormaps = [
+    "cmcrameri",
+    "colorcet",
+]
 test = [
     "coverage",
     "pytest",
