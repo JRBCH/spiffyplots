@@ -1,5 +1,8 @@
 """Public MultiPanel behavior."""
 
+import re
+import warnings
+
 import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
@@ -105,3 +108,41 @@ def test_savefig_and_close_delegate_to_the_wrapped_figure(tmp_path):
 
     figure.close()
     assert figure_number not in plt.get_fignums()
+
+
+def test_explicit_size_is_exact_without_tight_bbox_and_tight_bbox_warns(tmp_path):
+    figure = MultiPanel(shape=(1, 1), figsize=(89, 60), units="mm")
+    exact_output = tmp_path / "exact.pdf"
+
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        figure.savefig(exact_output)
+
+    media_box = re.search(
+        rb"/MediaBox\s*\[\s*0\s+0\s+([0-9.]+)\s+([0-9.]+)\s*\]",
+        exact_output.read_bytes(),
+    )
+    assert media_box is not None
+    width_pt, height_pt = map(float, media_box.groups())
+    assert width_pt * 25.4 / 72 == pytest.approx(89)
+    assert height_pt * 25.4 / 72 == pytest.approx(60)
+
+    with pytest.warns(
+        UserWarning,
+        match=r"Declared 89\.0 x 60\.0 mm.*Drop `bbox_inches`",
+    ):
+        figure.savefig(tmp_path / "tight.pdf", bbox_inches="tight")
+
+
+def test_tight_bbox_warning_respects_defaults_and_rcparams(tmp_path):
+    default_figure = MultiPanel(shape=(1, 1))
+    with warnings.catch_warnings():
+        warnings.simplefilter("error")
+        default_figure.savefig(tmp_path / "default-tight.pdf", bbox_inches="tight")
+
+    explicit_figure = MultiPanel(shape=(1, 1), figsize=(8.9, 6), units="cm")
+    with (
+        matplotlib.rc_context({"savefig.bbox": "tight"}),
+        pytest.warns(UserWarning, match=r"Declared 8\.9 x 6\.0 cm"),
+    ):
+        explicit_figure.savefig(tmp_path / "rc-tight.pdf")

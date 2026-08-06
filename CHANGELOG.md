@@ -80,6 +80,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### Bugfixes
 
+- Preserve explicitly declared `MultiPanel` dimensions on export and warn when
+  `bbox_inches="tight"` would change them.
 - Export PDF and PostScript text as embedded TrueType fonts and preserve SVG
   text as editable text instead of outlines in the base style.
 - Accept nested Python sequences as label grids and support arbitrary labels

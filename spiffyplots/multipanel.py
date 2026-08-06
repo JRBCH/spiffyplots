@@ -223,6 +223,7 @@ class MultiPanel:
         self.panels = []
 
         # parse kwargs
+        has_explicit_figsize = "figsize" in kwargs
         figsize = kwargs.pop("figsize", plt.rcParams.get("figure.figsize"))
         dpi = kwargs.pop("dpi", plt.rcParams.get("figure.dpi"))
         units = kwargs.pop("units", "in")
@@ -234,10 +235,19 @@ class MultiPanel:
                 "MultiPanel(figsize=(8.9, 6.0), units='cm')."
             )
 
+        figsize_inches = _convert_figsize(*figsize, units=units)
+        self._declared_figsize = (
+            (float(figsize[0]), float(figsize[1]), units)
+            if has_explicit_figsize
+            else None
+        )
         self.fig = plt.figure(
-            figsize=_convert_figsize(*figsize, units=units),
+            figsize=figsize_inches,
             dpi=dpi,
         )
+        if has_explicit_figsize:
+            # GUI backends quantize the initial dimensions to display pixels.
+            self.fig.set_size_inches(figsize_inches, forward=False)
 
         # OPTION 1: INITIALIZATION BASED ON ``labels``
         # # # # # # # # # # # #
@@ -432,6 +442,19 @@ class MultiPanel:
 
     def savefig(self, *args, **kwargs):
         """Save the wrapped figure with ``matplotlib.figure.Figure.savefig``."""
+        bbox_inches = kwargs.get("bbox_inches")
+        if bbox_inches is None:
+            bbox_inches = matplotlib.rcParams["savefig.bbox"]
+        if self._declared_figsize is not None and bbox_inches == "tight":
+            width, height, units = self._declared_figsize
+            warnings.warn(
+                f'`bbox_inches="tight"` overrides the explicit figure size. '
+                f"Declared {width} x {height} {units}; the saved file will have "
+                "a different size. Drop `bbox_inches` to preserve the declared "
+                "size, and use constrained-layout padding to control whitespace.",
+                UserWarning,
+                stacklevel=2,
+            )
         return self.fig.savefig(*args, **kwargs)
 
     def save(self, *args, **kwargs):
