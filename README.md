@@ -40,23 +40,24 @@ The style sheets ship inside the package and register themselves with
 matplotlib when `spiffyplots` is imported:
 
 ```python
-import spiffyplots  # registers the styles
+import spiffyplots  # registers the styles and colormaps
 import matplotlib.pyplot as plt
 
 plt.style.use("spiffy")  # base style
-plt.style.use(["spiffy", "muted"])  # base style plus a Paul Tol color scheme
+plt.style.use(["spiffy", "tol-muted"])  # base style plus a color scheme
 ```
 
-Import `spiffyplots` **before** calling `plt.style.use`. Alternatively, the same sheets are reachable by their
-package-relative name, without importing `spiffyplots`:
+Import `spiffyplots` **before** calling `plt.style.use`. The base style names a
+colormap that this package registers, and a style sheet naming an unregistered
+colormap applies silently and then fails at draw time.
 
-```python
-plt.style.use("spiffyplots.styles.spiffy")
-```
+Available styles:
 
-Available styles: `spiffy`, the color schemes `bright`, `high-vis`, `muted`,
-`retro` and `vibrant`, and the modifiers `latex`, `minor-ticks`, `right-axis`,
-`top-axis` and `heatmap`.
+| | |
+|---|---|
+| base | `spiffy` |
+| color | `tol-bright`, `tol-high-contrast`, `tol-light`, `tol-medium-contrast`, `tol-muted`, `tol-vibrant`, `okabe-ito` |
+| modifiers | `latex`, `minor-ticks`, `right-axis`, `top-axis` |
 
 The base `spiffy` style keeps vector text editable. PDF
 and PostScript embeds TrueType fonts, and SVG retains `<text>` elements instead of converting glyphs to paths.
@@ -64,11 +65,78 @@ and PostScript embeds TrueType fonts, and SVG retains `<text>` elements instead 
 If for some reason you want to restore
 Matplotlib's default outlined SVG behavior, set `plt.rcParams["svg.fonttype"] = "path"`.
 
+## Colors and colormaps
+
+Style sheets only set the default cycle. For the colors themselves, use
+`spiffyplots.colors` for discrete colors and `spiffyplots.cmap` for colormaps.
+
+```python
+import spiffyplots as spiffy
+
+scheme = spiffy.colors.tol_vibrant
+color_exc = scheme.red  # '#CC3311'
+color_inh = scheme.blue  # '#0077BB'
+
+spiffy.colors.from_cmap(spiffy.cmap.sequential, 6)  # 6 equally spaced colors
+spiffy.colors.shades(color_exc, 5)  # 5 shades of one base color
+```
+
+Schemes: `tol_bright`, `tol_high_contrast`, `tol_vibrant`, `tol_muted`,
+`tol_medium_contrast`, `tol_light`, `tol_pale`, `tol_dark` and `okabe_ito`.
+Each is a tuple you can index, slice and iterate, whose colors are also
+reachable by name. Each runs in its author's recommended order, then black,
+then grey.
+
+```python
+cmap = spiffy.cmap.sequential  # Paul Tol's iridescent
+cmap = spiffy.cmap.diverging  # Paul Tol's nightfall
+cmap = spiffy.cmap.iridescent_r  # any of Tol's, by short name
+cmap = spiffy.cmap.viridis  # falls through to matplotlib
+cmap = spiffy.cmap.batlow  # falls through to cmcrameri
+cmap = spiffy.cmap.kbc  # falls through to colorcet
+
+cmap = spiffy.cmap.from_base(color_exc)  # white -> color -> darker
+cmap = spiffy.cmap.from_colors(spiffy.colors.tol_muted)
+cmap = spiffy.cmap.discrete_rainbow(8)
+```
+
+### Perceptually uniform colormaps
+[cmcrameri](https://github.com/callumrollo/cmcrameri) and
+[colorcet](https://github.com/holoviz/colorcet) do that very well, and
+`spiffy.cmap` reaches their colormaps too once either is installed:
+
+```console
+pip install "spiffyplots[colormaps]"
+```
+
+```python
+import spiffyplots as spiffy
+
+cmap = spiffy.cmap.batlow  # cmcrameri, registered as `cmc.batlow`
+cmap = spiffy.cmap.kbc  # colorcet, registered as `cet_kbc`
+```
+
+No import of `cmcrameri` or `colorcet` is needed: `spiffy.cmap` imports whichever
+one is required the first time a name misses, so `import spiffyplots` stays fast.
+
+Matplotlib wins bare-name ties, so `spiffy.cmap.gray` is Matplotlib's gray, not
+colorcet's. Prefix to get the other one:
+
+```python
+cmap = spiffy.cmap.cet_gray  # colorcet's gray
+cmap = spiffy.cmap.get("cmc.berlin")  # cmcrameri's berlin, `cmc.` is not an attribute
+```
+
 ## Features
 
 * Matplotlib style sheets
     * General style sheets for quick and beautiful out-of-the-box plotting
-    * Color style sheets for [Paul Tol's color schemes](https://personal.sron.nl/~pault/)
+    * Color style sheets for [Paul Tol's color schemes](https://sronpersonalpages.nl/~pault/)
+      and [Okabe-Ito](https://jfly.uni-koeln.de/color/), all color-blind safe
+
+* Colors
+    * Easy access to colors and colormaps
+    * Ramps and shades derived from one base color, e.g. for heatmaps
 
 * Multi-panel figures
     * Easy and flexible wrapper of matplotlib's GridSpec
@@ -76,15 +144,9 @@ Matplotlib's default outlined SVG behavior, set `plt.rcParams["svg.fonttype"] = 
     * Support for custom panel arrangements and labels
     * Figure sizes in inches, centimetres or millimetres
 
-## Roadmap
-
-* Named access to the bundled color palettes and helpers for ramps and
-  colormaps
-* Verified journal-specific figure sizes and style sheets
-
 ## Credits
 
  * This package was created with Cookiecutter and the `audreyr/cookiecutter-pypackage` project template.
 
- * The idea for easy-to-use and pypi-deployable matplotlib stylesheets stems from John Garrett's
- [SciencePlots](https://github.com/garrettj403/SciencePlots) package.
+ * Most color schemes are [Paul Tol's](https://sronpersonalpages.nl/~pault/),
+ redistributed under the 3-clause BSD license

@@ -8,15 +8,32 @@ All notable changes to this project will be documented here. The format follows
 
 #### New features
 
+- Add `spiffyplots.colors`: easy access to colors from various color schemes
+  (`colors.tol_vibrant.blue`), plus `from_cmap` and `shades`.
+- Add `spiffyplots.cmap`: Paul Tol's colormaps, registered under a `tol.`
+  prefix and reachable by short name. If installed, also imports colormaps from 
+  `cmcrameri` and `colorcet`. Also
+  `from_colors`, `from_base` and `discrete_rainbow`.
+- Add the `tol-high-contrast`, `tol-medium-contrast`, `tol-light` and
+  `okabe-ito` color style sheets.
+- Add a `colormaps` extra: `pip install "spiffyplots[colormaps]"` pulls in
+  `cmcrameri` and `colorcet`.
 - Add a `figsize` converter, `CM` and `MM` constants, and a `units` option for
   constructing `MultiPanel` figures in centimetres or millimetres.
 - Add `save`, `savefig` and `close` methods to `MultiPanel`
 - Add `populate_random_data` for quickly filling MultiPanel figures with example data.
-- Style sheets are reachable by their package-relative name, for example
-  `plt.style.use("spiffyplots.styles.spiffy")`, on Matplotlib 3.7 or newer.
 
 #### Changed
 
+- **The default `image.cmap` is now Paul Tol's `tol.iridescent`**
+- **Every color cycle now ends with black, then grey**.
+- **`bright` and `muted` changed color order.** They now follow Paul Tol's recommendation. 
+- **Renamed the color sheets** to `tol-bright`, `tol-muted` and `tol-vibrant`,
+  with the bare names kept as aliases.
+- Color sheets are generated from `spiffyplots.colors` by
+  `python -m spiffyplots._genstyles`.
+- Removed the `high-vis` and `retro` color sheets.
+- Removed the `heatmap` sheet.
 - Document that `MultiPanel.width_ratios` has one value per column of the
   computed `shape`, rather than one value per visible panel.
 - Remove the unused `spiffyplots.base` and
