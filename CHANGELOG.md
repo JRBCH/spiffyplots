@@ -6,6 +6,11 @@ All notable changes to this project will be documented here. The format follows
 
 ### Unreleased
 
+#### New features
+
+- Add the `latex-helvetica` style sheet: LaTeX rendering with Helvetica for both
+  text and math. Requires the `sfmath` LaTeX package.
+
 #### Changed
 
 - **The default font is now Helvetica**, falling back through Arial, Nimbus Sans

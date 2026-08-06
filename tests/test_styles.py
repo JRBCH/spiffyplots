@@ -177,6 +177,26 @@ def test_latex_style_does_not_load_helvet():
     assert fontcmd == r"\sffamily"
 
 
+def test_latex_helvetica_style_keeps_helvetica():
+    """``latex-helvetica`` is the opposite trade: TeX rendering, Helvetica face."""
+    with plt.style.context(["spiffy", "latex-helvetica"]):
+        assert plt.rcParams["text.usetex"] is True
+        assert plt.rcParams["font.sans-serif"][0] == "Helvetica"
+        assert "sfmath" in plt.rcParams["text.latex.preamble"]
+
+
+@pytest.mark.skipif(not HAS_LATEX, reason="no LaTeX installation available")
+def test_latex_helvetica_style_loads_helvet():
+    """Self-contained: helvet is loaded even without the base sheet layered."""
+    from matplotlib.texmanager import TexManager
+
+    with plt.style.context("latex-helvetica"):
+        preamble, fontcmd = TexManager._get_font_preamble_and_command()
+
+    assert "helvet" in preamble
+    assert fontcmd == r"\sffamily"
+
+
 def test_styles_compose():
     """A colour style layers on top of the base style."""
     with plt.style.context(["spiffy", "tol-muted"]):
@@ -234,7 +254,7 @@ def test_usage_of_each_style(style, tmp_path):
     Catches rcParam keys that matplotlib removes between releases, which is
     the failure mode a plain 'is it registered' check misses.
     """
-    if style == "latex" and not HAS_LATEX:
+    if style.startswith("latex") and not HAS_LATEX:
         pytest.skip("no LaTeX installation available")
 
     with plt.style.context(style):

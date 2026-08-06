@@ -1,0 +1,8 @@
+# Activate LaTeX, with Helvetica for both text and math. Requires the sfmath
+# LaTeX package.
+
+text.usetex : True
+text.latex.preamble : \usepackage{amsmath}\usepackage[helvet]{sfmath}
+
+font.family : sans-serif
+font.sans-serif : Helvetica, Arial, Nimbus Sans, Liberation Sans, DejaVu Sans
