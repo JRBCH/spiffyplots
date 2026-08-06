@@ -9,6 +9,7 @@ from . import cmap, colors
 from ._units import CM, MM, figsize
 from .lineplots import multiline
 from .multipanel import MultiPanel
+from .panels import label_panels
 from .random_data import populate_random_data
 
 __author__ = """Julian Rossbroich"""
@@ -33,6 +34,7 @@ __all__ = [
     "cmap",
     "colors",
     "figsize",
+    "label_panels",
     "multiline",
     "populate_random_data",
 ]
