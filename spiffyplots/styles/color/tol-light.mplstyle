@@ -1,0 +1,8 @@
+# Paul Tol's light scheme. 10 colours, colour-blind safe.
+# Order: light_blue, orange, light_yellow, pink, light_cyan, mint, pear, olive, black, pale_grey.
+# Credit: https://sronpersonalpages.nl/~pault/
+#
+# Generated from spiffyplots.colors by `python -m spiffyplots._genstyles`.
+# Edit the colour data there, not this file.
+
+axes.prop_cycle : cycler('color', ['77AADD', 'EE8866', 'EEDD88', 'FFAABB', '99DDFF', '44BB99', 'BBCC33', 'AAAA00', '000000', 'DDDDDD'])

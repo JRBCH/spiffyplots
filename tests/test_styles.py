@@ -14,9 +14,11 @@ from pathlib import Path
 
 import matplotlib
 import matplotlib.pyplot as plt
+import numpy as np
 import pytest
 
 import spiffyplots
+from spiffyplots import _genstyles, colors
 
 # Resolve through the installed package, never through the repo, so the tests
 # can only see what a user would actually get.
@@ -73,6 +75,17 @@ def test_styles_registered(all_styles):
         assert style in matplotlib.style.available, f"{style!r} missing from available"
 
 
+@pytest.mark.parametrize(("alias", "target"), sorted(spiffyplots.STYLE_ALIASES.items()))
+def test_bare_aliases_match_their_tol_sheets(alias, target):
+    """The pre-0.7 names still resolve, to the same rcParams. Not covered by
+    ``test_usage_of_each_style``, which only sees shipped files."""
+    assert alias in matplotlib.style.available
+    with plt.style.context(alias):
+        aliased = plt.rcParams["axes.prop_cycle"]
+    with plt.style.context(target):
+        assert plt.rcParams["axes.prop_cycle"] == aliased
+
+
 def test_base_style_applies():
     """The headline style resolves and carries its rcParams."""
     with plt.style.context("spiffy"):
@@ -114,10 +127,50 @@ def test_latex_style_exports_embedded_font(tmp_path):
 
 def test_styles_compose():
     """A colour style layers on top of the base style."""
-    with plt.style.context(["spiffy", "muted"]):
+    with plt.style.context(["spiffy", "tol-muted"]):
         cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
-        assert cycle[0] == "#332288"
+        assert cycle[0] == "#CC6677"
         assert plt.rcParams["axes.linewidth"] == 0.5
+
+
+def test_base_style_draws_its_default_colormap():
+    """``plt.style.use`` does not validate ``image.cmap``, so a sheet naming an
+    unregistered colormap applies silently and raises inside ``draw``, far from
+    the cause. Catches a broken registration order here instead."""
+    with plt.style.context("spiffy"):
+        assert plt.rcParams["image.cmap"] == "tol.iridescent"
+        figure, axis = plt.subplots()
+        axis.imshow(np.arange(9).reshape(3, 3))
+        figure.canvas.draw()
+        plt.close(figure)
+
+
+def test_generated_sheets_are_up_to_date(tmp_path):
+    """The one thing stopping a sheet's hex from drifting from the Python
+    constant it mirrors. If this fails, run ``python -m spiffyplots._genstyles``
+    rather than editing the sheet."""
+    for filename, expected in _genstyles.generate().items():
+        shipped = STYLES_PATH / "color" / filename
+        assert shipped.is_file(), f"{filename} is not shipped"
+        assert shipped.read_text() == expected, f"{filename} is out of date"
+
+    generated = set(_genstyles.generate())
+    shipped = {path.name for path in (STYLES_PATH / "color").glob("*.mplstyle")}
+    assert shipped == generated, "hand-written sheet in styles/color"
+
+    # Also has to reproduce them into an empty directory.
+    assert _genstyles.main(["--output", str(tmp_path)]) == 0
+    assert _genstyles.main(["--check", "--output", str(tmp_path)]) == 0
+
+
+def test_base_cycle_matches_the_python_constant():
+    """``spiffy.mplstyle`` is hand-written, so pin its cycle here rather than
+    generating a sheet whose other forty lines are hand-tuned."""
+    with plt.style.context("spiffy"):
+        cycle = plt.rcParams["axes.prop_cycle"].by_key()["color"]
+    assert [color.upper() for color in cycle] == [
+        color.upper() for color in colors.SPIFFY_CYCLE
+    ]
 
 
 @pytest.mark.parametrize(
@@ -144,8 +197,7 @@ def test_import_emits_no_matplotlib_deprecations():
     """Registration must not rely on deprecated matplotlib helpers.
 
     ``read_style_directory`` and ``update_nested_dict`` are the obvious way to
-    do this and are what SciencePlots uses, but both are deprecated in
-    matplotlib 3.11 and removed in 3.13.
+    do this, but both are deprecated in matplotlib 3.11 and removed in 3.13.
 
     Scoped to ``MatplotlibDeprecationWarning`` on purpose. matplotlib 3.8
     itself trips deprecation warnings inside pyparsing when a recent pyparsing
@@ -190,13 +242,3 @@ def test_registration_works_without_pyplot():
         check=True,
     )
     assert result.stdout.strip() == "True"
-
-
-@pytest.mark.skipif(
-    tuple(int(part) for part in matplotlib.__version__.split(".")[:2]) < (3, 7),
-    reason="package-relative style names need matplotlib >= 3.7",
-)
-def test_dotted_package_style_access():
-    """Styles are also reachable without the import side effect."""
-    with plt.style.context("spiffyplots.styles.spiffy"):
-        assert plt.rcParams["axes.linewidth"] == 0.5

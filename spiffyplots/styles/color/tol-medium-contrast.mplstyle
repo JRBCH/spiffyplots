@@ -1,0 +1,8 @@
+# Paul Tol's medium-contrast scheme. 7 colours, colour-blind safe.
+# Order: light_blue, dark_blue, light_yellow, dark_red, dark_yellow, light_red, black.
+# Credit: https://sronpersonalpages.nl/~pault/
+#
+# Generated from spiffyplots.colors by `python -m spiffyplots._genstyles`.
+# Edit the colour data there, not this file.
+
+axes.prop_cycle : cycler('color', ['6699CC', '004488', 'EECC66', '994455', '997700', 'EE99AA', '000000'])

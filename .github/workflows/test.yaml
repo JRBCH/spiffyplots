@@ -74,8 +74,8 @@ jobs:
 
       - name: Style sheets present in both artifacts
         run: |
-          test "$(tar tzf dist/*.tar.gz | grep -c '\.mplstyle$')" -eq 11
-          test "$(unzip -l dist/*.whl | grep -c '\.mplstyle$')" -eq 11
+          test "$(tar tzf dist/*.tar.gz | grep -c '\.mplstyle$')" -eq 12
+          test "$(unzip -l dist/*.whl | grep -c '\.mplstyle$')" -eq 12
 
       - name: Install the wheel and register every style
         env:
@@ -84,13 +84,31 @@ jobs:
           uv venv --python 3.12 /tmp/check
           uv pip install --python /tmp/check dist/*.whl
           /tmp/check/bin/python - <<'PY'
+          import matplotlib
           import matplotlib.style
           import spiffyplots
           expected = {
-              "spiffy", "muted", "vibrant", "bright", "retro", "high-vis",
-              "heatmap", "minor-ticks", "top-axis", "right-axis", "latex",
+              "spiffy",
+              # colour sheets, one file each
+              "tol-bright", "tol-high-contrast", "tol-light",
+              "tol-medium-contrast", "tol-muted", "tol-vibrant", "okabe-ito",
+              # modifiers
+              "minor-ticks", "top-axis", "right-axis", "latex",
+              # bare aliases kept for the pre-0.7 names
+              "bright", "muted", "vibrant",
           }
           missing = expected - set(matplotlib.style.available)
           assert not missing, f"not registered: {sorted(missing)}"
-          print(f"all {len(expected)} styles registered from a clean config dir")
+          print(f"all {len(expected)} style names registered from a clean config dir")
+
+          cmaps = {n for n in matplotlib.colormaps if n.startswith("tol.")}
+          assert len(cmaps) == 24, f"expected 24 tol.* colormaps, got {len(cmaps)}"
+
+          matplotlib.use("Agg")
+          import matplotlib.pyplot as plt
+          plt.style.use("spiffy")
+          figure, axis = plt.subplots()
+          axis.imshow([[0, 1], [2, 3]])
+          figure.canvas.draw()
+          print(f"base style draws with image.cmap={plt.rcParams['image.cmap']}")
           PY

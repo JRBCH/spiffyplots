@@ -1,0 +1,8 @@
+# Okabe and Ito (2002). 8 colours, colour-blind safe.
+# Order: orange, sky_blue, bluish_green, yellow, blue, vermillion, reddish_purple, black.
+# Credit: https://jfly.uni-koeln.de/color/
+#
+# Generated from spiffyplots.colors by `python -m spiffyplots._genstyles`.
+# Edit the colour data there, not this file.
+
+axes.prop_cycle : cycler('color', ['E69F00', '56B4E9', '009E73', 'F0E442', '0072B2', 'D55E00', 'CC79A7', '000000'])

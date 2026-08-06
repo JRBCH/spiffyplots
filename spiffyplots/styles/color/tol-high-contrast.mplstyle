@@ -1,0 +1,8 @@
+# Paul Tol's high-contrast scheme. 4 colours, colour-blind safe.
+# Order: blue, yellow, red, black.
+# Credit: https://sronpersonalpages.nl/~pault/
+#
+# Generated from spiffyplots.colors by `python -m spiffyplots._genstyles`.
+# Edit the colour data there, not this file.
+
+axes.prop_cycle : cycler('color', ['004488', 'DDAA33', 'BB5566', '000000'])

@@ -1,0 +1,8 @@
+# Paul Tol's muted scheme. 11 colours, colour-blind safe.
+# Order: rose, indigo, sand, green, cyan, wine, teal, olive, purple, black, pale_grey.
+# Credit: https://sronpersonalpages.nl/~pault/
+#
+# Generated from spiffyplots.colors by `python -m spiffyplots._genstyles`.
+# Edit the colour data there, not this file.
+
+axes.prop_cycle : cycler('color', ['CC6677', '332288', 'DDCC77', '117733', '88CCEE', '882255', '44AA99', '999933', 'AA4499', '000000', 'DDDDDD'])

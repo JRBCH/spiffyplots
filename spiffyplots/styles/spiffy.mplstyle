@@ -1,11 +1,14 @@
 # This is the base style for the "SpiffyPlots" package.
 # Visit us on GitHub: https://github.com/JRBCH/spiffyplots
 
-# Set color cycle: Paul Tol's vibrant scheme in the order: blue, red, teal, cyan, orange, magenta, grey
-axes.prop_cycle : cycler('color', ['0077BB', 'CC3311', '009988', '33BBEE', 'EE7733', 'EE3377', 'BBBBBB'])
+# Color cycle: spiffyplots.colors.SPIFFY_CYCLE, Paul Tol's vibrant scheme reordered.
+# Keep the two in step; tests/test_styles.py checks.
+axes.prop_cycle : cycler('color', ['0077BB', 'CC3311', '009988', '33BBEE', 'EE7733', 'EE3377', '000000', 'BBBBBB'])
 
-# Set default colormap
-image.cmap: YlOrBr
+# Default colormap: Paul Tol's iridescent, registered by spiffyplots on import.
+# This is why `import spiffyplots` is needed before `plt.style.use("spiffy")`: a
+# sheet naming an unregistered colormap applies silently, then fails at draw time.
+image.cmap: tol.iridescent
 
 # Set default figure size
 figure.figsize : 3, 3

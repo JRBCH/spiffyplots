@@ -1,0 +1,8 @@
+# Paul Tol's vibrant scheme. 8 colours, colour-blind safe.
+# Order: blue, red, teal, cyan, orange, magenta, black, grey.
+# Credit: https://sronpersonalpages.nl/~pault/
+#
+# Generated from spiffyplots.colors by `python -m spiffyplots._genstyles`.
+# Edit the colour data there, not this file.
+
+axes.prop_cycle : cycler('color', ['0077BB', 'CC3311', '009988', '33BBEE', 'EE7733', 'EE3377', '000000', 'BBBBBB'])
