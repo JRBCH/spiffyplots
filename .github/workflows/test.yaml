@@ -74,8 +74,8 @@ jobs:
 
       - name: Style sheets present in both artifacts
         run: |
-          test "$(tar tzf dist/*.tar.gz | grep -c '\.mplstyle$')" -eq 12
-          test "$(unzip -l dist/*.whl | grep -c '\.mplstyle$')" -eq 12
+          test "$(tar tzf dist/*.tar.gz | grep -c '\.mplstyle$')" -eq 13
+          test "$(unzip -l dist/*.whl | grep -c '\.mplstyle$')" -eq 13
 
       - name: Install the wheel and register every style
         env:
@@ -83,6 +83,7 @@ jobs:
         run: |
           uv venv --python 3.12 /tmp/check
           uv pip install --python /tmp/check dist/*.whl
+          cd /tmp
           /tmp/check/bin/python - <<'PY'
           import matplotlib
           import matplotlib.style
@@ -93,7 +94,7 @@ jobs:
               "tol-bright", "tol-high-contrast", "tol-light",
               "tol-medium-contrast", "tol-muted", "tol-vibrant", "okabe-ito",
               # modifiers
-              "minor-ticks", "top-axis", "right-axis", "latex",
+              "minor-ticks", "top-axis", "right-axis", "latex", "latex-helvetica",
               # bare aliases kept for the pre-0.7 names
               "bright", "muted", "vibrant",
           }
