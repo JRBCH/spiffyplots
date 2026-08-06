@@ -57,16 +57,15 @@ font.family  : sans-serif
 #font.weight  : normal
 #font.stretch : normal
 
-# Fontsize defaults are chosen between 6 and 7 pt
-font.size             : 6.0
-axes.labelsize        : 7.0     # This is also the default for the panel label (a, b, c, ...) in multipanel figures
-axes.titlesize        : 7.0
-xtick.labelsize       : 6.0
-ytick.labelsize       : 6.0
-legend.fontsize       : 6.0
-legend.title_fontsize : 6.0
-figure.titlesize      : 7.0
-figure.labelsize      : 7.0
+font.size             : 7
+axes.labelsize        : 8
+axes.titlesize        : 8
+xtick.labelsize       : 7
+ytick.labelsize       : 7
+legend.fontsize       : 7
+legend.title_fontsize : 7
+figure.titlesize      : 8
+figure.labelsize      : 8
 
 # Helvetica first, then Arial and metric-compatible clones for machines without it.
 font.sans-serif : Helvetica, Arial, Nimbus Sans, Liberation Sans, DejaVu Sans

@@ -74,8 +74,11 @@ jobs:
 
       - name: Style sheets present in both artifacts
         run: |
-          test "$(tar tzf dist/*.tar.gz | grep -c '\.mplstyle$')" -eq 13
-          test "$(unzip -l dist/*.whl | grep -c '\.mplstyle$')" -eq 13
+          expected="$(find spiffyplots/styles -name '*.mplstyle' | wc -l)"
+          test "$expected" -gt 0
+          test "$(tar tzf dist/*.tar.gz | grep -c '\.mplstyle$')" -eq "$expected"
+          test "$(unzip -l dist/*.whl | grep -c '\.mplstyle$')" -eq "$expected"
+          echo "$expected style sheets in both artifacts"
 
       - name: Install the wheel and register every style
         env:
@@ -83,21 +86,19 @@ jobs:
         run: |
           uv venv --python 3.12 /tmp/check
           uv pip install --python /tmp/check dist/*.whl
+          SHIPPED="$(find spiffyplots/styles -name '*.mplstyle' -exec basename {} .mplstyle \; | sort | tr '\n' ' ')"
           cd /tmp
-          /tmp/check/bin/python - <<'PY'
+          SHIPPED="$SHIPPED" /tmp/check/bin/python - <<'PY'
+          import os
           import matplotlib
           import matplotlib.style
           import spiffyplots
-          expected = {
-              "spiffy",
-              # colour sheets, one file each
-              "tol-bright", "tol-high-contrast", "tol-light",
-              "tol-medium-contrast", "tol-muted", "tol-vibrant", "okabe-ito",
-              # modifiers
-              "minor-ticks", "top-axis", "right-axis", "latex", "latex-helvetica",
-              # bare aliases kept for the pre-0.7 names
-              "bright", "muted", "vibrant",
-          }
+
+          source = set(os.environ["SHIPPED"].split())
+          installed = {p.stem for p in spiffyplots.STYLES_PATH.rglob("*.mplstyle")}
+          assert installed == source, f"wheel ships {sorted(installed)}, source {sorted(source)}"
+
+          expected = installed | set(spiffyplots.STYLE_ALIASES)
           missing = expected - set(matplotlib.style.available)
           assert not missing, f"not registered: {sorted(missing)}"
           print(f"all {len(expected)} style names registered from a clean config dir")

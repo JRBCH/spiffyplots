@@ -6,9 +6,10 @@ import warnings
 
 import matplotlib
 import matplotlib.pyplot as plt
+import pytest
 
 import spiffyplots
-from spiffyplots import _genstyles, colors
+from spiffyplots import _genstyles, colors, journals
 
 
 def test_every_shipped_style_registers_and_renders():
@@ -67,14 +68,48 @@ def test_latex_modifiers_select_the_intended_font_setup():
         assert "sfmath" in plt.rcParams["text.latex.preamble"]
 
 
-def test_generated_color_styles_match_the_python_palettes():
+def test_generated_styles_match_their_python_definitions():
     generated = _genstyles.generate()
     shipped = {
-        path.name: path.read_text()
-        for path in (spiffyplots.STYLES_PATH / "color").glob("*.mplstyle")
+        f"{directory}/{path.name}": path.read_text()
+        for directory in _genstyles.GENERATED_DIRS
+        for path in (spiffyplots.STYLES_PATH / directory).glob("*.mplstyle")
     }
 
     assert shipped == generated
+
+
+def test_journal_sheets_declare_the_published_column_width():
+    for journal in journals.JOURNALS.values():
+        with plt.style.context(journal.style):
+            width, height = plt.rcParams["figure.figsize"]
+
+        expected = journal.width(journal.default_kind)
+        assert width * 25.4 == pytest.approx(expected, abs=0.01), journal.style
+        if journal.max_height is not None:
+            assert height * 25.4 <= journal.max_height, journal.style
+
+
+def test_journal_styles_keep_every_font_inside_the_published_range():
+    sizes = [
+        "font.size",
+        "axes.labelsize",
+        "axes.titlesize",
+        "xtick.labelsize",
+        "ytick.labelsize",
+        "legend.fontsize",
+        "legend.title_fontsize",
+        "figure.titlesize",
+        "figure.labelsize",
+    ]
+
+    for journal in journals.JOURNALS.values():
+        if journal.font_range is None:
+            continue
+        low, high = journal.font_range
+        with plt.style.context(["spiffy", journal.style]):
+            for key in sizes:
+                assert low <= plt.rcParams[key] <= high, (journal.style, key)
 
 
 def test_style_registration_uses_no_deprecated_matplotlib_api():

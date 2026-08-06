@@ -8,6 +8,10 @@ All notable changes to this project will be documented here. The format follows
 
 #### New features
 
+- Add `spiffyplots.journals`: figure specifications for several journals. For now, Nature, Science, Cell, Journal of Neuroscience, eLife, PLOS Computational
+  Biology, JMLR and TMLR.
+- Add a journal style sheet per entry, generated from `spiffyplots.journals`. E.g.
+  `plt.style.use(["spiffy", "nature"])` sets default font sizes and default figure size accordingly.
 - Add `spiffyplots.label_panels`: FUnction to draw panel letters on any matplotlib figure, not
   just a `MultiPanel`.
 - Add the `latex-helvetica` style sheet: LaTeX rendering with Helvetica for both
@@ -15,7 +19,7 @@ All notable changes to this project will be documented here. The format follows
 
 #### Changed
 
-- **Changed default font sizes to ~7 pt.**
+- **Changed default font sizes to 7-8pt.**
 - **Changed the default figure size to 4 x 2.5 in.**
 - Panel letters now default to `rcParams["axes.labelsize"]`
 - **The default font is now Helvetica**

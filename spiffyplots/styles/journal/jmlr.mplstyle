@@ -1,0 +1,25 @@
+# JMLR: 152.4 mm text width.
+# Maximum height 215.9 mm.
+# Source, checked 2026-08-06:
+# https://github.com/JmlrOrg/jmlr-style-file
+#
+# Generated from spiffyplots.journals by `python -m spiffyplots._genstyles`.
+# Edit the spec there, not this file.
+
+figure.figsize : 6.0000, 3.7500   # 152.4 x 95.25 mm
+
+# JMLR publishes no figure font size, so 9 and 10 pt are spiffy's; change them freely.
+font.size             : 9
+axes.labelsize        : 10
+axes.titlesize        : 10
+xtick.labelsize       : 9
+ytick.labelsize       : 9
+legend.fontsize       : 9
+legend.title_fontsize : 9
+figure.titlesize      : 10
+figure.labelsize      : 10
+
+pdf.fonttype : 42
+ps.fonttype  : 42
+svg.fonttype : none
+savefig.dpi  : 300

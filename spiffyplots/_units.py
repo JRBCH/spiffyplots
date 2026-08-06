@@ -6,6 +6,25 @@ MM = 1 / 25.4
 _UNIT_FACTORS = {"in": 1.0, "cm": CM, "mm": MM}
 
 
+def to_inches(value: float, units: str) -> float:
+    """Convert one length to inches.
+
+    Args:
+        value: A length in ``units``.
+        units: Input unit: ``"in"``, ``"cm"``, or ``"mm"``.
+
+    Raises:
+        ValueError: If ``units`` is unsupported.
+    """
+    try:
+        factor = _UNIT_FACTORS[units]
+    except (KeyError, TypeError):
+        raise ValueError(
+            f"Unsupported figure-size unit {units!r}; expected 'in', 'cm', or 'mm'."
+        ) from None
+    return value * factor
+
+
 def figsize(width: float, height: float, units: str) -> tuple[float, float]:
     """Return a ``(width, height)`` figure size converted to inches.
 
@@ -17,10 +36,4 @@ def figsize(width: float, height: float, units: str) -> tuple[float, float]:
     Raises:
         ValueError: If ``units`` is unsupported.
     """
-    try:
-        factor = _UNIT_FACTORS[units]
-    except (KeyError, TypeError):
-        raise ValueError(
-            f"Unsupported figure-size unit {units!r}; expected 'in', 'cm', or 'mm'."
-        ) from None
-    return width * factor, height * factor
+    return to_inches(width, units), to_inches(height, units)

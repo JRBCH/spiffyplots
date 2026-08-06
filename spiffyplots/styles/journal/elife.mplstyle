@@ -1,0 +1,13 @@
+# eLife: 85 mm single column, 170 mm full width.
+# Source, checked 2026-08-06:
+# https://elife-rp.msubmit.net/html/elife-rp_author_instructions.html
+#
+# Generated from spiffyplots.journals by `python -m spiffyplots._genstyles`.
+# Edit the spec there, not this file.
+
+figure.figsize : 6.6929, 4.1831   # 170 x 106.2 mm
+
+pdf.fonttype : 42
+ps.fonttype  : 42
+svg.fonttype : none
+savefig.dpi  : 300
