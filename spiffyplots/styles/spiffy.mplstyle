@@ -43,10 +43,10 @@ legend.frameon : False
 # # # # # # # # # # # # #
 
 figure.constrained_layout.use: True
-#figure.constrained_layout.h_pad:  0.04167  # Padding around axes objects. Float representing
-#figure.constrained_layout.w_pad:  0.04167  # inches. Default is 3./72. inches (3 pts)
-#figure.constrained_layout.hspace: 0.02     # Space between subplot groups. Float representing
-#figure.constrained_layout.wspace: 0.02     # a fraction of the subplot widths being separated.
+figure.constrained_layout.h_pad: 0.0
+figure.constrained_layout.w_pad: 0.0
+figure.constrained_layout.hspace: 0.05
+figure.constrained_layout.wspace: 0.05
 
 # FONTS
 # # # # #

@@ -41,8 +41,12 @@ def test_spiffy_style_keeps_its_visual_and_export_contract(tmp_path):
         assert plt.rcParams["axes.linewidth"] == 0.5
         assert plt.rcParams["axes.spines.top"] is False
         assert plt.rcParams["axes.spines.right"] is False
-        assert plt.rcParams["axes.labelsize"] == 7.0
-        assert plt.rcParams["xtick.labelsize"] == 6.0
+        assert plt.rcParams["axes.labelsize"] == 8.0
+        assert plt.rcParams["xtick.labelsize"] == 7.0
+        assert plt.rcParams["figure.constrained_layout.h_pad"] == 0.0
+        assert plt.rcParams["figure.constrained_layout.w_pad"] == 0.0
+        assert plt.rcParams["figure.constrained_layout.hspace"] == 0.05
+        assert plt.rcParams["figure.constrained_layout.wspace"] == 0.05
         assert plt.rcParams["image.cmap"] == "tol.iridescent"
         assert plt.rcParams["axes.prop_cycle"].by_key()["color"] == list(
             colors.SPIFFY_CYCLE

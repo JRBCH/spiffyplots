@@ -19,6 +19,7 @@ All notable changes to this project will be documented here. The format follows
 
 #### Changed
 
+- Set constrained-layout padding to 0 and panel spacing to 0.05.
 - **Changed default font sizes to 7-8pt.**
 - **Changed the default figure size to 4 x 2.5 in.**
 - Panel letters now default to `rcParams["axes.labelsize"]`
