@@ -42,6 +42,14 @@ spiffyplots.multipanel module
     :undoc-members:
     :show-inheritance:
 
+spiffyplots.panels module
+-------------------------
+
+.. automodule:: spiffyplots.panels
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
 spiffyplots.random_data module
 ------------------------------
 

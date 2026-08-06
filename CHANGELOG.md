@@ -32,6 +32,10 @@ All notable changes to this project will be documented here. The format follows
 
 #### New features
 
+- Add `spiffyplots.label_panels`: panel letters on any matplotlib figure, not
+  just a `MultiPanel`. Defaults to the figure's axes in reading order, skipping
+  colorbars, and returns the `Text` artists. `MultiPanel` now draws its own
+  labels through it.
 - Add `spiffyplots.colors`: easy access to colors from various color schemes
   (`colors.tol_vibrant.blue`), plus `from_cmap` and `shades`.
 - Add `spiffyplots.cmap`: Paul Tol's colormaps, registered under a `tol.`
