@@ -25,6 +25,7 @@ All notable changes to this project will be documented here. The format follows
 
 #### Changed
 
+- Switched to MIT license.
 - **The default `image.cmap` is now Paul Tol's `tol.iridescent`**
 - **Every color cycle now ends with black, then grey**.
 - **`bright` and `muted` changed color order.** They now follow Paul Tol's recommendation. 

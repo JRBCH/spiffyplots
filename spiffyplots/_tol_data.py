@@ -1,5 +1,5 @@
 # The colour values in this file are Paul Tol's, redistributed under the
-# licence below. The rest of spiffyplots is GPL-3.0-only; see LICENSE.
+# licence below. The rest of spiffyplots is MIT-licensed; see LICENSE.
 #
 # Copyright (c) 2022, Paul Tol
 # All rights reserved.
