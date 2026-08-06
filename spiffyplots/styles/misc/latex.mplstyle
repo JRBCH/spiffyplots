@@ -2,3 +2,17 @@
 
 text.usetex : True
 text.latex.preamble : \usepackage{amsmath}
+
+# Hand the typeface back to TeX, so `plt.style.use(["spiffy", "latex"])` gives
+# Computer Modern Sans text with Computer Modern math.
+#
+# This line is load-bearing. Matplotlib's TexManager scans font.sans-serif for a
+# name it knows and injects the matching LaTeX package; the base spiffy sheet
+# leads that list with Helvetica, which TexManager maps to \usepackage{helvet}.
+# Without the reset below, this sheet would silently keep Helvetica for text
+# while math stayed Computer Modern, mismatched inside a single label.
+#
+# For Helvetica text *and* sans math under LaTeX instead, drop this line and add
+# \usepackage[helvet]{sfmath} to the preamble above. Do not reach for
+# \usepackage{sansmath}: it renders \Delta as a missing-glyph box.
+font.sans-serif : Computer Modern Sans Serif, DejaVu Sans

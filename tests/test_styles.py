@@ -16,6 +16,7 @@ import matplotlib
 import matplotlib.pyplot as plt
 import numpy as np
 import pytest
+from matplotlib import font_manager
 
 import spiffyplots
 from spiffyplots import _genstyles, colors
@@ -123,6 +124,57 @@ def test_latex_style_exports_embedded_font(tmp_path):
 
     pdf_bytes = pdf_path.read_bytes()
     assert b"/Type3" not in pdf_bytes and b"/FontFile" in pdf_bytes
+
+
+def test_base_style_matches_math_to_text_font():
+    """Math and text resolve to the same font file, so a label containing
+    ``$\\Delta w$`` does not switch typeface mid-string.
+
+    ``mathtext.rm`` must stay a generic family alias rather than a concrete font
+    name: it then follows ``font.sans-serif`` and stays matched to whichever
+    entry actually resolved on this machine. Note ``sans-serif`` itself is not
+    usable there, because the rcParam is validated as a fontconfig pattern and
+    the hyphen fails to parse.
+    """
+    with plt.style.context("spiffy"):
+        assert plt.rcParams["font.sans-serif"][0] == "Helvetica"
+        assert plt.rcParams["mathtext.fontset"] == "custom"
+        assert plt.rcParams["mathtext.rm"] == "sans"
+
+        text_font = font_manager.findfont(
+            font_manager.FontProperties(family=["sans-serif"])
+        )
+        math_font = font_manager.findfont(
+            font_manager.FontProperties(family=[plt.rcParams["mathtext.rm"]])
+        )
+        assert text_font == math_font
+
+
+def test_latex_style_hands_the_typeface_back_to_tex():
+    """``["spiffy", "latex"]`` gives Computer Modern, not Helvetica.
+
+    Matplotlib's TexManager scans ``font.sans-serif`` for a name it recognises
+    and injects the matching LaTeX package. The base sheet leads that list with
+    Helvetica, which maps to ``\\usepackage{helvet}``, so without the reset in
+    latex.mplstyle the LaTeX output would keep Helvetica text while math stayed
+    Computer Modern, mismatched inside a single label.
+    """
+    with plt.style.context(["spiffy", "latex"]):
+        assert plt.rcParams["text.usetex"] is True
+        assert "Helvetica" not in plt.rcParams["font.sans-serif"]
+        assert plt.rcParams["font.sans-serif"][0] == "Computer Modern Sans Serif"
+
+
+@pytest.mark.skipif(not HAS_LATEX, reason="no LaTeX installation available")
+def test_latex_style_does_not_load_helvet():
+    """The reset above is checked against what TexManager actually generates."""
+    from matplotlib.texmanager import TexManager
+
+    with plt.style.context(["spiffy", "latex"]):
+        preamble, fontcmd = TexManager._get_font_preamble_and_command()
+
+    assert "helvet" not in preamble
+    assert fontcmd == r"\sffamily"
 
 
 def test_styles_compose():

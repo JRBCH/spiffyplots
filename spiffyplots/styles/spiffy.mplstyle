@@ -61,6 +61,27 @@ font.family  : sans-serif
 #font.stretch : normal
 font.size    : 8.0
 
+# Nature and most journals ask for a "standard" sans-serif face, naming Helvetica
+# or Arial. The clones after them are metrically compatible (Nimbus Sans with
+# Helvetica, Liberation Sans with Arial), so a machine without the real thing
+# still lays text out at the same widths. DejaVu Sans is matplotlib's own and is
+# the only entry guaranteed to be present.
+font.sans-serif : Helvetica, Arial, Nimbus Sans, Liberation Sans, DejaVu Sans
+
+# Render math in the same face as the surrounding text, so `$\Delta w$` in an
+# axis label does not switch typeface mid-string. `sans` is a generic family
+# alias, so it follows font.sans-serif above and stays matched to whichever
+# entry actually resolved. Do not write `sans-serif` here: the rcParam is
+# validated as a fontconfig pattern and the hyphen is a parse error.
+#
+# Stretchy glyphs (\sqrt bars, \left( \right) delimiters) do not exist in these
+# faces and come from matplotlib's fallback math font. That is cosmetic; it logs
+# "No TeX to Unicode mapping for '__radicalbig__'" and renders correctly.
+mathtext.fontset : custom
+mathtext.rm      : sans
+mathtext.it      : sans:italic
+mathtext.bf      : sans:bold
+
 # Journals usually require embedded TrueType fonts, not Type 3, and editable text, see below.
 # https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/
 pdf.fonttype : 42

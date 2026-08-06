@@ -4,6 +4,25 @@ All notable changes to this project will be documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 [Semantic Versioning](https://semver.org/).
 
+### Unreleased
+
+#### Changed
+
+- **The default font is now Helvetica**, falling back through Arial, Nimbus Sans
+  and Liberation Sans to DejaVu Sans. The clones are metrically compatible with
+  the first two, so text lays out at the same widths on machines without the
+  real face. Journals that ask for a "standard" sans-serif, Nature among them,
+  name Helvetica or Arial.
+- **Math now renders in the text font.** `$\Delta w$` in an axis label no longer
+  switches typeface mid-string. Stretchy glyphs such as `\sqrt` bars and
+  `\left( \right)` delimiters have no Helvetica equivalent and still come from
+  matplotlib's fallback math font.
+- The `latex` style sheet now resets the font list, so
+  `plt.style.use(["spiffy", "latex"])` gives Computer Modern Sans with Computer
+  Modern math. Without the reset matplotlib loads `helvet` on seeing Helvetica
+  in the font list, which would have kept Helvetica text against Computer
+  Modern math.
+
 ### v0.7.0 (06-Aug-2026)
 
 #### New features
