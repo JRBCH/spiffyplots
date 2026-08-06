@@ -1,38 +1,28 @@
 # Contributing
 
-SpiffyPlots requires Python 3.10 or newer and uses
-[uv](https://docs.astral.sh/uv/) for development.
-
-## Setup
+Python 3.10+, [uv](https://docs.astral.sh/uv/) for everything. Branch off
+`develop` and merge back into it; `master` tracks the last release.
 
 ```console
-git clone https://github.com/JRBCH/spiffyplots.git
-cd spiffyplots
 uv sync
+uv run ruff format --check . && uv run ruff check . && uv run pytest
 ```
 
-## Checks
-
-Before committing Python changes, run:
-
-```console
-uv run ruff format --check .
-uv run ruff check .
-uv run pytest
-```
-
-For documentation changes, also run:
+Add tests for behaviour changes, and a `CHANGELOG.md` bullet under `Unreleased`
+for anything user-facing. Run these when they apply:
 
 ```console
 uv run --group docs sphinx-build -W --keep-going -b html docs/source docs/_build/html
+uv run python examples/ex_multipanel.py   # figure layout or style changes
 ```
 
-If a change affects figure layout or a Matplotlib style, regenerate and inspect
-the comparison figures:
+## Generated, do not hand-edit
 
-```console
-uv run python examples/ex_multipanel.py
-```
+- `spiffyplots/styles/color/*.mplstyle` are built from `spiffyplots.colors`.
+  Edit the colour data there, then run
+  `uv run python -m spiffyplots._genstyles`. A test fails if they drift.
+- `uv.lock`. Change `pyproject.toml`, then run `uv lock`.
 
-Keep changes focused, add tests for behavior changes, and update the relevant
-documentation for user-facing changes.
+The Matplotlib floor is 3.8, well below the dev environment, and CI tests the
+oldest and newest Matplotlib for each supported Python. Do not use API that
+only exists in recent releases.
