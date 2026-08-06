@@ -3443,6 +3443,8 @@ test = [
 [package.dev-dependencies]
 dev = [
     { name = "bump2version" },
+    { name = "cmcrameri" },
+    { name = "colorcet" },
     { name = "coverage" },
     { name = "ipykernel" },
     { name = "jupyter" },
@@ -3476,6 +3478,8 @@ provides-extras = ["colormaps", "test"]
 [package.metadata.requires-dev]
 dev = [
     { name = "bump2version" },
+    { name = "cmcrameri" },
+    { name = "colorcet" },
     { name = "coverage" },
     { name = "ipykernel" },
     { name = "jupyter" },

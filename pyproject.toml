@@ -43,6 +43,9 @@ docs = [
 ]
 dev = [
     "bump2version",
+    # Mirrors the `colormaps` extra; no tool.uv default-extras to inherit it.
+    "cmcrameri",
+    "colorcet",
     "coverage",
     "ipykernel",
     "jupyter",
@@ -64,3 +67,6 @@ spiffyplots = ["styles/**/*.mplstyle"]
 [tool.ruff]
 target-version = "py310"
 extend-exclude = ["*.ipynb"]
+
+[tool.uv]
+default-groups = ["dev", "docs"]
