@@ -4,7 +4,7 @@ All notable changes to this project will be documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 [Semantic Versioning](https://semver.org/).
 
-### Unreleased
+### v0.7.0 (06-Aug-2026)
 
 #### New features
 
@@ -29,6 +29,7 @@ All notable changes to this project will be documented here. The format follows
 
 #### Changed
 
+- Switched to MIT license.
 - **The default `image.cmap` is now Paul Tol's `tol.iridescent`**
 - **Every color cycle now ends with black, then grey**.
 - **`bright` and `muted` changed color order.** They now follow Paul Tol's recommendation. 

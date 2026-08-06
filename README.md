@@ -4,13 +4,13 @@
 [![Documentation Status](https://readthedocs.org/projects/spiffyplots/badge/?version=latest)](https://spiffyplots.readthedocs.io/en/latest/?badge=latest)
 [![PyPI version](https://badge.fury.io/py/spiffyplots.svg)](https://badge.fury.io/py/spiffyplots)
 [![GitHub last commit](https://img.shields.io/github/last-commit/JRBCH/spiffyplots.svg?style=flat)]()
-[![GPLv3 license](https://img.shields.io/badge/License-GPLv3-blue.svg)](http://perso.crans.org/besson/LICENSE.html)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/JRBCH/spiffyplots/blob/master/LICENSE)
 
 A collection of matplotlib style sheets and plotting tools for publication-ready figures.
 
 Requires Python 3.10 or newer and Matplotlib 3.8 or newer.
 
-* Free software: GPL-3 license
+* Free software: MIT license
 * Documentation: https://spiffyplots.readthedocs.io.
 
 #### Simple style example:

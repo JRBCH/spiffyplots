@@ -14,7 +14,7 @@ from .random_data import populate_random_data
 
 __author__ = """Julian Rossbroich"""
 __email__ = "julian.rossbroich@tum.de"
-__version__ = "0.6.1"
+__version__ = "0.7.0"
 
 STYLES_PATH = Path(__file__).parent / "styles"
 
