@@ -70,6 +70,7 @@ target/
 
 # Jupyter Notebook
 .ipynb_checkpoints
+/dev-notebooks/
 
 # celery beat schedule file
 celerybeat-schedule
