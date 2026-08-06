@@ -10,7 +10,7 @@ readme = "README.md"
 requires-python = ">=3.10"
 license = "GPL-3.0-only"
 authors = [
-    { name = "Julian Rossbroich", email = "julian.rossbroich@fmi.ch" },
+    { name = "Julian Rossbroich", email = "julian.rossbroich@tum.de" },
 ]
 dependencies = [
     # 3.8 is the oldest release that supports numpy>=2.
