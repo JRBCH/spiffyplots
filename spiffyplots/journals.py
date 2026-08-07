@@ -1,6 +1,6 @@
 """Figure specifications from journal author guidelines.
 
-Every entry carries the source it was read from and the date it was checked. 
+Every entry carries the source it was read from and the date it was checked.
 Claude code extracted this, so take it with a grain of salt, but I checked
 the numbers against the source and they seem correct. The
 style sheets in ``styles/journal`` are generated from this table.
@@ -14,7 +14,7 @@ style sheets in ``styles/journal`` are generated from this table.
 Print a journal for the full specification::
 
     >>> import spiffyplots as spiffy
-    >>> spiffy.journals.nature                                
+    >>> spiffy.journals.nature
 """
 
 import textwrap
