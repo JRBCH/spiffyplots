@@ -44,7 +44,7 @@ The base `spiffy` style contains my own rather opinionated preferences for every
 
 ```python
 import matplotlib.pyplot as plt
-import spiffyplots 
+import spiffyplots
 
 plt.style.use("spiffy")  # base style only
 plt.style.use(["spiffy", "tol-muted"])  # plus a color scheme
@@ -79,11 +79,12 @@ matplitlib's `GridSpec` is great, but I got real tired of formatting and re-form
 ```python
 import matplotlib.pyplot as plt
 from spiffyplots import MultiPanel
+
 plt.style.use("spiffy")
 
 figure = MultiPanel(
-    grid=[4, 2],    # 4 panels in the first row, 2 in the second
-    labels=True     # label panels (a, b, c, ...)
+    grid=[4, 2],  # 4 panels in the first row, 2 in the second
+    labels=True,  # label panels (a, b, c, ...)
 )
 
 # Access each subplot axis by its label
