@@ -26,9 +26,7 @@ colormaps = [
     "colorcet",
 ]
 test = [
-    "coverage",
     "pytest",
-    "pytest-cov",
 ]
 
 [project.urls]
@@ -43,10 +41,14 @@ docs = [
 ]
 dev = [
     "bump2version",
-    "coverage",
+    # Mirrors the `colormaps` extra; no tool.uv default-extras to inherit it.
+    "cmcrameri",
+    "colorcet",
+    "ipykernel",
+    "jupyter",
+    "nbconvert",
     "pre-commit",
     "pytest",
-    "pytest-cov",
     "ruff",
     "twine",
     "watchdog",
@@ -61,3 +63,6 @@ spiffyplots = ["styles/**/*.mplstyle"]
 [tool.ruff]
 target-version = "py310"
 extend-exclude = ["*.ipynb"]
+
+[tool.uv]
+default-groups = ["dev", "docs"]

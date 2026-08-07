@@ -1,7 +1,6 @@
 """The Spiffy MultiPanel class and its methods."""
 
 import math
-import string
 import warnings
 from collections import defaultdict
 from collections.abc import Iterable, Sequence
@@ -14,6 +13,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ._units import figsize as _convert_figsize
+from .panels import get_letters as _get_letters
+from .panels import label_panels
 
 
 class _PanelCollection(Sequence):
@@ -158,7 +159,8 @@ class MultiPanel:
             label_case (str): 'uppercase' or 'lowercase'. Defaults to 'lowercase'.
                 This and following kwargs are passed to ``MultiPanel._draw_labels``.
             label_weight (str): Weight of the figure labels. defaults to 'bold'
-            label_size (int): Font size for figure labels. Defaults to 12.
+            label_size (int): Font size for figure labels. Defaults to
+                ``rcParams["axes.labelsize"]``
             label_offset (Tuple): Label offset in points from the panel's top-left
                 corner. Defaults to (-20, 6).
             label_location (Tuple): Deprecated label location in panel axes fractions.
@@ -221,6 +223,7 @@ class MultiPanel:
         self.panels = []
 
         # parse kwargs
+        has_explicit_figsize = "figsize" in kwargs
         figsize = kwargs.pop("figsize", plt.rcParams.get("figure.figsize"))
         dpi = kwargs.pop("dpi", plt.rcParams.get("figure.dpi"))
         units = kwargs.pop("units", "in")
@@ -232,10 +235,19 @@ class MultiPanel:
                 "MultiPanel(figsize=(8.9, 6.0), units='cm')."
             )
 
+        figsize_inches = _convert_figsize(*figsize, units=units)
+        self._declared_figsize = (
+            (float(figsize[0]), float(figsize[1]), units)
+            if has_explicit_figsize
+            else None
+        )
         self.fig = plt.figure(
-            figsize=_convert_figsize(*figsize, units=units),
+            figsize=figsize_inches,
             dpi=dpi,
         )
+        if has_explicit_figsize:
+            # GUI backends quantize the initial dimensions to display pixels.
+            self.fig.set_size_inches(figsize_inches, forward=False)
 
         # OPTION 1: INITIALIZATION BASED ON ``labels``
         # # # # # # # # # # # #
@@ -389,45 +401,60 @@ class MultiPanel:
             self._draw_labels(
                 label_offset=label_offset,
                 label_location=label_location,
-                size=kwargs.pop("label_size", 12),
+                size=kwargs.pop("label_size", None),
                 weight=kwargs.pop("label_weight", "bold"),
                 color=kwargs.pop("label_color", "black"),
             )
 
     def _draw_labels(self, label_offset, label_location, size, weight, color) -> None:
+        if size is None:
+            size = matplotlib.rcParams["axes.labelsize"]
 
-        text_kwargs = {
-            "size": size,
-            "weight": weight,
-            "ha": "left",
-            "va": "baseline",
-            "usetex": False,
-            "family": "sans-serif",
-            "color": color,
-        }
-        for ax, label in zip(self.panels, self._labels, strict=True):
-            if label_location is not None:
+        if label_location is not None:
+            for ax, label in zip(self.panels, self._labels, strict=True):
                 ax.text(
                     label_location[0],
                     label_location[1],
                     label,
                     transform=ax.transAxes,
                     clip_on=False,
-                    **text_kwargs,
+                    size=size,
+                    weight=weight,
+                    color=color,
+                    ha="left",
+                    va="baseline",
+                    usetex=False,
+                    family="sans-serif",
                 )
-            else:
-                ax.annotate(
-                    label,
-                    xy=(0, 1),
-                    xycoords="axes fraction",
-                    xytext=label_offset,
-                    textcoords="offset points",
-                    annotation_clip=False,
-                    **text_kwargs,
-                )
+            return
+
+        # Panels are already in their intended order, so pass them explicitly
+        # rather than letting label_panels sort the figure into reading order.
+        label_panels(
+            self.fig,
+            axes=self.panels,
+            labels=self._labels,
+            offset=label_offset,
+            size=size,
+            weight=weight,
+            color=color,
+        )
 
     def savefig(self, *args, **kwargs):
         """Save the wrapped figure with ``matplotlib.figure.Figure.savefig``."""
+        bbox_inches = kwargs.get("bbox_inches")
+        if bbox_inches is None:
+            bbox_inches = matplotlib.rcParams["savefig.bbox"]
+        if self._declared_figsize is not None and bbox_inches == "tight":
+            width, height, units = self._declared_figsize
+            warnings.warn(
+                f'`bbox_inches="tight"` overrides the explicit figure size. '
+                f"Declared {width} x {height} {units}; the saved file will have "
+                "a different size. Drop `bbox_inches` to preserve the declared "
+                "size, and use constrained-layout padding to control whitespace.",
+                UserWarning,
+                stacklevel=2,
+            )
         return self.fig.savefig(*args, **kwargs)
 
     def save(self, *args, **kwargs):
@@ -439,31 +466,6 @@ class MultiPanel:
         Closes the matplotlib figure object
         """
         plt.close(self.fig)
-
-
-def _get_letters(case: str | None = "lowercase", count: int = 26) -> list[str]:
-    """
-
-    :param case: 'lowercase' or 'uppercase'. Defaults to 'lowercase'.
-    :param count: number of labels to return. Defaults to 26.
-    :return: ordered letter labels, continuing with aa/AA after z/Z
-    """
-    if case == "lowercase":
-        alphabet = string.ascii_lowercase
-    else:
-        alphabet = string.ascii_uppercase
-
-    labels = []
-    for index in range(count):
-        label = ""
-        while True:
-            index, remainder = divmod(index, len(alphabet))
-            label = alphabet[remainder] + label
-            if index == 0:
-                break
-            index -= 1
-        labels.append(label)
-    return labels
 
 
 def _is_nested_label_grid(labels) -> bool:

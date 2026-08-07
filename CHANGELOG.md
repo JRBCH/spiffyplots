@@ -4,6 +4,37 @@ All notable changes to this project will be documented here. The format follows
 [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) and
 [Semantic Versioning](https://semver.org/).
 
+### v0.8.0 (07-Aug-2026)
+
+#### New features
+
+- Add `spiffyplots.journals`: figure specifications for several journals. For now, Nature, Science, Cell, Journal of Neuroscience, eLife, PLOS Computational
+  Biology, JMLR and TMLR.
+- Add a journal style sheet per entry, generated from `spiffyplots.journals`. E.g.
+  `plt.style.use(["spiffy", "nature"])` sets default font sizes and default figure size accordingly.
+- Add `spiffyplots.label_panels`: FUnction to draw panel letters on any matplotlib figure, not
+  just a `MultiPanel`.
+- Add the `latex-helvetica` style sheet: LaTeX rendering with Helvetica for both
+  text and math. Requires the `sfmath` LaTeX package.
+
+#### Changed
+
+- Set constrained-layout padding to 0 and panel spacing to 0.05.
+- **Changed default font sizes to 7-8pt.**
+- **Changed the default figure size to 4 x 2.5 in.**
+- Panel letters now default to `rcParams["axes.labelsize"]`
+- **The default font is now Helvetica**
+- Math now renders in the text font when not using latex.
+- The `latex` style sheet now resets the font list, so
+  `plt.style.use(["spiffy", "latex"])` gives Computer Modern Sans with Computer
+  Modern math.
+
+#### Bugfixes
+
+- Fix `multiline`: accept a shared 1D `x` or one array per line, validate that
+  x/y point counts and line/value counts agree, and preserve explicit axis
+  limits instead of forcing autoscale.
+
 ### v0.7.0 (06-Aug-2026)
 
 #### New features
@@ -56,6 +87,8 @@ All notable changes to this project will be documented here. The format follows
 
 #### Bugfixes
 
+- Preserve explicitly declared `MultiPanel` dimensions on export and warn when
+  `bbox_inches="tight"` would change them.
 - Export PDF and PostScript text as embedded TrueType fonts and preserve SVG
   text as editable text instead of outlines in the base style.
 - Accept nested Python sequences as label grids and support arbitrary labels

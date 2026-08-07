@@ -1,0 +1,25 @@
+# TMLR: 165.1 mm text width.
+# Maximum height 228.6 mm.
+# Source, checked 2026-08-06:
+# https://github.com/JmlrOrg/tmlr-style-file
+#
+# Generated from spiffyplots.journals by `python -m spiffyplots._genstyles`.
+# Edit the spec there, not this file.
+
+figure.figsize : 6.5000, 4.0625   # 165.1 x 103.2 mm
+
+# TMLR publishes no figure font size, so 8 and 9 pt are spiffy's; change them freely.
+font.size             : 8
+axes.labelsize        : 9
+axes.titlesize        : 9
+xtick.labelsize       : 8
+ytick.labelsize       : 8
+legend.fontsize       : 8
+legend.title_fontsize : 8
+figure.titlesize      : 9
+figure.labelsize      : 9
+
+pdf.fonttype : 42
+ps.fonttype  : 42
+svg.fonttype : none
+savefig.dpi  : 300

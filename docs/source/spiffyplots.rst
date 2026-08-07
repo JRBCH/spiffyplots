@@ -10,6 +10,13 @@ Figure size helpers
 
 .. autodata:: spiffyplots.MM
 
+spiffyplots.journals module
+---------------------------
+
+.. automodule:: spiffyplots.journals
+    :members:
+    :show-inheritance:
+
 spiffyplots.colors module
 -------------------------
 
@@ -38,6 +45,14 @@ spiffyplots.multipanel module
 -----------------------------
 
 .. automodule:: spiffyplots.multipanel
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+spiffyplots.panels module
+-------------------------
+
+.. automodule:: spiffyplots.panels
     :members:
     :undoc-members:
     :show-inheritance:

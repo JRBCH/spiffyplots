@@ -1,4 +1,4 @@
-.PHONY: clean clean-test clean-pyc clean-build docs help format lint test coverage dist install
+.PHONY: clean clean-test clean-pyc clean-build docs help format lint test coverage demo dist install
 .DEFAULT_GOAL := help
 
 define BROWSER_PYSCRIPT
@@ -62,6 +62,9 @@ coverage: ## check code coverage quickly with the default Python
 	uv run coverage report -m
 	uv run coverage html
 	$(BROWSER) htmlcov/index.html
+
+demo: ## regenerate the animated README demo
+	uv run python assets/make_demo.py
 
 dist: clean ## builds source and wheel package
 	uv build

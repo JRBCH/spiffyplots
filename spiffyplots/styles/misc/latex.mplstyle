@@ -2,3 +2,6 @@
 
 text.usetex : True
 text.latex.preamble : \usepackage{amsmath}
+
+# Reset the font list, otherwise matplotlib sees Helvetica and loads helvet.
+font.sans-serif : Computer Modern Sans Serif, DejaVu Sans

@@ -1,0 +1,27 @@
+# Nature: 89 mm single column, 183 mm double column.
+# Maximum height 170 mm.
+# Text 5-7 pt.
+# Panel letters 8 pt bold lowercase.
+# Source, checked 2026-08-06:
+# https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/
+#
+# Generated from spiffyplots.journals by `python -m spiffyplots._genstyles`.
+# Edit the spec there, not this file.
+
+figure.figsize : 7.2047, 4.5030   # 183 x 114.4 mm
+
+# 6 and 7 pt sit inside the 5-7 pt range; change them freely.
+font.size             : 6
+axes.labelsize        : 7
+axes.titlesize        : 7
+xtick.labelsize       : 6
+ytick.labelsize       : 6
+legend.fontsize       : 6
+legend.title_fontsize : 6
+figure.titlesize      : 7
+figure.labelsize      : 7
+
+pdf.fonttype : 42
+ps.fonttype  : 42
+svg.fonttype : none
+savefig.dpi  : 450

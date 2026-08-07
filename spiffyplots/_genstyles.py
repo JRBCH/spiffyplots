@@ -1,4 +1,4 @@
-"""Generate the colour style sheets from :mod:`spiffyplots.colors`.
+"""Generate the colour and journal style sheets from their Python definitions.
 
 .. code-block:: console
 
@@ -10,10 +10,14 @@ import argparse
 import sys
 from pathlib import Path
 
-from . import colors
+from . import colors, journals
+from ._units import MM
 
-#: Where the colour sheets are written.
-COLOR_STYLES_PATH = Path(__file__).parent / "styles" / "color"
+#: Where the generated sheets are written.
+STYLES_PATH = Path(__file__).parent / "styles"
+
+#: Subdirectories this script owns, relative to :data:`STYLES_PATH`.
+GENERATED_DIRS = ("color", "journal")
 
 TOL_URL = "https://sronpersonalpages.nl/~pault/"
 OKABE_ITO_URL = "https://jfly.uni-koeln.de/color/"
@@ -39,7 +43,7 @@ SHEETS = {
 
 
 def render(scheme, title: str, credit: str) -> str:
-    """The text of one sheet."""
+    """The text of one colour sheet."""
     values = ", ".join(f"'{color.lstrip('#')}'" for color in scheme)
     return "\n".join(
         [
@@ -56,11 +60,96 @@ def render(scheme, title: str, credit: str) -> str:
     )
 
 
-def generate() -> dict[str, str]:
-    """Every sheet's filename mapped to its text."""
-    return {
-        f"{stem}.mplstyle": render(*definition) for stem, definition in SHEETS.items()
+def render_journal(journal: journals.Journal) -> str:
+    """The text of one journal sheet."""
+    kind = journal.default_kind
+    width_mm = journal.width(kind)
+    size = journal.figsize(kind)
+
+    widths = ", ".join(f"{mm:g} mm {name}" for mm, name in journal.widths.values())
+    header = [f"# {journal.title}: {widths}."]
+    if journal.max_height is not None:
+        header.append(f"# Maximum height {journal.max_height:g} mm.")
+    if journal.font_range is not None:
+        header.append(f"# Text {journal.font_range[0]:g}-{journal.font_range[1]:g} pt.")
+    if journal.panel_label is not None:
+        label_size, weight, case = journal.panel_label
+        header.append(f"# Panel letters {label_size:g} pt {weight} {case}.")
+
+    body = [
+        (
+            f"figure.figsize : {size[0]:.4f}, {size[1]:.4f}"
+            f"   # {width_mm:g} x {size[1] / MM:.4g} mm"
+        ),
+    ]
+
+    if journal.font_size is not None:
+        if journal.font_range is not None:
+            reason = (
+                f"# {journal.font_size:g} and {journal.label_size:g} pt sit inside "
+                f"the {journal.font_range[0]:g}-{journal.font_range[1]:g} pt range"
+            )
+        else:
+            reason = (
+                f"# {journal.title} publishes no figure font size, so "
+                f"{journal.font_size:g} and {journal.label_size:g} pt are spiffy's"
+            )
+        body += ["", f"{reason}; change them freely."]
+        body += _font_lines(journal.font_size, journal.label_size)
+
+    body += [
+        "",
+        "pdf.fonttype : 42",
+        "ps.fonttype  : 42",
+        "svg.fonttype : none",
+    ]
+    if journal.dpi is not None:
+        body.append(f"savefig.dpi  : {journal.dpi}")
+
+    return "\n".join(
+        [
+            *header,
+            f"# Source, checked {journal.checked}:",
+            f"# {journal.source}",
+            "#",
+            "# Generated from spiffyplots.journals by `python -m spiffyplots._genstyles`.",
+            "# Edit the spec there, not this file.",
+            "",
+            *body,
+            "",
+        ]
+    )
+
+
+def _font_lines(font_size: float, label_size: float) -> list[str]:
+    sizes = {
+        "font.size": font_size,
+        "axes.labelsize": label_size,
+        "axes.titlesize": label_size,
+        "xtick.labelsize": font_size,
+        "ytick.labelsize": font_size,
+        "legend.fontsize": font_size,
+        "legend.title_fontsize": font_size,
+        "figure.titlesize": label_size,
+        "figure.labelsize": label_size,
     }
+    width = max(len(key) for key in sizes)
+    return [f"{key:<{width}} : {value:g}" for key, value in sizes.items()]
+
+
+def generate() -> dict[str, str]:
+    """Every sheet's path, relative to ``styles/``, mapped to its text."""
+    sheets = {
+        f"color/{stem}.mplstyle": render(*definition)
+        for stem, definition in SHEETS.items()
+    }
+    sheets.update(
+        {
+            f"journal/{journal.style}.mplstyle": render_journal(journal)
+            for journal in journals.JOURNALS.values()
+        }
+    )
+    return sheets
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -74,16 +163,16 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument(
         "--output",
         type=Path,
-        default=COLOR_STYLES_PATH,
-        help=f"directory to write into (default: {COLOR_STYLES_PATH})",
+        default=STYLES_PATH,
+        help=f"directory to write into (default: {STYLES_PATH})",
     )
     args = parser.parse_args(argv)
 
     sheets = generate()
     problems = []
 
-    for filename, text in sheets.items():
-        path = args.output / filename
+    for name, text in sheets.items():
+        path = args.output / name
         current = path.read_text() if path.is_file() else None
         if current == text:
             continue
@@ -94,14 +183,13 @@ def main(argv: list[str] | None = None) -> int:
             path.write_text(text)
             print(f"wrote {path}")
 
-    if args.output.is_dir():
-        unexpected = sorted(
-            path.name
-            for path in args.output.glob("*.mplstyle")
-            if path.name not in sheets
-        )
+    for directory in GENERATED_DIRS:
+        if not (args.output / directory).is_dir():
+            continue
         problems += [
-            f"not generated by this script: {args.output / name}" for name in unexpected
+            f"not generated by this script: {path}"
+            for path in sorted((args.output / directory).glob("*.mplstyle"))
+            if f"{directory}/{path.name}" not in sheets
         ]
 
     for problem in problems:

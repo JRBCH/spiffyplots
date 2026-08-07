@@ -5,10 +5,11 @@ from pathlib import Path
 import matplotlib
 import matplotlib.style
 
-from . import cmap, colors
+from . import cmap, colors, journals
 from ._units import CM, MM, figsize
 from .lineplots import multiline
 from .multipanel import MultiPanel
+from .panels import label_panels
 from .random_data import populate_random_data
 
 __author__ = """Julian Rossbroich"""
@@ -22,6 +23,7 @@ STYLE_ALIASES = {
     "bright": "tol-bright",
     "muted": "tol-muted",
     "vibrant": "tol-vibrant",
+    **journals.ALIASES,
 }
 
 __all__ = [
@@ -33,6 +35,8 @@ __all__ = [
     "cmap",
     "colors",
     "figsize",
+    "journals",
+    "label_panels",
     "multiline",
     "populate_random_data",
 ]

@@ -1,0 +1,26 @@
+# PLOS Computational Biology: 132 mm text column, 190.5 mm full page.
+# Maximum height 222.3 mm.
+# Text 8-12 pt.
+# Source, checked 2026-08-06:
+# https://journals.plos.org/ploscompbiol/s/figures
+#
+# Generated from spiffyplots.journals by `python -m spiffyplots._genstyles`.
+# Edit the spec there, not this file.
+
+figure.figsize : 7.5000, 4.6875   # 190.5 x 119.1 mm
+
+# 8 and 9 pt sit inside the 8-12 pt range; change them freely.
+font.size             : 8
+axes.labelsize        : 9
+axes.titlesize        : 9
+xtick.labelsize       : 8
+ytick.labelsize       : 8
+legend.fontsize       : 8
+legend.title_fontsize : 8
+figure.titlesize      : 9
+figure.labelsize      : 9
+
+pdf.fonttype : 42
+ps.fonttype  : 42
+svg.fonttype : none
+savefig.dpi  : 300

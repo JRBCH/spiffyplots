@@ -1,0 +1,27 @@
+# Science: 90 mm single column, 183 mm double column.
+# Maximum height 227.5 mm.
+# Text 6-9 pt.
+# Panel letters 10 pt bold uppercase.
+# Source, checked 2026-08-06:
+# https://www.science.org/cms/asset/62583409-a188-466e-8cc0-6fb5f083bbff/author_prep_guide_2025.pdf
+#
+# Generated from spiffyplots.journals by `python -m spiffyplots._genstyles`.
+# Edit the spec there, not this file.
+
+figure.figsize : 7.2047, 4.5030   # 183 x 114.4 mm
+
+# 7 and 8 pt sit inside the 6-9 pt range; change them freely.
+font.size             : 7
+axes.labelsize        : 8
+axes.titlesize        : 8
+xtick.labelsize       : 7
+ytick.labelsize       : 7
+legend.fontsize       : 7
+legend.title_fontsize : 7
+figure.titlesize      : 8
+figure.labelsize      : 8
+
+pdf.fonttype : 42
+ps.fonttype  : 42
+svg.fonttype : none
+savefig.dpi  : 500

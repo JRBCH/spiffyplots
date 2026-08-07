@@ -1,17 +1,14 @@
 # This is the base style for the "SpiffyPlots" package.
-# Visit us on GitHub: https://github.com/JRBCH/spiffyplots
+# https://github.com/JRBCH/spiffyplots
 
-# Color cycle: spiffyplots.colors.SPIFFY_CYCLE, Paul Tol's vibrant scheme reordered.
-# Keep the two in step; tests/test_styles.py checks.
+# Default color cycle: Paul Tol's vibrant scheme reordered.
 axes.prop_cycle : cycler('color', ['0077BB', 'CC3311', '009988', '33BBEE', 'EE7733', 'EE3377', '000000', 'BBBBBB'])
 
-# Default colormap: Paul Tol's iridescent, registered by spiffyplots on import.
-# This is why `import spiffyplots` is needed before `plt.style.use("spiffy")`: a
-# sheet naming an unregistered colormap applies silently, then fails at draw time.
+# Default colormap: Paul Tol's iridescent
 image.cmap: tol.iridescent
 
 # Set default figure size
-figure.figsize : 3, 3
+figure.figsize : 4, 2.5
 
 # Remove top and right spines
 axes.spines.right : False
@@ -46,10 +43,10 @@ legend.frameon : False
 # # # # # # # # # # # # #
 
 figure.constrained_layout.use: True
-#figure.constrained_layout.h_pad:  0.04167  # Padding around axes objects. Float representing
-#figure.constrained_layout.w_pad:  0.04167  # inches. Default is 3./72. inches (3 pts)
-#figure.constrained_layout.hspace: 0.02     # Space between subplot groups. Float representing
-#figure.constrained_layout.wspace: 0.02     # a fraction of the subplot widths being separated.
+figure.constrained_layout.h_pad: 0.0
+figure.constrained_layout.w_pad: 0.0
+figure.constrained_layout.hspace: 0.05
+figure.constrained_layout.wspace: 0.05
 
 # FONTS
 # # # # #
@@ -59,7 +56,25 @@ font.family  : sans-serif
 #font.variant : normal
 #font.weight  : normal
 #font.stretch : normal
-font.size    : 8.0
+
+font.size             : 7
+axes.labelsize        : 8
+axes.titlesize        : 8
+xtick.labelsize       : 7
+ytick.labelsize       : 7
+legend.fontsize       : 7
+legend.title_fontsize : 7
+figure.titlesize      : 8
+figure.labelsize      : 8
+
+# Helvetica first, then Arial and metric-compatible clones for machines without it.
+font.sans-serif : Helvetica, Arial, Nimbus Sans, Liberation Sans, DejaVu Sans
+
+# `sans` follows font.sans-serif above, so math renders in the same face as the text.
+mathtext.fontset : custom
+mathtext.rm      : sans
+mathtext.it      : sans:italic
+mathtext.bf      : sans:bold
 
 # Journals usually require embedded TrueType fonts, not Type 3, and editable text, see below.
 # https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/
