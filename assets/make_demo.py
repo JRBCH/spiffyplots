@@ -12,8 +12,6 @@ from pygments import lex
 from pygments.lexers import PythonLexer
 from pygments.token import Token
 
-import spiffyplots  
-
 # The demo. The two typed rows start empty; every other row is constant
 IMPORT_LINE = "import spiffyplots"
 STYLE_LINE = 'plt.style.use("spiffy")'
