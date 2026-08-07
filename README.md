@@ -2,7 +2,7 @@
 
 [![Tests](https://github.com/JRBCH/spiffyplots/actions/workflows/test.yaml/badge.svg)](https://github.com/JRBCH/spiffyplots/actions/workflows/test.yaml)
 [![Documentation Status](https://readthedocs.org/projects/spiffyplots/badge/?version=latest)](https://spiffyplots.readthedocs.io/en/latest/?badge=latest)
-[![PyPI version](https://badge.fury.io/py/spiffyplots.svg)](https://badge.fury.io/py/spiffyplots)
+[![PyPI version](https://img.shields.io/pypi/v/spiffyplots.svg)](https://pypi.org/project/spiffyplots/)
 [![GitHub last commit](https://img.shields.io/github/last-commit/JRBCH/spiffyplots.svg?style=flat)]()
 [![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/JRBCH/spiffyplots/blob/master/LICENSE)
 
