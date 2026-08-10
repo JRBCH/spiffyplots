@@ -77,6 +77,9 @@ mathtext.it      : sans:italic
 mathtext.bf      : sans:bold
 mathtext.cal     : sans
 
+# Use autohinting to improve the appearance of text at small sizes.
+text.hinting : force_autohint
+
 # Journals usually require embedded TrueType fonts, not Type 3, and editable text, see below.
 # https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/
 pdf.fonttype : 42
