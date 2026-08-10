@@ -75,6 +75,7 @@ mathtext.fontset : custom
 mathtext.rm      : sans
 mathtext.it      : sans:italic
 mathtext.bf      : sans:bold
+mathtext.cal     : sans
 
 # Journals usually require embedded TrueType fonts, not Type 3, and editable text, see below.
 # https://research-figure-guide.nature.com/figures/building-and-exporting-figure-panels/
