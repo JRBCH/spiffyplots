@@ -13,6 +13,7 @@ All notable changes to this project will be documented here. The format follows
 #### Bugfixes
 
 - Fix the PyPI version badge.
+- `spiffy` style now uses automatic font hinting to prevent glyph rendering failures in raster figures.
 
 ### v0.8.0 (07-Aug-2026)
 
