@@ -1,0 +1,11 @@
+# Scale text for inline notebook display.
+
+font.size             : 10
+axes.labelsize        : 11
+axes.titlesize        : 11
+xtick.labelsize       : 10
+ytick.labelsize       : 10
+legend.fontsize       : 10
+legend.title_fontsize : 10
+figure.titlesize      : 11
+figure.labelsize      : 11

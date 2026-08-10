@@ -6,6 +6,10 @@ All notable changes to this project will be documented here. The format follows
 
 ### Unreleased
 
+#### New features
+
+- Add the `notebook` style sheet for larger text in inline figures.
+
 #### Bugfixes
 
 - Fix the PyPI version badge.
